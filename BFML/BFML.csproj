@@ -7,4 +7,8 @@
         <UseWPF>true</UseWPF>
     </PropertyGroup>
 
+    <ItemGroup>
+      <PackageReference Include="CmlLib.Core" Version="3.3.5" />
+    </ItemGroup>
+
 </Project>
