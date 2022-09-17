@@ -24,5 +24,10 @@ namespace BFML
         {
             InitializeComponent();
         }
+
+        private async void PlayButton_OnClick(object sender, RoutedEventArgs e)
+        {
+            ShitLabel.Content = "ABOBA";
+        }
     }
 }
