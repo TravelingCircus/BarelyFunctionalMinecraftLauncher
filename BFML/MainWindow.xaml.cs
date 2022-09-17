@@ -12,21 +12,24 @@ namespace BFML
         public MainWindow()
         {
             InitializeComponent();
-            LaunchMinecraft();
         }
 
-        private async void LaunchMinecraft()
+        private async void PlayButtonOnClick(object sender, RoutedEventArgs e)
         {
+            ShitLabel.Content = "Loading";
             System.Net.ServicePointManager.DefaultConnectionLimit = 256;
 
             MinecraftPath path = new MinecraftPath();
             CMLauncher launcher = new CMLauncher(path);
 
+            /*launcher.VersionLoader = new LocalVersionLoader(launcher.MinecraftPath);
+            launcher.FileDownloader = null;*/
+            
             launcher.FileChanged += (e) =>
             {
                 Console.WriteLine("[{0}] {1} - {2}/{3}", e.FileKind.ToString(), e.FileName, e.ProgressedFileCount, e.TotalFileCount);
             };
-            launcher.ProgressChanged += (s, e) =>
+            launcher.ProgressChanged += (_, e) =>
             {
                 Console.WriteLine("{0}%", e.ProgressPercentage);
             };
@@ -37,18 +40,13 @@ namespace BFML
                 Console.WriteLine(v.Name);
             }
 
-            Process process = await launcher.CreateProcessAsync("1.16.5", new MLaunchOption
+            Process process = await launcher.CreateProcessAsync("1.7.10", new MLaunchOption
             {
-                MaximumRamMb = 2048,
+                MaximumRamMb = 8192,
                 Session = MSession.GetOfflineSession("hello123"),
             });
 
             process.Start();
-        }
-
-        private async void PlayButton_OnClick(object sender, RoutedEventArgs e)
-        {
-            ShitLabel.Content = "ABOBA";
         }
     }
 }
