@@ -52,7 +52,7 @@ namespace BFML
             process.Start();
         }
 
-        private async void DownloadButton_OnClick(object sender, RoutedEventArgs e)
+        private async void DownloadButtonOnClick(object sender, RoutedEventArgs e)
         {
             await DownloadSomethingViaHttpClient();
         }
@@ -67,5 +67,10 @@ namespace BFML
             using FileStream fileStream = new FileStream(savePath, FileMode.OpenOrCreate);
             await stream.CopyToAsync(fileStream);
         }
+
+       private void InstallButtonOnClick(object sender, RoutedEventArgs e)
+       {
+           throw new NotImplementedException();
+       }
     }
 }
