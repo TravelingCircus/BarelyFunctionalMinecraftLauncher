@@ -4,49 +4,50 @@ using System.Windows;
 using CmlLib.Core;
 using CmlLib.Core.Auth;
 using CmlLib.Core.Version;
+using CmlLib.Core.VersionLoader;
 
-namespace BFML
+namespace BFML;
+
+public partial class MainWindow : Window
 {
-    public partial class MainWindow : Window
+    public MainWindow()
     {
-        public MainWindow()
-        {
-            InitializeComponent();
-        }
+        InitializeComponent();
+    }
 
-        private async void PlayButtonOnClick(object sender, RoutedEventArgs e)
-        {
-            ShitLabel.Content = "Loading";
-            System.Net.ServicePointManager.DefaultConnectionLimit = 256;
+    private async void PlayButtonOnClick(object sender, RoutedEventArgs e)
+    {
+        ShitLabel.Content = "Loading";
+        System.Net.ServicePointManager.DefaultConnectionLimit = 256;
 
-            MinecraftPath path = new MinecraftPath();
-            CMLauncher launcher = new CMLauncher(path);
+        MinecraftPath path = new MinecraftPath();
+        CMLauncher launcher = new CMLauncher(path);
 
-            /*launcher.VersionLoader = new LocalVersionLoader(launcher.MinecraftPath);
-            launcher.FileDownloader = null;*/
+        /*launcher.VersionLoader = new LocalVersionLoader(launcher.MinecraftPath);
+        launcher.FileDownloader = null;*/
             
-            launcher.FileChanged += (e) =>
-            {
-                Console.WriteLine("[{0}] {1} - {2}/{3}", e.FileKind.ToString(), e.FileName, e.ProgressedFileCount, e.TotalFileCount);
-            };
-            launcher.ProgressChanged += (_, e) =>
-            {
-                Console.WriteLine("{0}%", e.ProgressPercentage);
-            };
+        launcher.FileChanged += (e) =>
+        {
+            Console.WriteLine("[{0}] {1} - {2}/{3}", e.FileKind.ToString(), e.FileName, e.ProgressedFileCount, e.TotalFileCount);
+        };
+        launcher.ProgressChanged += (_, e) =>
+        {
+            Console.WriteLine("{0}%", e.ProgressPercentage);
+        };
 
-            MVersionCollection versions = await launcher.GetAllVersionsAsync();
-            foreach (MVersionMetadata v in versions)
-            {
-                Console.WriteLine(v.Name);
-            }
-
-            Process process = await launcher.CreateProcessAsync("1.7.10", new MLaunchOption
-            {
-                MaximumRamMb = 8192,
-                Session = MSession.GetOfflineSession("hello123"),
-            });
-
-            process.Start();
+        MVersionCollection versions = await launcher.GetAllVersionsAsync();
+        foreach (MVersionMetadata v in versions)
+        {
+            Console.WriteLine(v.Name);
         }
+        
+        string forgeVersionName = versions[1].Name;
+        Process process = await launcher.CreateProcessAsync(forgeVersionName, new MLaunchOption
+        {
+            MaximumRamMb = 8192,
+            Session = MSession.GetOfflineSession("hello123"),
+        });
+
+        process.Start();
     }
 }
