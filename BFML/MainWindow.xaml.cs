@@ -43,7 +43,7 @@ namespace BFML
                 Console.WriteLine(v.Name);
             }
 
-            Process process = await launcher.CreateProcessAsync("1.7.10", new MLaunchOption
+            Process process = await launcher.CreateProcessAsync(versions[1].Name, new MLaunchOption
             {
                 MaximumRamMb = 8192,
                 Session = MSession.GetOfflineSession("hello123"),
@@ -68,9 +68,11 @@ namespace BFML
             await stream.CopyToAsync(fileStream);
         }
 
-       private void InstallButtonOnClick(object sender, RoutedEventArgs e)
+       private async void InstallButtonOnClick(object sender, RoutedEventArgs e)
        {
-           throw new NotImplementedException();
+           MinecraftPath path = new MinecraftPath();
+           CMLauncher launcher = new CMLauncher(path);
+           await launcher.CheckAndDownloadAsync(await launcher.GetVersionAsync("1.16.5"));
        }
     }
 }
