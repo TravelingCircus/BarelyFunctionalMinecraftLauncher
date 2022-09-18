@@ -1,5 +1,8 @@
 ﻿using System;
 using System.Diagnostics;
+using System.IO;
+using System.Net.Http;
+using System.Threading.Tasks;
 using System.Windows;
 using CmlLib.Core;
 using CmlLib.Core.Auth;
@@ -47,6 +50,22 @@ namespace BFML
             });
 
             process.Start();
+        }
+
+        private async void DownloadButton_OnClick(object sender, RoutedEventArgs e)
+        {
+            await DownloadSomethingViaHttpClient();
+        }
+
+       private async Task DownloadSomethingViaHttpClient()
+        {
+            Uri url = new Uri("https://upload.wikimedia.org/wikipedia/commons/4/47/PNG_transparency_demonstration_1.png");
+            string savePath = @"D:\Home\Desktope\TestDownload\PNG_transparency_demonstration_1.png";
+            
+            using HttpClient client = new HttpClient();
+            using Stream stream = await client.GetStreamAsync(url);
+            using FileStream fileStream = new FileStream(savePath, FileMode.OpenOrCreate);
+            await stream.CopyToAsync(fileStream);
         }
     }
 }
