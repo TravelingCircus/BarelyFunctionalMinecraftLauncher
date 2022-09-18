@@ -25,28 +25,12 @@ namespace BFML
             MinecraftPath path = new MinecraftPath();
             CMLauncher launcher = new CMLauncher(path);
 
-            /*launcher.VersionLoader = new LocalVersionLoader(launcher.MinecraftPath);
-            launcher.FileDownloader = null;*/
-            
-            launcher.FileChanged += (e) =>
-            {
-                Console.WriteLine("[{0}] {1} - {2}/{3}", e.FileKind.ToString(), e.FileName, e.ProgressedFileCount, e.TotalFileCount);
-            };
-            launcher.ProgressChanged += (_, e) =>
-            {
-                Console.WriteLine("{0}%", e.ProgressPercentage);
-            };
-
             MVersionCollection versions = await launcher.GetAllVersionsAsync();
-            foreach (MVersionMetadata v in versions)
-            {
-                Console.WriteLine(v.Name);
-            }
 
             Process process = await launcher.CreateProcessAsync(versions[1].Name, new MLaunchOption
             {
                 MaximumRamMb = 8192,
-                Session = MSession.GetOfflineSession("hello123"),
+                Session = MSession.GetOfflineSession("hello123")
             });
 
             process.Start();
@@ -63,8 +47,8 @@ namespace BFML
             string savePath = @"D:\Home\Desktope\TestDownload\PNG_transparency_demonstration_1.png";
             
             using HttpClient client = new HttpClient();
-            using Stream stream = await client.GetStreamAsync(url);
-            using FileStream fileStream = new FileStream(savePath, FileMode.OpenOrCreate);
+            await using Stream stream = await client.GetStreamAsync(url);
+            await using FileStream fileStream = new FileStream(savePath, FileMode.OpenOrCreate);
             await stream.CopyToAsync(fileStream);
         }
 
