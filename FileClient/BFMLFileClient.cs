@@ -5,8 +5,7 @@ namespace FileClient;
 public class BFMLFileClient
 {
     private const string ForgeFilesDirectory = "ForgeFiles";
-    private const string TargetDirectory = "Target";
-    
+
     public static BFMLFileClient ConnectToServer()
     {
         return new BFMLFileClient();
@@ -15,8 +14,10 @@ public class BFMLFileClient
 
     public Task DownloadForgeFiles(string savePath)
     {
-        DirectoryInfo source = new DirectoryInfo(ForgeFilesDirectory);
-        source.CopyTo(TargetDirectory);
-        return Task.CompletedTask;
+        return Task.Run(() =>
+        {
+            DirectoryInfo source = new DirectoryInfo(ForgeFilesDirectory);
+            source.CopyTo(savePath, true);
+        });
     }
 }
