@@ -7,6 +7,7 @@ using System.Windows;
 using CmlLib.Core;
 using CmlLib.Core.Auth;
 using CmlLib.Core.Version;
+using FileClient;
 
 namespace BFML
 {
@@ -54,6 +55,9 @@ namespace BFML
 
        private async void InstallButtonOnClick(object sender, RoutedEventArgs e)
        {
+           BFMLFileClient fileClient = BFMLFileClient.ConnectToServer();          
+           await fileClient.DownloadForgeFiles("");
+           return;
            MinecraftPath path = new MinecraftPath();
            CMLauncher launcher = new CMLauncher(path);
            await launcher.CheckAndDownloadAsync(await launcher.GetVersionAsync("1.16.5"));

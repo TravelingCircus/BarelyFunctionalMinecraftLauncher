@@ -9,7 +9,7 @@
     <Grid>
         <Label x:Name="ShitLabel" Content="Shit"/>
         <Button Content="DownloadShit" VerticalAlignment="Top" Width="150" Height="50" Click="DownloadButtonOnClick"/>
-        <Button Content="DownloadShit" VerticalAlignment="Center" Width="150" Height="50" Click="InstallButtonOnClick"/>
+        <Button Content="InstallShit" VerticalAlignment="Center" Width="150" Height="50" Click="InstallButtonOnClick"/>
         <Button Content="Play" VerticalAlignment="Bottom" Width="75" Height="50" Click="PlayButtonOnClick"/>
     </Grid>
 </Window>

@@ -11,4 +11,8 @@
       <PackageReference Include="CmlLib.Core" Version="3.3.5" />
     </ItemGroup>
 
+    <ItemGroup>
+      <ProjectReference Include="..\FileClient\FileClient.csproj" />
+    </ItemGroup>
+
 </Project>
