@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 using CmlLib.Core;
 using CmlLib.Core.Version;
 
@@ -18,5 +19,11 @@ public class Forge
     public bool IsInstalled()
     {
         throw new NotImplementedException();
+    }
+
+    public Task Install(string archivePath)
+    {
+        throw new NotImplementedException();
+        return Task.CompletedTask;
     }
 }
