@@ -1,18 +1,23 @@
 ﻿using System.Threading.Tasks;
 using CmlLib.Core;
+using CmlLib.Core.Version;
 
 namespace BFML.Core;
 
 public class Game
 {
-    public readonly string VanillaVersion = "1.16.5";
+    public readonly MVersion VanillaVersion = new MVersion("1.16.5");
     private readonly CMLauncher _launcher;
     private readonly MinecraftPath _minecraftPath;
+    private readonly Vanilla _vanilla;
+    private readonly Forge _forge;
     
     public Game()
     {
         _minecraftPath = new MinecraftPath();
         _launcher = new CMLauncher(_minecraftPath);
+        _vanilla = new Vanilla(_minecraftPath, VanillaVersion);
+        _forge = new Forge(_minecraftPath, VanillaVersion);
     }
 
     public Task Install()
