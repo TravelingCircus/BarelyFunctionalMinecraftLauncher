@@ -107,5 +107,10 @@ namespace BFML
 
             await _skinPreviewRenderer.Render(obj).ConfigureAwait(false);
         }
+
+        private void ServerButtonOnClick(object sender, RoutedEventArgs e)
+        {
+            BFMLFileClient.ConnectToServer();
+        }
     }
 }

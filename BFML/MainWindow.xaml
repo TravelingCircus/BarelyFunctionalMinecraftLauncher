@@ -19,5 +19,6 @@
         <Button Grid.Column="1" Content="DownloadShit" VerticalAlignment="Top" Width="150" Height="50" Click="DownloadButtonOnClick"/>
         <Button Grid.Column="1" Content="InstallShit" VerticalAlignment="Center" Width="150" Height="50" Click="InstallButtonOnClick"/>
         <Button Grid.Column="1" Content="Play" VerticalAlignment="Bottom" Width="75" Height="50" Click="PlayButtonOnClick"/>
+        <Button Grid.Column="1" Content="Server" VerticalAlignment="Bottom" HorizontalAlignment="Left" Width="75" Height="50" Click="ServerButtonOnClick"/>
     </Grid>
 </Window>
