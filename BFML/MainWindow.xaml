@@ -3,13 +3,21 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:glWpfControl="clr-namespace:OpenTK.Wpf;assembly=GLWpfControl"
         xmlns:local="clr-namespace:BFML"
         mc:Ignorable="d"
-        Title="MainWindow" Height="600" Width="800">
-    <Grid>
-        <Label x:Name="ShitLabel" Content="Shit"/>
-        <Button Content="DownloadShit" VerticalAlignment="Top" Width="150" Height="50" Click="DownloadButtonOnClick"/>
-        <Button Content="InstallShit" VerticalAlignment="Center" Width="150" Height="50" Click="InstallButtonOnClick"/>
-        <Button Content="Play" VerticalAlignment="Bottom" Width="75" Height="50" Click="PlayButtonOnClick"/>
+        Title="MainWindow" Height="700" Width="1200">
+    <Grid ShowGridLines="True">
+        <Grid.ColumnDefinitions>    
+            <ColumnDefinition></ColumnDefinition>    
+            <ColumnDefinition></ColumnDefinition>    
+            <ColumnDefinition></ColumnDefinition>    
+        </Grid.ColumnDefinitions>  
+        
+        <glWpfControl:GLWpfControl Grid.Column="0" x:Name="OpenTkControl" Render="OpenTkControlOnRender"/>
+        <Label Grid.Column="2" x:Name="ShitLabel" Content="Shit"/>
+        <Button Grid.Column="1" Content="DownloadShit" VerticalAlignment="Top" Width="150" Height="50" Click="DownloadButtonOnClick"/>
+        <Button Grid.Column="1" Content="InstallShit" VerticalAlignment="Center" Width="150" Height="50" Click="InstallButtonOnClick"/>
+        <Button Grid.Column="1" Content="Play" VerticalAlignment="Bottom" Width="75" Height="50" Click="PlayButtonOnClick"/>
     </Grid>
 </Window>

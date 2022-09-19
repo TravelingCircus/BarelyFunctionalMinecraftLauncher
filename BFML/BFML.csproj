@@ -9,10 +9,18 @@
 
     <ItemGroup>
       <PackageReference Include="CmlLib.Core" Version="3.3.5" />
+      <PackageReference Include="OpenTK.GLWpfControl" Version="4.2.2" />
+      <PackageReference Include="SixLabors.ImageSharp" Version="2.1.3" />
     </ItemGroup>
 
     <ItemGroup>
       <ProjectReference Include="..\FileClient\FileClient.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Content Include="bin\Debug\net6.0-windows\perfection.png" />
+      <Content Include="bin\Debug\net6.0-windows\shader.frag" />
+      <Content Include="bin\Debug\net6.0-windows\shader.vert" />
     </ItemGroup>
 
 </Project>

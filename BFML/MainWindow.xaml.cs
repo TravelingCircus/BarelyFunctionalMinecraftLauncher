@@ -4,19 +4,33 @@ using System.IO;
 using System.Net.Http;
 using System.Threading.Tasks;
 using System.Windows;
+using BFML._3D;
 using CmlLib.Core;
 using CmlLib.Core.Auth;
 using CmlLib.Core.Version;
 using FileClient;
 using FileClient.Utils;
+using OpenTK.Graphics.OpenGL4;
+using OpenTK.Mathematics;
+using OpenTK.Wpf;
 
 namespace BFML
 {
     public partial class MainWindow : Window
     {
+        private readonly SkinPreviewRenderer _skinPreviewRenderer;
+
         public MainWindow()
         {
             InitializeComponent();
+            GLWpfControlSettings settings = new GLWpfControlSettings
+            {
+                MajorVersion = 4,
+                MinorVersion = 0
+            };
+            OpenTkControl.Start(settings);
+            _skinPreviewRenderer = new SkinPreviewRenderer();
+            _skinPreviewRenderer.SetUp();
         }
 
         private async void PlayButtonOnClick(object sender, RoutedEventArgs e)
@@ -84,6 +98,14 @@ namespace BFML
                 }
                 else throw new InvalidDataException($"Unexpected directory: {directory.Name}");
             }
+        }
+
+        private async void OpenTkControlOnRender(TimeSpan obj)
+        {
+            GL.ClearColor(Color4.White);
+            GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
+
+            await _skinPreviewRenderer.Render(obj).ConfigureAwait(false);
         }
     }
 }
