@@ -23,4 +23,11 @@
       <Content Include="bin\Debug\net6.0-windows\shader.vert" />
     </ItemGroup>
 
+    <ItemGroup>
+      <ApplicationDefinition Include="WPF\App.xaml">
+        <Generator>MSBuild:Compile</Generator>
+        <XamlRuntime>Wpf</XamlRuntime>
+      </ApplicationDefinition>
+    </ItemGroup>
+
 </Project>

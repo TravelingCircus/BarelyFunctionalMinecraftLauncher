@@ -1,4 +1,4 @@
-﻿<Window x:Class="BFML.MainWindow"
+﻿<Window x:Class="BFML.WPF.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
@@ -14,7 +14,7 @@
             <ColumnDefinition></ColumnDefinition>    
         </Grid.ColumnDefinitions>  
         
-        <glWpfControl:GLWpfControl Grid.Column="0" x:Name="OpenTkControl" Render="OpenTkControlOnRender"/>
+        <glWpfControl:GLWpfControl Grid.Column="0" x:Name="OpenTkControl" Render="SkinPreviewOnRender"/>
         <Label Grid.Column="2" x:Name="ShitLabel" Content="Shit"/>
         <Button Grid.Column="1" Content="DownloadShit" VerticalAlignment="Top" Width="150" Height="50" Click="DownloadButtonOnClick"/>
         <Button Grid.Column="1" Content="InstallShit" VerticalAlignment="Center" Width="150" Height="50" Click="InstallButtonOnClick"/>

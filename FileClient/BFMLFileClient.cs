@@ -25,7 +25,6 @@ public class BFMLFileClient
         Console.WriteLine("Client closed");
         
         return new BFMLFileClient();
-        //TODO actually connect to the server
     }
 
     private static byte[] ReadAllBytesFromStream(NetworkStream networkStream)
