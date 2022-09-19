@@ -25,6 +25,11 @@ public class User
     private string _password;
     private int _gryvnyasPaid;
 
+    public User()
+    {
+        
+    }
+    
     public User(string nickname, string password, int gryvnyasPaid)
     {
         _nickname = nickname;

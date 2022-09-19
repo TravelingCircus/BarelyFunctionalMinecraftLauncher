@@ -1,5 +1,6 @@
 ﻿using System.Net;
 using System.Net.Sockets;
+using CommonData;
 
 namespace HTTPFileServer;
 
@@ -20,10 +21,13 @@ internal static class Program
                 clientSocket = serverSocket.AcceptTcpClient();
                 clientStream = clientSocket.GetStream();
 
-                byte[] bytes = TransferBIMBA();
-                clientStream.Write(bytes, 0, bytes.Length);
+                //byte[] bytes = GetByteArrayFromFile(@"D:\Home\Desktope\ExtractedForgeFiles1.16.5.zip");
+                byte[] bytes = DataConverter.ReadAllBytesFromStream(clientStream);
+                User user = (User) DataConverter.ByteArrayToObject(bytes);
+                UserDataSerializer.SerializeXML(user);
+                /*clientStream.Write(bytes, 0, bytes.Length);
                 clientStream.Flush();
-                Console.WriteLine("Sent request: ");
+                Console.WriteLine("Sent request: ");*/
 
                 clientSocket.Close();
             }
@@ -37,10 +41,10 @@ internal static class Program
             throw;
         }
     }
-
-    private static byte[] TransferBIMBA()
+    
+    private static byte[] GetByteArrayFromFile(String path)
     {
-        byte[] bytes = File.ReadAllBytes(@"D:\Home\Desktope\ExtractedForgeFiles1.16.5.zip");
+        byte[] bytes = File.ReadAllBytes(path);
         return bytes;
     }
 }
