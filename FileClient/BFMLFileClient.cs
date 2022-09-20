@@ -1,13 +1,37 @@
 ﻿using System.Net.Sockets;
 using CommonData;
-using FileClient.Utils;
+using FileClient.Requests;
 
 namespace FileClient;
 
 public class BFMLFileClient
 {
     private const string ForgeFilesDirectory = "ForgeFiles";
+    
+    public static TcpClient DebugConnectToServer()
+    {
+        TcpClient client = new TcpClient("127.0.0.1", 7000);
+        Console.WriteLine("Client connected");
+        return client;
+    }
 
+    public static NetworkStream GetServerStream(TcpClient client)
+    {
+        NetworkStream stream = client.GetStream();
+        return stream;
+    }
+    
+    public static void DebugClientRequest(NetworkStream stream, string message)
+    {
+        Request.SendTextMessage(stream, message);
+    }
+    
+    public static void DebugDisconnectFromServer(TcpClient client)
+    {
+        client.Close();
+        Console.WriteLine("Client closed");
+    }
+    
     public static BFMLFileClient ConnectToServer()
     {
         TcpClient client = new TcpClient("127.0.0.1", 7000);

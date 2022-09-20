@@ -1,4 +1,5 @@
-﻿namespace HTTPFileServer;
+﻿
+namespace HTTPFileServer;
 
 internal static class Program
 {
@@ -13,6 +14,7 @@ internal static class Program
             while (true)
             {
                 byte[] bytes = network.ListenForBytes();
+                network.ReadTextMessage(bytes);
                 ReceivedBytes?.Invoke(bytes);
             }
         }
