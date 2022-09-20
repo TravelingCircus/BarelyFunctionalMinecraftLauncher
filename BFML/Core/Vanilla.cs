@@ -3,7 +3,7 @@ using CmlLib.Core.Version;
 
 namespace BFML.Core;
 
-public class Vanilla
+public sealed class Vanilla
 {
     private readonly MVersion _version;
     private readonly MinecraftPath _path;

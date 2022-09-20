@@ -5,7 +5,7 @@ using CmlLib.Core.Version;
 
 namespace BFML.Core;
 
-public class Forge
+public sealed class Forge
 {
     private readonly MinecraftPath _minecraftPath;
     private readonly MVersion _version;

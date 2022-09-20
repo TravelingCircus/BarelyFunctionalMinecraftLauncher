@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.IO;
 using System.Threading.Tasks;
 using CmlLib.Core;
@@ -7,7 +8,7 @@ using CmlLib.Core.Version;
 
 namespace BFML.Core;
 
-public class Game
+public sealed class Game
 {
     public readonly MVersion VanillaVersion = new MVersion("1.16.5");//TODO read from config-file/server
     public readonly MVersion ForgeVersion;//TODO read from config-file/server
@@ -27,11 +28,13 @@ public class Game
 
     public void Launch()
     {
-        _launcher.Launch(ForgeVersion.Id, new MLaunchOption()
+        System.Net.ServicePointManager.DefaultConnectionLimit = 256;
+        Process process = _launcher.CreateProcess(ForgeVersion, new MLaunchOption()
         {
-            MaximumRamMb = 6000, //TODO Get values from somewhere else that my own ass
+            MaximumRamMb = 8192, //TODO Get values from somewhere else that my own ass
             Session = MSession.GetOfflineSession("BFML_TEST")
-        });
+        },false);
+        process.Start();
     }
     
     public async Task Install()
@@ -41,7 +44,6 @@ public class Game
         await InstallForge().ConfigureAwait(false);
         await InstallMods().ConfigureAwait(false);
     }
-
 
     public bool IsReadyToLaunch()
     {
