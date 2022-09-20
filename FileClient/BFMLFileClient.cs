@@ -49,13 +49,9 @@ public class BFMLFileClient
         }
     }
 
-    public Task DownloadForgeFiles(string savePath)
+    public Task<string> DownloadForgeFiles()
     {
-        return Task.Run(() =>
-        {
-            DirectoryInfo source = new DirectoryInfo(ForgeFilesDirectory);
-            source.CopyTo(savePath, true);
-        });
+        throw new NotImplementedException();
     }
 
     public Task<LaunchConfiguration> DownloadLaunchConfiguration()
