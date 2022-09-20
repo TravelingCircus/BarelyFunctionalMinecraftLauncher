@@ -1,15 +1,10 @@
 ﻿using System;
-using System.Diagnostics;
 using System.IO;
 using System.Net.Http;
 using System.Threading.Tasks;
 using System.Windows;
 using BFML._3D;
-using CmlLib.Core;
-using CmlLib.Core.Auth;
-using CmlLib.Core.Version;
 using FileClient;
-using FileClient.Utils;
 using OpenTK.Graphics.OpenGL4;
 using OpenTK.Mathematics;
 using OpenTK.Wpf;
@@ -28,28 +23,14 @@ public partial class MainWindow : Window
             MajorVersion = 4,
             MinorVersion = 0
         };
-        OpenTkControl.Start(settings);
+        //OpenTkControl.Start(settings);
         _skinPreviewRenderer = new SkinPreviewRenderer();
         _skinPreviewRenderer.SetUp();
     }
 
-    private async void PlayButtonOnClick(object sender, RoutedEventArgs e)
+    private void PlayButtonOnClick(object sender, RoutedEventArgs e)
     {
-        ShitLabel.Content = "Loading";
-        System.Net.ServicePointManager.DefaultConnectionLimit = 256;
-
-        MinecraftPath path = new MinecraftPath();
-        CMLauncher launcher = new CMLauncher(path);
-
-        MVersionCollection versions = await launcher.GetAllVersionsAsync();
-
-        Process process = await launcher.CreateProcessAsync(versions[1].Name, new MLaunchOption
-        {
-            MaximumRamMb = 8192,
-            Session = MSession.GetOfflineSession("hello123")
-        });
-
-        process.Start();
+        throw new NotImplementedException();
     }
 
     private async void DownloadButtonOnClick(object sender, RoutedEventArgs e)
@@ -69,35 +50,9 @@ public partial class MainWindow : Window
         await stream.CopyToAsync(fileStream);
     }
 
-    private async void InstallButtonOnClick(object sender, RoutedEventArgs e)
+    private void InstallButtonOnClick(object sender, RoutedEventArgs e)
     {
-        MinecraftPath path = new MinecraftPath();
-        CMLauncher launcher = new CMLauncher(path);
-
-        await launcher.CheckAndDownloadAsync(await launcher.GetVersionAsync("1.16.5"));
-
-        await InstallForge();
-    }
-
-    private async Task InstallForge()
-    {
-        MinecraftPath minecraftPath = new MinecraftPath();
-        using TempDirectory tempDirectory = new TempDirectory();
-        BFMLFileClient fileClient = BFMLFileClient.ConnectToServer();
-
-        await fileClient.DownloadForgeFiles(tempDirectory.Info.FullName).ConfigureAwait(false);
-        foreach (DirectoryInfo directory in tempDirectory.Info.GetDirectories())
-        {
-            if (directory.Name == "libraries")
-            {
-                directory.CopyTo(minecraftPath.Library, true);
-            }
-            else if (directory.Name.Contains("-forge-"))
-            {
-                //Directory.Move(directory.FullName, );
-            }
-            else throw new InvalidDataException($"Unexpected directory: {directory.Name}");
-        }
+        throw new NotImplementedException();
     }
 
     private async void SkinPreviewOnRender(TimeSpan obj)
