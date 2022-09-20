@@ -5,25 +5,37 @@ using System.Threading.Tasks;
 using CmlLib.Core;
 using CmlLib.Core.Auth;
 using CmlLib.Core.Version;
+using CommonData;
+using FileClient;
 
 namespace BFML.Core;
 
 public sealed class Game
 {
-    public readonly MVersion VanillaVersion = new MVersion("1.16.5");//TODO read from config-file/server
-    public readonly MVersion ForgeVersion;//TODO read from config-file/server
-    
+    public readonly MVersion VanillaVersion;
+    public readonly MVersion ForgeVersion;
+
+    private readonly BFMLFileClient _fileClient;
     private readonly CMLauncher _launcher;
     private readonly MinecraftPath _minecraftPath;
     private readonly Vanilla _vanilla;
     private readonly Forge _forge;
 
-    public Game()
+    private Game(BFMLFileClient fileClient)
     {
+        _fileClient = fileClient;
         _minecraftPath = new MinecraftPath();
         _launcher = new CMLauncher(_minecraftPath);
+        
+        ForgeVersion.InheritFrom(VanillaVersion);
         _vanilla = new Vanilla(_minecraftPath, VanillaVersion);
-        _forge = new Forge(_minecraftPath, VanillaVersion);
+        _forge = new Forge(_minecraftPath, ForgeVersion, _fileClient);
+    }
+
+    public static async Task<Game> SetUp(BFMLFileClient fileClient)
+    {
+        LaunchConfiguration configuration = await fileClient.DownloadLaunchConfiguration();
+        throw new NotImplementedException();
     }
 
     public void Launch()
@@ -37,12 +49,15 @@ public sealed class Game
         process.Start();
     }
     
-    public async Task Install()
+    public Task Install()
     {
-        await DeleteAllFiles().ConfigureAwait(false);
-        await InstallMinecraft().ConfigureAwait(false);
-        await InstallForge().ConfigureAwait(false);
-        await InstallMods().ConfigureAwait(false);
+        DeleteAllFiles();
+        InstallMinecraft();
+        Task[] tasks = {
+            InstallForge(),
+            InstallMods()
+        };
+        return Task.WhenAll(tasks);
     }
 
     public bool IsReadyToLaunch()

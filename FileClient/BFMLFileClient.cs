@@ -57,4 +57,9 @@ public class BFMLFileClient
             source.CopyTo(savePath, true);
         });
     }
+
+    public Task<LaunchConfiguration> DownloadLaunchConfiguration()
+    {
+        throw new NotImplementedException();
+    }
 }

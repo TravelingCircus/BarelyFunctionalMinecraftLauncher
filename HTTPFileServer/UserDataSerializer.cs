@@ -3,7 +3,7 @@ using CommonData;
 
 namespace HTTPFileServer;
 
-public class UserDataSerializer
+public sealed class UserDataSerializer
 {
     public static Task SerializeXML(User user)
     {
