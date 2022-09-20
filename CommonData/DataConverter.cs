@@ -25,24 +25,24 @@ public class DataConverter
     
     public static byte[] ObjectToByteArray(object obj)
     {
-        if(obj is null)
-            return null;
+        if(obj is null) throw new ArgumentNullException("obj");
+        
         BinaryFormatter binaryFormatter = new BinaryFormatter();
+        byte[] result;
         using (MemoryStream memoryStream = new MemoryStream())
         {
             binaryFormatter.Serialize(memoryStream, obj);
-            return memoryStream.ToArray();
+            result = memoryStream.ToArray();
         }
+        return result;
     }
     
-    public static object ByteArrayToObject(byte[] byteArray)
+    public static T ByteArrayToObject<T>(byte[] byteArray)
     {
-        if(byteArray is null)
-            return null;
+        if (byteArray is null || byteArray.Length < 1) throw new ArgumentNullException("byteArray", "input array is null or empty");
+        
         BinaryFormatter binaryFormatter = new BinaryFormatter();
-        using (MemoryStream memoryStream = new MemoryStream(byteArray))
-        {
-            return binaryFormatter.Deserialize(memoryStream);
-        }
+        using MemoryStream memoryStream = new MemoryStream(byteArray);
+        return (T) binaryFormatter.Deserialize(memoryStream);
     }
 }
