@@ -18,14 +18,14 @@ public partial class MainWindow : Window
     public MainWindow()
     {
         InitializeComponent();
-        GLWpfControlSettings settings = new GLWpfControlSettings
+        /*GLWpfControlSettings settings = new GLWpfControlSettings
         {
             MajorVersion = 4,
             MinorVersion = 0
-        };
+        };*/
         //OpenTkControl.Start(settings);
-        _skinPreviewRenderer = new SkinPreviewRenderer();
-        _skinPreviewRenderer.SetUp();
+        //_skinPreviewRenderer = new SkinPreviewRenderer();
+        //_skinPreviewRenderer.SetUp();
     }
 
     private void PlayButtonOnClick(object sender, RoutedEventArgs e)
