@@ -8,15 +8,13 @@ namespace BFML.Core;
 
 public sealed class Forge
 {
+    public readonly MVersion Version;
     private readonly MinecraftPath _minecraftPath;
-    private readonly MVersion _version;
-    private readonly BFMLFileClient _fileClient;
 
-    public Forge(MinecraftPath minecraftPath, MVersion version, BFMLFileClient fileClient)
+    public Forge(MVersion version, MinecraftPath minecraftPath)
     {
+        Version = version;
         _minecraftPath = minecraftPath;
-        _version = version;
-        _fileClient = fileClient;
     }
 
     public bool IsInstalled()

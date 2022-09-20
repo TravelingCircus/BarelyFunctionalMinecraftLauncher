@@ -12,78 +12,83 @@ namespace BFML.Core;
 
 public sealed class Game
 {
-    public readonly MVersion VanillaVersion;
-    public readonly MVersion ForgeVersion;
-
+    public readonly Vanilla Vanilla;
+    public readonly Forge Forge;
+    public readonly Mods Mods;
     private readonly BFMLFileClient _fileClient;
     private readonly CMLauncher _launcher;
     private readonly MinecraftPath _minecraftPath;
-    private readonly Vanilla _vanilla;
-    private readonly Forge _forge;
 
-    private Game(BFMLFileClient fileClient)
+    private Game(BFMLFileClient fileClient, MinecraftPath minecraftPath, Vanilla vanilla, Forge forge, Mods mods)
     {
         _fileClient = fileClient;
-        _minecraftPath = new MinecraftPath();
+        _minecraftPath = minecraftPath;
+        Vanilla = vanilla;
+        Forge = forge;
+        Mods = mods;
         _launcher = new CMLauncher(_minecraftPath);
-        
-        ForgeVersion.InheritFrom(VanillaVersion);
-        _vanilla = new Vanilla(_minecraftPath, VanillaVersion);
-        _forge = new Forge(_minecraftPath, ForgeVersion, _fileClient);
     }
 
     public static async Task<Game> SetUp(BFMLFileClient fileClient)
     {
         LaunchConfiguration configuration = await fileClient.DownloadLaunchConfiguration();
-        throw new NotImplementedException();
+
+        MinecraftPath path = new MinecraftPath();
+        MVersion vanillaVersion = new MVersion(configuration.VanillaVersion);
+        MVersion forgeVersion = new MVersion(configuration.VanillaVersion+"-forge-"+configuration.ForgeVersion);
+        forgeVersion.InheritFrom(vanillaVersion);
+        
+        return new Game(fileClient, path,
+            new Vanilla(vanillaVersion, path),
+            new Forge(forgeVersion, path),
+            new Mods(path));
     }
 
     public void Launch()
     {
         System.Net.ServicePointManager.DefaultConnectionLimit = 256;
-        Process process = _launcher.CreateProcess(ForgeVersion, new MLaunchOption()
+        Process process = _launcher.CreateProcess(Forge.Version, new MLaunchOption
         {
-            MaximumRamMb = 8192, //TODO Get values from somewhere else that my own ass
+            MaximumRamMb = 8192, //TODO Get values from somewhere other than my own ass
             Session = MSession.GetOfflineSession("BFML_TEST")
         },false);
         process.Start();
     }
     
-    public Task Install()
+    public async Task Install()
     {
         DeleteAllFiles();
-        InstallMinecraft();
+        await InstallMinecraft().ConfigureAwait(false);
         Task[] tasks = {
             InstallForge(),
             InstallMods()
         };
-        return Task.WhenAll(tasks);
+        await Task.WhenAll(tasks).ConfigureAwait(false);
     }
 
     public bool IsReadyToLaunch()
     {
         throw new NotImplementedException();
-        return _forge.IsInstalled();
+        return Forge.IsInstalled();
     }
 
-    public Task DeleteAllFiles()
+    public void DeleteAllFiles()
     {
         string minecraftDirectory = _minecraftPath.BasePath;
-        return Task.Run(() =>
-        {
-            if (!Directory.Exists(minecraftDirectory)) return;
-            Directory.Delete(minecraftDirectory);
-        });
+        if (!Directory.Exists(minecraftDirectory)) return;
+        
+        Directory.Delete(minecraftDirectory);
     }
 
     private Task InstallMinecraft()
     {
-        return _launcher.CheckAndDownloadAsync(VanillaVersion);
+        return _launcher.CheckAndDownloadAsync(Vanilla.Version);
     }
 
-    private Task InstallForge()
+    private async Task InstallForge()
     {
-        return Task.CompletedTask;
+        string forgeFilesZip = await _fileClient.DownloadForgeFiles();
+        await Forge.Install(forgeFilesZip).ConfigureAwait(false);
     }
     
     private Task InstallMods()

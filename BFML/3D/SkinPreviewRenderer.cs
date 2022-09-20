@@ -76,7 +76,7 @@ public class SkinPreviewRenderer
         GL.BindVertexArray(0);
     }
 
-    public Task Render(TimeSpan deltaTime)
+    public void Render(TimeSpan deltaTime)
     {
         GL.BindVertexArray(_vertexArrayObject);
         _shader.Use();
@@ -91,7 +91,5 @@ public class SkinPreviewRenderer
         _shader.SetUniformMatrix4("transform", ref transform);
 
         GL.DrawElements(PrimitiveType.Triangles, _triangles.Length, DrawElementsType.UnsignedInt, 0);
-
-        return Task.CompletedTask;
     }
 }

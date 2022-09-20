@@ -5,12 +5,12 @@ namespace BFML.Core;
 
 public sealed class Vanilla
 {
-    private readonly MVersion _version;
+    public readonly MVersion Version;
     private readonly MinecraftPath _path;
 
-    public Vanilla(MinecraftPath path, MVersion version)
+    public Vanilla(MVersion version, MinecraftPath path)
     {
-        _version = version;
+        Version = version;
         _path = path;
     }
 }
