@@ -9,12 +9,12 @@ public class RegistrationHandler : MessageHandler
         throw new NotImplementedException();
     }
 
-    public override void Handle(Message message)
+    public override Task Handle(Message message)
     {
         throw new NotImplementedException();
     }
 
-    public override Message GetResponse(Message message)
+    public override Task<Message> GetResponse(Message message)
     {
         throw new NotImplementedException();
     }

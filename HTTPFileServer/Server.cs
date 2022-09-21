@@ -48,14 +48,12 @@ public class Server
     {
         NetworkStream networkStream = client.GetStream();
         NetworkChannel networkChannel = new NetworkChannel(networkStream);
-        Message message;
-        MessageHandler messageHandler;
         while (client.Connected)
         {
-            message = await networkChannel.ListenForMessage();
-            //messageHandler = //TODO PickHandler();
-            //TODO message = await messageHandler.Handle();
-            //TODO Handle request and return response
+            Message message = await networkChannel.ListenForMessage();
+            //message = MessageHandler.GetRightTypeMessage(message).FromData(message.GetData());
+            MessageHandler messageHandler = HandlerPicker.GetFor(message);
+            message = await messageHandler.GetResponse(message);
             await networkChannel.SendMessage(message);
         }
         Console.WriteLine($"HANDLING CONNECTION thread_{Thread.CurrentThread.ManagedThreadId}");
