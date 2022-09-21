@@ -1,4 +1,4 @@
-﻿namespace CommonData;
+﻿namespace CommonData.Network;
 
 public abstract class MessageHandler
 {
