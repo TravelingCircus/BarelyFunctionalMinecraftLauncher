@@ -2,15 +2,13 @@
 
 public abstract class Message
 {
-    protected byte[] messageBytes;
+    public abstract byte[] GetHeader();
 
-    public byte[] MessageToByteArray()
+    public byte[] WriteDataTo(StreamWriter writer)
     {
-        return DataConverter.ObjectToByteArray(this);
+        //TODO write from data stream to supplied writer
+        throw new NotImplementedException();
     }
-    
-    public Message ByteArrayToMessage()
-    {
-        return DataConverter.ByteArrayToObject<Message>(messageBytes);
-    }
+
+    public abstract StreamReader GetData();
 }
