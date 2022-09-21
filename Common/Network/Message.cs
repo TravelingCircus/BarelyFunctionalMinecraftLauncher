@@ -10,5 +10,7 @@ public abstract class Message
         throw new NotImplementedException();
     }
 
-    public abstract StreamReader GetData();
+    public abstract Stream GetData();
+
+    public abstract Message FromData(StreamReader reader);
 }
