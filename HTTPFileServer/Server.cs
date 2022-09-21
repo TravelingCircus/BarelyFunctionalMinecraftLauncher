@@ -5,8 +5,9 @@ namespace HTTPFileServer;
 
 public class Server
 {
-    private CancellationTokenSource _cancellationTokenSource;
-    private TcpListener _tcpListener;
+    public bool IsRunning { get; private set; }
+    private readonly CancellationTokenSource _cancellationTokenSource;
+    private readonly TcpListener _tcpListener;
     
     public Server()
     {
@@ -18,7 +19,7 @@ public class Server
     {
         _tcpListener.Start();
         CancellationToken cancellationToken = _cancellationTokenSource.Token;
-
+        IsRunning = true;
         Console.WriteLine($"STARTED thread_{Thread.CurrentThread.ManagedThreadId}");
         Task.Run(() =>
         {
@@ -32,23 +33,27 @@ public class Server
         {
             Console.WriteLine($"LISTENING thread_{Thread.CurrentThread.ManagedThreadId}");
             TcpClient tcpClient = _tcpListener.AcceptTcpClient();
-            Console.WriteLine($"RECEIVED CONNECTION thread_{Thread.CurrentThread.ManagedThreadId}");
+            if(tcpClient.Connected)Console.WriteLine($"RECEIVED CONNECTION thread_{Thread.CurrentThread.ManagedThreadId}");
             Task.Run(() =>
             {
                 HandleClient(tcpClient);
             }, cancellationToken);
         }
+        Console.WriteLine($"STOPPED LISTENING thread_{Thread.CurrentThread.ManagedThreadId}");
     }
     
     private void HandleClient(TcpClient client)
     {
+        NetworkStream networkStream = client.GetStream();
         Console.WriteLine($"HANDLING CONNECTION thread_{Thread.CurrentThread.ManagedThreadId}");
     }
 
     public void Terminate()
     {
         _cancellationTokenSource.Cancel();
+        _cancellationTokenSource.Dispose();
         _tcpListener.Stop();
-        Console.WriteLine("TERMINATED");
+        IsRunning = false;
+        Console.WriteLine($"TERMINATED thread_{Thread.CurrentThread.ManagedThreadId}");
     }
 }

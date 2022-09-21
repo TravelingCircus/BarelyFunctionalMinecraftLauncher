@@ -1,15 +1,15 @@
-﻿
-namespace HTTPFileServer;
+﻿namespace HTTPFileServer;
 
 internal static class Program
 {
-    private static void Main(string[] args)
+    private static async Task Main()
     {
         Server server = new Server();
         server.Start();
-        if (Console.ReadLine() == "/close")
+        
+        while (server.IsRunning)
         {
-            server.Terminate();
+            await Task.Delay(100);
         }
     }
 }
