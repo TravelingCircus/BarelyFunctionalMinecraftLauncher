@@ -1,9 +1,24 @@
-﻿namespace CommonData;
+﻿using System.Net.Sockets;
+using CommonData.Network;
+
+namespace CommonData;
 
 public class NetworkChannel
 {
-    //public Task SendMessage(Message message);
-    //public Task<Message> ListenForMessage();
+    private NetworkStream _stream;
+    
+    public NetworkChannel(NetworkStream stream)
+    {
+        _stream = stream;
+    }
+    
+    public Task SendMessage(Message message)
+    {
+        throw new NotImplementedException();
+    }
 
-    //private void PickHandler();
+    public Task<Message> ListenForMessage()
+    {
+        throw new NotImplementedException();
+    }
 }

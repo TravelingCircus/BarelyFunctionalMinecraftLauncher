@@ -1,5 +1,7 @@
 ﻿using System.Net;
 using System.Net.Sockets;
+using CommonData;
+using CommonData.Network;
 
 namespace HTTPFileServer;
 
@@ -36,15 +38,26 @@ public class Server
             if(tcpClient.Connected)Console.WriteLine($"RECEIVED CONNECTION thread_{Thread.CurrentThread.ManagedThreadId}");
             Task.Run(() =>
             {
-                HandleClient(tcpClient);
+                HandleClient(tcpClient).GetAwaiter();
             }, cancellationToken);
         }
         Console.WriteLine($"STOPPED LISTENING thread_{Thread.CurrentThread.ManagedThreadId}");
     }
     
-    private void HandleClient(TcpClient client)
+    private async Task HandleClient(TcpClient client)
     {
         NetworkStream networkStream = client.GetStream();
+        NetworkChannel networkChannel = new NetworkChannel(networkStream);
+        Message message;
+        MessageHandler messageHandler;
+        while (client.Connected)
+        {
+            message = await networkChannel.ListenForMessage();
+            //messageHandler = //TODO PickHandler();
+            //TODO message = await messageHandler.Handle();
+            //TODO Handle request and return response
+            await networkChannel.SendMessage(message);
+        }
         Console.WriteLine($"HANDLING CONNECTION thread_{Thread.CurrentThread.ManagedThreadId}");
     }
 
