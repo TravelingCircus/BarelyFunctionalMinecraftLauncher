@@ -2,4 +2,16 @@
     <Style x:Key="Minecraft">
         <Setter Property="TextElement.FontFamily" Value="/Fonts/#MinecraftFont" />
     </Style>
+    <Style x:Key="GlowText">
+        <Setter Property="TextBlock.Effect">
+            <Setter.Value>
+                <DropShadowEffect
+                    BlurRadius="30"
+                    Direction="270"
+                    Opacity="1"
+                    ShadowDepth="0"
+                    Color="#ff9a3c" />
+            </Setter.Value>
+        </Setter>
+    </Style>
 </ResourceDictionary>

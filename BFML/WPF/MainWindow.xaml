@@ -46,8 +46,17 @@
                 Grid.Row="0"
                 Grid.Column="1"
                 Width="360"
-                Height="106"
-                Margin="20,373,20,221"
+                Margin="20,332,20,269"
+                Fill="#383838"
+                RadiusX="4"
+                RadiusY="4" />
+
+            <Rectangle
+                Grid.Row="0"
+                Grid.Column="1"
+                Width="360"
+                Height="45"
+                Margin="20,443,20,212"
                 Fill="#383838"
                 RadiusX="4"
                 RadiusY="4" />
@@ -57,7 +66,7 @@
                 Grid.Column="1"
                 Width="300"
                 Height="284"
-                Margin="50,34,50,382"
+                Margin="50,30,50,386"
                 Fill="#383838"
                 RadiusX="4"
                 RadiusY="4" />
@@ -67,7 +76,7 @@
                 Grid.Column="1"
                 Width="360"
                 Height="116"
-                Margin="20,551,20,33"
+                Margin="20,554,20,30"
                 Background="#ff9a3c"
                 Content="Play"
                 Cursor="Hand"
@@ -78,8 +87,23 @@
 
             <local:Toggle
                 Grid.Column="1"
-                Margin="170,411,170,259"
+                Margin="313,452,31,220"
                 Template="{DynamicResource ToggleTemplate1}" />
+
+            <TextBlock
+                Grid.Column="1"
+                Width="70"
+                Margin="66,-6,264,354"
+                FontFamily="Minecraft"
+                FontSize="60"
+                Foreground="#ff9a3c"
+                LineHeight="60"
+                LineStackingStrategy="BlockLineHeight"
+                Style="{DynamicResource GlowText}"
+                Text=" BFML"
+                TextAlignment="Center"
+                TextWrapping="Wrap" />
+
         </Grid>
 
     </Border>

@@ -60,11 +60,11 @@ public partial class MainWindow : Window
         GL.ClearColor(Color4.White);
         GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
 
-        await _skinPreviewRenderer.Render(obj).ConfigureAwait(false);
+        //await _skinPreviewRenderer.Render(obj).ConfigureAwait(false);
     }
 
     private void ServerButtonOnClick(object sender, RoutedEventArgs e)
     {
-        BFMLFileClient.ConnectToServer();
+        //BFMLFileClient.ConnectToServer();
     }
 }

@@ -4,23 +4,26 @@
     xmlns:local="clr-namespace:ToggleClass">
 
     <Style x:Key="ToggleSyle1" TargetType="{x:Type local:Toggle}">
-        <Setter Property="MaxHeight" Value="30" />
-        <Setter Property="MaxWidth" Value="60" />
-        <Setter Property="MinHeight" Value="30" />
-        <Setter Property="MinWidth" Value="60" />
+        <Setter Property="MaxHeight" Value="28" />
+        <Setter Property="MaxWidth" Value="56" />
+        <Setter Property="MinHeight" Value="28" />
+        <Setter Property="MinWidth" Value="56" />
     </Style>
     <ControlTemplate x:Key="ToggleTemplate1" TargetType="{x:Type local:Toggle}">
         <Border
             x:Name="BackOfSwitch"
             Background="#FF595959"
-            CornerRadius="15">
+            CornerRadius="14">
 
             <Ellipse
                 x:Name="FrontOfSwitch"
-                Width="26"
+                Width="24"
                 Margin="2"
                 HorizontalAlignment="Left"
                 Fill="#ff9a3c" />
+
+
+
 
         </Border>
         <ControlTemplate.Triggers>
@@ -34,6 +37,18 @@
                             BlurRadius="30"
                             Direction="270"
                             Opacity="1"
+                            ShadowDepth="0"
+                            Color="#ff9a3c" />
+                    </Setter.Value>
+                </Setter>
+            </Trigger>
+            <Trigger Property="IsChecked" Value="false">
+                <Setter TargetName="FrontOfSwitch" Property="Effect">
+                    <Setter.Value>
+                        <DropShadowEffect
+                            BlurRadius="18"
+                            Direction="270"
+                            Opacity="0.8"
                             ShadowDepth="0"
                             Color="#ff9a3c" />
                     </Setter.Value>
