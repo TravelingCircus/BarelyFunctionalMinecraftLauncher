@@ -30,6 +30,7 @@ public sealed class RegistrationHandler : MessageHandler
         RegistrationRequest request = new RegistrationRequest();
         request.FromData(dataStream);
         bool success = await _repository.AddNewUser(new User(request.NickName, request.PasswordHash, 0));
+        Console.WriteLine($"SENT RESPONSE:{success} thread_{Thread.CurrentThread.ManagedThreadId}");
         return new RegistrationResponse(success);
     }
 }
