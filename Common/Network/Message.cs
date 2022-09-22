@@ -2,15 +2,14 @@
 
 public abstract class Message
 {
-    public abstract byte[] GetHeader();
+    public abstract MessageHeader GetHeader();
 
-    public byte[] WriteDataTo(StreamWriter writer)
+    public Task WriteDataTo(Stream targetStream)
     {
-        //TODO write from data stream to supplied writer
-        throw new NotImplementedException();
+        return GetData().CopyToAsync(targetStream);
     }
 
-    public abstract Stream GetData();
+    public abstract void FromData(Stream stream);
 
-    public abstract Message FromData(StreamReader reader);
+    protected abstract Stream GetData();
 }
