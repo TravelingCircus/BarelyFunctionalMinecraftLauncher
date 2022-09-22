@@ -1,7 +1,6 @@
 ﻿using System.Net.Sockets;
-using CommonData.Network;
 
-namespace CommonData;
+namespace CommonData.Network;
 
 public class NetworkChannel
 {
@@ -27,6 +26,7 @@ public class NetworkChannel
     {
         MemoryStream memoryStream = new MemoryStream(header.DataLength);
         _stream.CopyToAsync(memoryStream);
+        memoryStream.Position = 0;
         return Task.FromResult((Stream)memoryStream);
     }
     

@@ -2,6 +2,7 @@
 using System.Net.Sockets;
 using CommonData;
 using CommonData.Network;
+using HTTPFileServer.DataAccess;
 using HTTPFileServer.MessageHandlers;
 
 namespace HTTPFileServer;
@@ -20,7 +21,8 @@ public class Server
 
     public void Start()
     {
-        HandlerPicker.RegisterHandler(1, new RegistrationHandler());
+        Repository repository = new Repository();
+        HandlerPicker.RegisterHandler(1, new RegistrationHandler(repository));
         //TODO properly register handlers
         
         _tcpListener.Start();

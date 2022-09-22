@@ -8,6 +8,10 @@ public class RegistrationRequest : Message
     public string NickName;
     public string PasswordHash;
 
+    public RegistrationRequest()
+    {
+    }
+
     public RegistrationRequest(string nickName, string passwordHash)
     {
         NickName = nickName;

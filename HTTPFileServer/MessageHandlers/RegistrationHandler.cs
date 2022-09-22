@@ -1,12 +1,22 @@
-﻿using CommonData.Network;
+﻿using CommonData;
+using CommonData.Network;
+using CommonData.Network.Messages;
+using HTTPFileServer.DataAccess;
 
 namespace HTTPFileServer.MessageHandlers;
 
-public class RegistrationHandler : MessageHandler
+public sealed class RegistrationHandler : MessageHandler
 {
+    private Repository _repository;
+
+    public RegistrationHandler(Repository repository)
+    {
+        _repository = repository;
+    }
+
     public override bool CanHandle(MessageHeader messageHeader)
     {
-        throw new NotImplementedException();
+        return messageHeader.MessageKey == 1;
     }
 
     public override Task Handle(Stream dataStream)
@@ -14,8 +24,11 @@ public class RegistrationHandler : MessageHandler
         throw new NotImplementedException();
     }
 
-    public override Task<Message> GetResponse(Stream dataStream)
+    public override async Task<Message> GetResponse(Stream dataStream)
     {
-        throw new NotImplementedException();
+        RegistrationRequest request = new RegistrationRequest();
+        request.FromData(dataStream);
+        bool success = await _repository.AddNewUser(new User(request.NickName, request.PasswordHash, 0));
+        return new RegistrationResponse(success);
     }
 }
