@@ -4,7 +4,7 @@ namespace HTTPFileServer.MessageHandlers;
 
 public class RegistrationHandler : MessageHandler
 {
-    public override bool CanHandle(Message message)
+    public override bool CanHandle(MessageHeader messageheader)
     {
         throw new NotImplementedException();
     }

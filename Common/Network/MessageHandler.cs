@@ -2,7 +2,7 @@
 
 public abstract class MessageHandler
 {
-    public abstract bool CanHandle(Message message);
+    public abstract bool CanHandle(MessageHeader messageHeader);
     public abstract Task Handle(Stream dataStream);
     public abstract Task<Message> GetResponse(Stream dataStream);
 
