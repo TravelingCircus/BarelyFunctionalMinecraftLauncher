@@ -21,7 +21,8 @@ public class Server
 
     public void Start()
     {
-        Repository repository = new Repository();
+        //Repository repository = new Repository(@"WSTAW SIUDA SWOYE MISTSE");
+        Repository repository = new Repository(@"C:\Users\maksy\Desktope\TestRepo");
         HandlerPicker.RegisterHandler(1, new RegistrationHandler(repository));
         //TODO properly register handlers
         

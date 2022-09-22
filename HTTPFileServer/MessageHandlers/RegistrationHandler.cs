@@ -21,7 +21,7 @@ public sealed class RegistrationHandler : MessageHandler
 
     public override Task Handle(Stream dataStream)
     {
-        throw new NotImplementedException();
+        throw new NotSupportedException();
     }
 
     public override async Task<Message> GetResponse(Stream dataStream)
