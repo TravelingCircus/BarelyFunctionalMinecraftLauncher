@@ -2,6 +2,7 @@
 using System.Net.Sockets;
 using CommonData;
 using CommonData.Network;
+using HTTPFileServer.MessageHandlers;
 
 namespace HTTPFileServer;
 
@@ -19,6 +20,9 @@ public class Server
 
     public void Start()
     {
+        HandlerPicker.RegisterHandler(1, new RegistrationHandler());
+        //TODO properly register handlers
+        
         _tcpListener.Start();
         CancellationToken cancellationToken = _cancellationTokenSource.Token;
         IsRunning = true;
