@@ -26,6 +26,7 @@ public sealed class RegistrationHandler : MessageHandler
 
     public override async Task<Message> GetResponse(Stream dataStream)
     {
+        Console.WriteLine($"HANDLING REGISTRATION REQUEST thread_{Thread.CurrentThread.ManagedThreadId}");
         RegistrationRequest request = new RegistrationRequest();
         request.FromData(dataStream);
         bool success = await _repository.AddNewUser(new User(request.NickName, request.PasswordHash, 0));

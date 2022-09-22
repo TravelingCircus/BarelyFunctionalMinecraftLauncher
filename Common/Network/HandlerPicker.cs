@@ -7,7 +7,7 @@ public static class HandlerPicker
     
     public static MessageHandler GetHandler(MessageHeader messageHeader)
     {
-        if (_keyToHandler.ContainsKey(messageHeader.MessageKey))
+        if (!_keyToHandler.ContainsKey(messageHeader.MessageKey))
         {
             throw new ArgumentOutOfRangeException(nameof(messageHeader),
                 $"No handler registered for key: {messageHeader.MessageKey}");

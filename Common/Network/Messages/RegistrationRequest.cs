@@ -22,8 +22,8 @@ public class RegistrationRequest : Message
     {
         return new MessageHeader(Key, 
             2 * sizeof(int)
-            +NickName.Length * sizeof(char)
-            +PasswordHash.Length * sizeof(char));
+            +NickName.Length
+            +PasswordHash.Length);
     }
 
     protected override Stream GetData()
@@ -36,6 +36,7 @@ public class RegistrationRequest : Message
         buffer.Write(nicknameBytes);
         buffer.Write(BitConverter.GetBytes(passwordBytes.Length));
         buffer.Write(passwordBytes);
+        buffer.Position = 0;
         return buffer;
     }
 

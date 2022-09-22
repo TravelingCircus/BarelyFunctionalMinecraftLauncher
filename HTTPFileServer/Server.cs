@@ -59,10 +59,8 @@ public class Server
         {
             MessageHeader header = await networkChannel.ListenForHeader();
             Stream messageData = await networkChannel.ListenForMessage(header);
-
             MessageHandler messageHandler = HandlerPicker.GetHandler(header);
             Message response = await messageHandler.GetResponse(messageData);
-            
             await networkChannel.SendMessage(response);
         }
         

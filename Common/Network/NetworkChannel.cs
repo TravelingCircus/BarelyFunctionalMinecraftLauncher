@@ -25,7 +25,17 @@ public class NetworkChannel
     public Task<Stream> ListenForMessage(MessageHeader header)
     {
         MemoryStream memoryStream = new MemoryStream(header.DataLength);
-        _stream.CopyToAsync(memoryStream);
+        int read = 0;
+        List<byte> result = new List<byte>();
+        while (read < header.DataLength)
+        {
+            int leftToRead = header.DataLength - read;
+            byte[] buffer = new byte[leftToRead];
+            int readThisTime = _stream.Read(buffer, 0, leftToRead);
+            result.AddRange(buffer[0..readThisTime]);
+            read += readThisTime;
+        }
+        memoryStream.Write(result.ToArray(), 0, header.DataLength);
         memoryStream.Position = 0;
         return Task.FromResult((Stream)memoryStream);
     }

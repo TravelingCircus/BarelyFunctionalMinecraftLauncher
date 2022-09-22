@@ -8,7 +8,10 @@ public abstract class Message
 
     public Task WriteDataTo(Stream targetStream)
     {
-        return GetData().CopyToAsync(targetStream);
+        Stream source = GetData();
+        byte[] buffer = new byte[source.Length];
+        source.Read(buffer, 0, buffer.Length);
+        return targetStream.WriteAsync(buffer, 0, buffer.Length);
     }
 
     public abstract void FromData(Stream stream);
