@@ -2,14 +2,9 @@
 
 public abstract class MessageHandler
 {
-    /*private static Dictionary<byte, Message> _keyToMessage = new Dictionary<byte, Message>()
-    {
-        {0, new Message()}
-    };*/
-    
     public abstract bool CanHandle(Message message);
-    public abstract Task Handle(Message message);
-    public abstract Task<Message> GetResponse(Message message);
+    public abstract Task Handle(Stream dataStream);
+    public abstract Task<Message> GetResponse(Stream dataStream);
 
     public static Message GetRightTypeMessage(Message message)
     {

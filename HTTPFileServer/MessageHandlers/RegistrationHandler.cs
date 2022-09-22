@@ -9,12 +9,12 @@ public class RegistrationHandler : MessageHandler
         throw new NotImplementedException();
     }
 
-    public override Task Handle(Message message)
+    public override Task Handle(Stream dataStream)
     {
         throw new NotImplementedException();
     }
 
-    public override Task<Message> GetResponse(Message message)
+    public override Task<Message> GetResponse(Stream dataStream)
     {
         throw new NotImplementedException();
     }
