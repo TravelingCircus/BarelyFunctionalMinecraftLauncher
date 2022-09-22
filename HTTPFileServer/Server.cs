@@ -50,12 +50,15 @@ public class Server
         NetworkChannel networkChannel = new NetworkChannel(networkStream);
         while (client.Connected)
         {
-            Message message = await networkChannel.ListenForMessage();
-            //message = MessageHandler.GetRightTypeMessage(message).FromData(message.GetData());
-            MessageHandler messageHandler = HandlerPicker.GetFor(message);
-            message = await messageHandler.GetResponse(message);
-            await networkChannel.SendMessage(message);
+            MessageHeader header = await networkChannel.ListenForHeader();
+            Stream messageData = await networkChannel.ListenForMessage(header);
+
+            MessageHandler messageHandler = HandlerPicker.GetHandler(header);
+            Message response = await messageHandler.GetResponse(messageData);
+            
+            await networkChannel.SendMessage(response);
         }
+        
         Console.WriteLine($"HANDLING CONNECTION thread_{Thread.CurrentThread.ManagedThreadId}");
     }
 

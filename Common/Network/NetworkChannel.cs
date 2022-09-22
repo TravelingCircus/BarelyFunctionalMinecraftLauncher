@@ -11,8 +11,13 @@ public class NetworkChannel
     {
         _stream = stream;
     }
+
+    public Task<MessageHeader> ListenForHeader()
+    {
+        throw new NotImplementedException();
+    }
     
-    public Task<Message> ListenForMessage()
+    public Task<Stream> ListenForMessage(MessageHeader header)
     {
         throw new NotImplementedException();
     }

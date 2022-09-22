@@ -16,9 +16,10 @@ public class RegistrationRequest : Message
 
     public override MessageHeader GetHeader()
     {
-        return new MessageHeader(Key, 2 * sizeof(int)
-        +NickName.Length * sizeof(char)
-        +PasswordHash.Length * sizeof(char));
+        return new MessageHeader(Key, 
+            2 * sizeof(int)
+            +NickName.Length * sizeof(char)
+            +PasswordHash.Length * sizeof(char));
     }
 
     protected override Stream GetData()
@@ -38,7 +39,7 @@ public class RegistrationRequest : Message
     {
         byte[] intBuffer = new byte[4];
         byte[] stringBuffer;
-        
+        //TODO extract writing/reading primitive types
         stream.Read(intBuffer, 0, 4);
         int stringLength = BitConverter.ToInt32(intBuffer, 0);
         stringBuffer = new byte[stringLength];
