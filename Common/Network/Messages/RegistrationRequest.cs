@@ -41,19 +41,7 @@ public class RegistrationRequest : Message
 
     public override void FromData(Stream stream)
     {
-        byte[] intBuffer = new byte[4];
-        byte[] stringBuffer;
-        //TODO extract writing/reading primitive types
-        stream.Read(intBuffer, 0, 4);
-        int stringLength = BitConverter.ToInt32(intBuffer, 0);
-        stringBuffer = new byte[stringLength];
-        stream.Read(stringBuffer, 0, stringLength);
-        NickName = Encoding.UTF8.GetString(stringBuffer);
-        
-        stream.Read(intBuffer, 0, 4);
-        stringLength = BitConverter.ToInt32(intBuffer, 0);
-        stringBuffer = new byte[stringLength];
-        stream.Read(stringBuffer, 0, stringLength);
-        PasswordHash = Encoding.UTF8.GetString(stringBuffer);
+        NickName = StringReadStream(stream);
+        PasswordHash = StringReadStream(stream);
     }
 }

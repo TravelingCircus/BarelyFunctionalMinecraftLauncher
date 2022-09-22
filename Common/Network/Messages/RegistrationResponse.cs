@@ -3,6 +3,7 @@
 public class RegistrationResponse : Message
 {
     public bool Success;
+    public const byte Key = 2;
 
     public RegistrationResponse(bool success)
     {
@@ -11,16 +12,19 @@ public class RegistrationResponse : Message
 
     public override MessageHeader GetHeader()
     {
-        throw new NotImplementedException();
+        return new MessageHeader(Key, 1);
     }
 
     public override void FromData(Stream stream)
     {
-        throw new NotImplementedException();
+        Success = BoolReadStream(stream);
     }
 
     protected override Stream GetData()
     {
-        throw new NotImplementedException();
+        MemoryStream buffer = new MemoryStream();
+        byte[] successBytes = BitConverter.GetBytes(Success);
+        buffer.Write(successBytes);
+        return buffer;
     }
 }
