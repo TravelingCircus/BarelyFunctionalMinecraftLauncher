@@ -40,6 +40,16 @@ public sealed class FileClient
         return true;
     }
 
+    public Task<string> DownloadForgeFiles()
+    {
+        throw new NotImplementedException();
+    }
+
+    public Task<LaunchConfiguration> DownloadLaunchConfiguration()
+    {
+        throw new NotImplementedException();
+    }
+
     private async Task SendRequestsWhenAvailable(NetworkChannel networkChannel, 
         ConcurrentQueue<Query> queryQueue, CancellationToken cancellationToken)
     {
@@ -56,17 +66,7 @@ public sealed class FileClient
             }
         }
     }
-
-    public Task<string> DownloadForgeFiles()
-    {
-        throw new NotImplementedException();
-    }
-
-    public Task<LaunchConfiguration> DownloadLaunchConfiguration()
-    {
-        throw new NotImplementedException();
-    }
-
+    
     private Task<Message> GetResponseFor(Message request)
     {
         TaskCompletionSource<Message> taskCompletionSource = new TaskCompletionSource<Message>();
