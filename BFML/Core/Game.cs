@@ -15,11 +15,11 @@ public sealed class Game
     public readonly Vanilla Vanilla;
     public readonly Forge Forge;
     public readonly Mods Mods;
-    private readonly TCPFileClient.FileClient _fileClient;
+    private readonly FileClient _fileClient;
     private readonly CMLauncher _launcher;
     private readonly MinecraftPath _minecraftPath;
 
-    private Game(TCPFileClient.FileClient fileClient, MinecraftPath minecraftPath, Vanilla vanilla, Forge forge, Mods mods)
+    private Game(FileClient fileClient, MinecraftPath minecraftPath, Vanilla vanilla, Forge forge, Mods mods)
     {
         _fileClient = fileClient;
         _minecraftPath = minecraftPath;
@@ -29,7 +29,7 @@ public sealed class Game
         _launcher = new CMLauncher(_minecraftPath);
     }
 
-    public static async Task<Game> SetUp(TCPFileClient.FileClient fileClient)
+    public static async Task<Game> SetUp(FileClient fileClient)
     {
         LaunchConfiguration configuration = await fileClient.DownloadLaunchConfiguration();
 
