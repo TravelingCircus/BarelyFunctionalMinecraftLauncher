@@ -2,8 +2,12 @@
 
 public sealed class ForgeDownloadRequest : Message
 {
-    public const byte Key = 5;
     public string FilePath;
+    
+    public ForgeDownloadRequest()
+    {
+        
+    }
     
     public ForgeDownloadRequest(string filePath)
     {
@@ -12,7 +16,8 @@ public sealed class ForgeDownloadRequest : Message
     
     public override MessageHeader GetHeader()
     {
-        return new MessageHeader(Key,GetFileSizeBytes(FilePath));
+        return new MessageHeader(MessageRegistry.GetKeyForMessageType(typeof(ForgeDownloadRequest)),
+            GetFileSizeBytes(FilePath));
     }
 
     public override void ApplyData(Stream stream)

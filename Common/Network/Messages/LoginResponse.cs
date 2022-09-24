@@ -3,8 +3,12 @@
 public class LoginResponse: Message
 {
     public bool LoginSuccess;
-    public const byte Key = 4;
 
+    public LoginResponse()
+    {
+        
+    }
+    
     public LoginResponse(bool loginSuccess)
     {
         LoginSuccess = loginSuccess;
@@ -12,7 +16,7 @@ public class LoginResponse: Message
 
     public override MessageHeader GetHeader()
     {
-        return new MessageHeader(Key, 1);
+        return new MessageHeader(MessageRegistry.GetKeyForMessageType(typeof(LoginResponse)), 1);
     }
 
     public override void ApplyData(Stream stream)

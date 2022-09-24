@@ -16,7 +16,7 @@ public sealed class RegistrationHandler : MessageHandler
 
     public override bool CanHandle(MessageHeader messageHeader)
     {
-        return messageHeader.MessageKey == 1;
+        return MessageRegistry.GetMessageTypeName(messageHeader) == nameof(RegistrationRequest);
     }
 
     public override Task Handle(Stream dataStream)

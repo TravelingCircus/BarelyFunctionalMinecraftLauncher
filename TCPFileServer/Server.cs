@@ -1,6 +1,7 @@
 ﻿using System.Net;
 using System.Net.Sockets;
 using CommonData.Network;
+using CommonData.Network.Messages;
 using HTTPFileServer.DataAccess;
 using HTTPFileServer.MessageHandlers;
 
@@ -23,8 +24,8 @@ public class Server
         //Repository repository = new Repository(@"WSTAW SIUDA SWOYE MISTSE");
         Repository repository = new Repository(@"C:\Users\maksy\Desktope\TestRepo");
         //Repository repository = new Repository(@"D:\Home\Desktope\TestDownload");
-        HandlerPicker.RegisterHandler(1, new RegistrationHandler(repository));
-        HandlerPicker.RegisterHandler(3, new LoginHandler(repository));
+        HandlerPicker.RegisterHandler(nameof(RegistrationRequest), new RegistrationHandler(repository));
+        HandlerPicker.RegisterHandler(nameof(LoginRequest), new LoginHandler(repository));
         //TODO properly register handlers
         
         _tcpListener.Start();
@@ -58,7 +59,6 @@ public class Server
         NetworkChannel networkChannel = new NetworkChannel(networkStream);
         while (client.Connected)
         {
-            //TODO convert to using MessageRegistry;
             MessageHeader header = await networkChannel.ListenForHeader();
             Stream messageData = await networkChannel.ListenForMessage(header);
             MessageHandler messageHandler = HandlerPicker.GetHandler(header);

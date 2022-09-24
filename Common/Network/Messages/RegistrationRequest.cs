@@ -4,7 +4,6 @@ namespace CommonData.Network.Messages;
 
 public class RegistrationRequest : Message
 {
-    public const byte Key = 1;
     public string NickName;
     public string PasswordHash;
 
@@ -20,7 +19,7 @@ public class RegistrationRequest : Message
 
     public override MessageHeader GetHeader()
     {
-        return new MessageHeader(Key, 
+        return new MessageHeader(MessageRegistry.GetKeyForMessageType(typeof(RegistrationRequest)), 
             2 * sizeof(int)
             +NickName.Length
             +PasswordHash.Length);

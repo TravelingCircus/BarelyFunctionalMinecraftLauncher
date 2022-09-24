@@ -3,8 +3,12 @@
 public class RegistrationResponse : Message
 {
     public bool Success;
-    public const byte Key = 2;
 
+    public RegistrationResponse()
+    {
+        
+    }
+    
     public RegistrationResponse(bool success)
     {
         Success = success;
@@ -12,7 +16,7 @@ public class RegistrationResponse : Message
 
     public override MessageHeader GetHeader()
     {
-        return new MessageHeader(Key, 1);
+        return new MessageHeader(MessageRegistry.GetKeyForMessageType(typeof(RegistrationResponse)), 1);
     }
 
     public override void ApplyData(Stream stream)

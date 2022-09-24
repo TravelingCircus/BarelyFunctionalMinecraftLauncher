@@ -16,7 +16,7 @@ public class LoginHandler: MessageHandler
 
     public override bool CanHandle(MessageHeader messageHeader)
     {
-        return messageHeader.MessageKey == 3;
+        return MessageRegistry.GetMessageTypeName(messageHeader) == nameof(LoginRequest);
     }
 
     public override Task Handle(Stream dataStream)

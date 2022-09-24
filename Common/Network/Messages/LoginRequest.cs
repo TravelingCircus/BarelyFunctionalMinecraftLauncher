@@ -4,11 +4,13 @@ namespace CommonData.Network.Messages;
 
 public class LoginRequest: Message
 {
-    public const byte Key = 3;
     public string NickName;
     public string PasswordHash;
-    
-    public LoginRequest(){}
+
+    public LoginRequest()
+    {
+        
+    }
 
     public LoginRequest(string nickName, string passwordHash)
     {
@@ -18,7 +20,7 @@ public class LoginRequest: Message
     
     public override MessageHeader GetHeader()
     {
-        return new MessageHeader(Key, 
+        return new MessageHeader(MessageRegistry.GetKeyForMessageType(typeof(LoginRequest)), 
             2 * sizeof(int)
             +NickName.Length
             +PasswordHash.Length);

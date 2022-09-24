@@ -50,7 +50,7 @@ public sealed class FileClient
                 await networkChannel.SendMessage(query.Request);
                 MessageHeader header = await _networkChannel.ListenForHeader();
                 Stream messageData = await _networkChannel.ListenForMessage(header);
-                Message response = MessageRegistry.GetEmptyMessageFor(header);
+                Message response = MessageRegistry.GetMessageFor(header);
                 response.ApplyData(messageData);
                 query.Response.SetResult(response);
             }
