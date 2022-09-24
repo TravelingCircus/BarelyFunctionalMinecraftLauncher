@@ -159,6 +159,7 @@
                 FontSize="60"
                 Foreground="#383838"
                 Style="{DynamicResource PlayButton}" />
+                Width="360"
 
             <Button
                 Grid.Row="0"

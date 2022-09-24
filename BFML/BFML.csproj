@@ -20,7 +20,7 @@
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\FileClient\FileClient.csproj" />
+      <ProjectReference Include="..\TCPFileClient\TCPFileClient.csproj" />
     </ItemGroup>
 
     <ItemGroup>

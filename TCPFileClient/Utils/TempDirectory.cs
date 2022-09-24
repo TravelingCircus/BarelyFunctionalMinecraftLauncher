@@ -1,4 +1,4 @@
-﻿namespace FileClient.Utils;
+﻿namespace TCPFileClient.Utils;
 
 public sealed class TempDirectory : IDisposable
 {

@@ -1,9 +1,9 @@
 ﻿using System.Net.Sockets;
 using CommonData;
 
-namespace FileClient;
+namespace TCPFileClient;
 
-public class BFMLFileClient
+public class FileClient
 {
     public static TcpClient ConnectToServer()
     {
