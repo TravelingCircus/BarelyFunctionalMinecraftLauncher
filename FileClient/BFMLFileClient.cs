@@ -5,7 +5,7 @@ namespace FileClient;
 
 public class BFMLFileClient
 {
-    public static TcpClient DebugConnectToServer()
+    public static TcpClient ConnectToServer()
     {
         TcpClient client = new TcpClient("127.0.0.1", 69);
         Console.WriteLine("Client connected");

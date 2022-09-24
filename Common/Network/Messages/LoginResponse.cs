@@ -1,13 +1,13 @@
 ﻿namespace CommonData.Network.Messages;
 
-public class RegistrationResponse : Message
+public class LoginResponse: Message
 {
-    public bool Success;
-    public const byte Key = 2;
+    public bool LoginSuccess;
+    public const byte Key = 4;
 
-    public RegistrationResponse(bool success)
+    public LoginResponse(bool loginSuccess)
     {
-        Success = success;
+        LoginSuccess = loginSuccess;
     }
 
     public override MessageHeader GetHeader()
@@ -17,13 +17,13 @@ public class RegistrationResponse : Message
 
     public override void FromData(Stream stream)
     {
-        Success = BoolReadStream(stream);
+        LoginSuccess = BoolReadStream(stream);
     }
 
     protected override Stream GetData()
     {
         MemoryStream buffer = new MemoryStream(1);
-        byte[] successBytes = BitConverter.GetBytes(Success);
+        byte[] successBytes = BitConverter.GetBytes(LoginSuccess);
         buffer.Write(successBytes);
         return buffer;
     }

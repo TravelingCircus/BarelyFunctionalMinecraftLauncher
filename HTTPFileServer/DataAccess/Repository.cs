@@ -23,4 +23,12 @@ public class Repository
         
         return Task.FromResult(true);
     }
+    
+    public Task<bool> CheckUser(User user)
+    {
+        string filePath = _path + $"/{user.Nickname}.xml";
+        if (File.Exists(filePath)) return Task.FromResult(true);
+
+        return Task.FromResult(false);
+    }
 }

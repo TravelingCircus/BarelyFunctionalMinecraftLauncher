@@ -23,7 +23,9 @@ public class Server
     {
         //Repository repository = new Repository(@"WSTAW SIUDA SWOYE MISTSE");
         Repository repository = new Repository(@"C:\Users\maksy\Desktope\TestRepo");
+        //Repository repository = new Repository(@"D:\Home\Desktope\TestDownload");
         HandlerPicker.RegisterHandler(1, new RegistrationHandler(repository));
+        HandlerPicker.RegisterHandler(3, new LoginHandler(repository));
         //TODO properly register handlers
         
         _tcpListener.Start();
