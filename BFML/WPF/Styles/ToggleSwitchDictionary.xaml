@@ -1,7 +1,7 @@
 ﻿<ResourceDictionary
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:local="clr-namespace:BFML.WPF">
+    xmlns:local="clr-namespace:ToggleClass">
 
     <Style x:Key="ToggleSyle1" TargetType="{x:Type local:Toggle}">
         <Setter Property="MaxHeight" Value="28" />

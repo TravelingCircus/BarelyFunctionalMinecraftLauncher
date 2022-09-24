@@ -46,7 +46,7 @@
                             SnapsToDevicePixels="true">
                             <Border.Effect>
                                 <DropShadowEffect
-                                    BlurRadius="50"
+                                    BlurRadius="35"
                                     Direction="270"
                                     Opacity="1"
                                     ShadowDepth="0"

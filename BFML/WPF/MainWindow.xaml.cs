@@ -8,6 +8,7 @@ using FileClient;
 using OpenTK.Graphics.OpenGL4;
 using OpenTK.Mathematics;
 using OpenTK.Wpf;
+using System.Windows.Input;
 
 namespace BFML.WPF;
 
@@ -26,6 +27,7 @@ public partial class MainWindow : Window
         //OpenTkControl.Start(settings);
         //_skinPreviewRenderer = new SkinPreviewRenderer();
         //_skinPreviewRenderer.SetUp();
+        
     }
 
     private void PlayButtonOnClick(object sender, RoutedEventArgs e)
@@ -66,5 +68,41 @@ public partial class MainWindow : Window
     private void ServerButtonOnClick(object sender, RoutedEventArgs e)
     {
         //BFMLFileClient.ConnectToServer();
+    }
+
+    private void MoveWindow(object sender, MouseEventArgs e)
+    {
+        if (e.LeftButton == MouseButtonState.Pressed)
+        {
+            if (this.WindowState == WindowState.Maximized) 
+            {
+                this.WindowState = WindowState.Normal;
+                Application.Current.MainWindow.Top = 3;
+            }
+            this.DragMove();
+        }
+    }
+
+    private void ShutDown(object sender, MouseButtonEventArgs e)
+    {
+        try
+        {
+            App.Current.Shutdown();
+        }
+        catch (Exception ex)
+        {
+            MessageBox.Show(ex.Message);
+        }
+    }
+    private void Minimize(object sender, MouseButtonEventArgs e)
+    {
+        try
+        {
+            this.WindowState = WindowState.Minimized;
+        }
+        catch (Exception ex)
+        {
+            MessageBox.Show(ex.Message);
+        }
     }
 }

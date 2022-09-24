@@ -1,7 +1,7 @@
 ﻿using System.Windows;
 using System.Windows.Controls.Primitives;
 
-namespace BFML.WPF
+namespace ToggleClass
 {
     public class Toggle : ToggleButton
     {

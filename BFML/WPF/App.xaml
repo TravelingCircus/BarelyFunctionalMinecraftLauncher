@@ -10,6 +10,9 @@
                 <ResourceDictionary Source="Styles/FontsDictionary.xaml" />
                 <ResourceDictionary Source="Styles/PlayButtonDictionary.xaml" />
                 <ResourceDictionary Source="Styles/ToggleSwitchDictionary.xaml" />
+                <ResourceDictionary Source="Styles/DefaultButtonDictionary.xaml" />
+                <ResourceDictionary Source="Styles/TitleButton.xaml" />
+
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Application.Resources>

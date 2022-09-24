@@ -8,6 +8,12 @@
     </PropertyGroup>
 
     <ItemGroup>
+      <None Remove="WPF\Images\LogOutIcon.png" />
+      <None Remove="WPF\Images\RecycleIcon.png" />
+      <None Remove="WPF\Images\WrenchIcon.png" />
+    </ItemGroup>
+
+    <ItemGroup>
       <PackageReference Include="CmlLib.Core" Version="3.3.5" />
       <PackageReference Include="OpenTK.GLWpfControl" Version="4.2.2" />
       <PackageReference Include="SixLabors.ImageSharp" Version="2.1.3" />
@@ -28,6 +34,18 @@
         <Generator>MSBuild:Compile</Generator>
         <XamlRuntime>Wpf</XamlRuntime>
       </ApplicationDefinition>
+    </ItemGroup>
+
+    <ItemGroup>
+      <Resource Include="WPF\Images\LogOutIcon.png">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </Resource>
+      <Resource Include="WPF\Images\RecycleIcon.png">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </Resource>
+      <Resource Include="WPF\Images\WrenchIcon.png">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </Resource>
     </ItemGroup>
 
 </Project>
