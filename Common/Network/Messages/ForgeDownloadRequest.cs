@@ -15,7 +15,7 @@ public sealed class ForgeDownloadRequest : Message
         return new MessageHeader(Key,GetFileSizeBytes(FilePath));
     }
 
-    public override void FromData(Stream stream)
+    public override void ApplyData(Stream stream)
     {
         throw new NotImplementedException();
     }

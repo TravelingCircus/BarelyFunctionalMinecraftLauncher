@@ -28,7 +28,7 @@ public class LoginHandler: MessageHandler
     {
         Console.WriteLine($"HANDLING LOGIN REQUEST thread_{Thread.CurrentThread.ManagedThreadId}");
         LoginRequest request = new LoginRequest();
-        request.FromData(dataStream);
+        request.ApplyData(dataStream);
         bool success = await _repository.CheckUser(new User(request.NickName, request.PasswordHash, 0));
         Console.WriteLine($"SENT RESPONSE:{success} thread_{Thread.CurrentThread.ManagedThreadId}");
         return new LoginResponse(success);

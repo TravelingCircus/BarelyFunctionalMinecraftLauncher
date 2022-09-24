@@ -40,7 +40,7 @@ public class RegistrationRequest : Message
         return buffer;
     }
 
-    public override void FromData(Stream stream)
+    public override void ApplyData(Stream stream)
     {
         NickName = StringReadStream(stream);
         PasswordHash = StringReadStream(stream);

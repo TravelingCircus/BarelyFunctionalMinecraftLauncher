@@ -15,7 +15,7 @@ public class RegistrationResponse : Message
         return new MessageHeader(Key, 1);
     }
 
-    public override void FromData(Stream stream)
+    public override void ApplyData(Stream stream)
     {
         Success = BoolReadStream(stream);
     }

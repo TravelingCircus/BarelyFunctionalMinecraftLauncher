@@ -58,6 +58,7 @@ public class Server
         NetworkChannel networkChannel = new NetworkChannel(networkStream);
         while (client.Connected)
         {
+            //TODO convert to using MessageRegistry;
             MessageHeader header = await networkChannel.ListenForHeader();
             Stream messageData = await networkChannel.ListenForMessage(header);
             MessageHandler messageHandler = HandlerPicker.GetHandler(header);

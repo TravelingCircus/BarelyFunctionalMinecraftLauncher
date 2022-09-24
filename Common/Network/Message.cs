@@ -16,7 +16,7 @@ public abstract class Message
         return targetStream.WriteAsync(buffer, 0, buffer.Length);
     }
 
-    public abstract void FromData(Stream stream);
+    public abstract void ApplyData(Stream stream);
 
     protected abstract Stream GetData();
     
