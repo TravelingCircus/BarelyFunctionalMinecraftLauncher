@@ -1,15 +1,20 @@
 ﻿using System.Net.Sockets;
 using CommonData;
+using CommonData.Network;
 
 namespace TCPFileClient;
 
 public class FileClient
 {
-    public static TcpClient ConnectToServer()
+    private List<TaskCompletionSource<Message>> _requests;
+    //TODO add cancellation token
+    //TODO encapsulate TCPClient
+    //TODO Channel listens endlessly on separate thread
+    //TODO async connect method, that returns result (true/false)
+    public static FileClient ConnectToServer()
     {
-        TcpClient client = new TcpClient("127.0.0.1", 69);
-        Console.WriteLine("Client connected");
-        return client;
+        return null;
+        //return new TcpClient("127.0.0.1", 69);
     }
 
     public Task<string> DownloadForgeFiles()
@@ -18,6 +23,20 @@ public class FileClient
     }
 
     public Task<LaunchConfiguration> DownloadLaunchConfiguration()
+    {
+        throw new NotImplementedException();
+    }
+
+    private Task<Message> GetResponseFor(Message request)
+    {
+        //Add request
+        //await response data
+        //handle response data
+        //return response message
+        throw new NotImplementedException();
+    }
+
+    private void Terminate()
     {
         throw new NotImplementedException();
     }
