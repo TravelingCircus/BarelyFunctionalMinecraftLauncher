@@ -12,7 +12,7 @@
     Background="Transparent"
     MouseDown="MoveWindow"
     ResizeMode="NoResize"
-    Style="{StaticResource Minecraft}"
+    Style="{DynamicResource Minecraft}"
     WindowStyle="None"
     mc:Ignorable="d">
 
