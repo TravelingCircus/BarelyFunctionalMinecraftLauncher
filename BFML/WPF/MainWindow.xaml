@@ -12,12 +12,10 @@
     Background="Transparent"
     MouseDown="MoveWindow"
     ResizeMode="NoResize"
-    Style="{DynamicResource Minecraft}"
     WindowStyle="None"
     mc:Ignorable="d">
 
     <Window.Resources />
-
 
     <Border Background="#383838" CornerRadius="8">
         <Grid>
@@ -110,6 +108,44 @@
                 Fill="#383838"
                 RadiusX="4"
                 RadiusY="4" />
+
+            <Slider
+                Grid.Row="0"
+                Grid.Column="1"
+                Height="24"
+                Margin="32,398,31,278"
+                AutoToolTipPlacement="TopLeft"
+                Style="{DynamicResource Horizontal_Slider}"
+                Template="{DynamicResource Slider}">
+                <Slider.Resources>
+                    <Style TargetType="ToolTip">
+                        <Setter Property="OverridesDefaultStyle" Value="True" />
+                        <Setter Property="SnapsToDevicePixels" Value="True" />
+                        <Setter Property="Foreground" Value="#dcdcdc" />
+                        <Setter Property="FontFamily" Value="Minecraft" />
+                        <Setter Property="FontSize" Value="15" />
+                        <Setter Property="Margin" Value="0,-4,0,0" />
+
+                        <Setter Property="Template">
+                            <Setter.Value>
+                                <ControlTemplate TargetType="ToolTip">
+                                    <ContentPresenter />
+                                </ControlTemplate>
+                            </Setter.Value>
+                        </Setter>
+                    </Style>
+                </Slider.Resources>
+            </Slider>
+
+
+            <Slider
+                Grid.Row="0"
+                Grid.Column="0"
+                Width="311"
+                Height="24"
+                Margin="30,642,59,34"
+                Style="{DynamicResource Horizontal_Slider}"
+                Template="{DynamicResource Slider}" />
 
             <TextBlock
                 Grid.Row="0"

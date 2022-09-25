@@ -8,6 +8,7 @@
     </PropertyGroup>
 
     <ItemGroup>
+      <None Remove="WPF\Fonts\MinecraftFont.ttf" />
       <None Remove="WPF\Images\LogOutIcon.png" />
       <None Remove="WPF\Images\RecycleIcon.png" />
       <None Remove="WPF\Images\WrenchIcon.png" />
@@ -37,6 +38,7 @@
     </ItemGroup>
 
     <ItemGroup>
+      <Resource Include="WPF\Fonts\MinecraftFont.ttf" />
       <Resource Include="WPF\Images\LogOutIcon.png">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </Resource>
