@@ -26,7 +26,8 @@
                 <ControlTemplate TargetType="RepeatButton">
                     <Border
                         Height="10"
-                        Background="#595959"
+                        Background="#ff9a3c"
+                        BorderBrush="#ff9a3c"
                         BorderThickness="0"
                         CornerRadius="2"
                         SnapsToDevicePixels="True" />
@@ -35,13 +36,19 @@
         </Setter>
     </Style>
 
-    <Style x:Key="CustomToolTip" TargetType="ToolTip">
-        <Setter Property="OverridesDefaultStyle" Value="True" />
-        <Setter Property="SnapsToDevicePixels" Value="True" />
+    <Style x:Key="SliderRepeatButton2" TargetType="RepeatButton">
+        <Setter Property="SnapsToDevicePixels" Value="true" />
+        <Setter Property="OverridesDefaultStyle" Value="true" />
         <Setter Property="Template">
             <Setter.Value>
-                <ControlTemplate TargetType="ToolTip">
-                    <ContentPresenter />
+                <ControlTemplate TargetType="RepeatButton">
+                    <Border
+                        Height="10"
+                        Background="#595959"
+                        BorderBrush="#595959"
+                        BorderThickness="0"
+                        CornerRadius="2"
+                        SnapsToDevicePixels="True" />
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
@@ -85,6 +92,27 @@
             <Track x:Name="PART_Track" Grid.Row="1">
                 <Track.DecreaseRepeatButton>
                     <RepeatButton Command="Slider.DecreaseLarge" Style="{StaticResource SliderRepeatButton1}" />
+                </Track.DecreaseRepeatButton>
+                <Track.Thumb>
+                    <Thumb Style="{StaticResource SliderThumb}" />
+                </Track.Thumb>
+                <Track.IncreaseRepeatButton>
+                    <RepeatButton Command="Slider.IncreaseLarge" Style="{StaticResource SliderRepeatButton}" />
+                </Track.IncreaseRepeatButton>
+            </Track>
+        </Grid>
+    </ControlTemplate>
+
+    <ControlTemplate x:Key="Slider2" TargetType="Slider">
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" MinHeight="{TemplateBinding MinHeight}" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+            <Track x:Name="PART_Track" Grid.Row="1">
+                <Track.DecreaseRepeatButton>
+                    <RepeatButton Command="Slider.DecreaseLarge" Style="{StaticResource SliderRepeatButton2}" />
                 </Track.DecreaseRepeatButton>
                 <Track.Thumb>
                     <Thumb Style="{StaticResource SliderThumb}" />

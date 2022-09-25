@@ -109,33 +109,74 @@
                 RadiusX="4"
                 RadiusY="4" />
 
-            <Slider
-                Grid.Row="0"
-                Grid.Column="1"
-                Height="24"
-                Margin="32,398,31,278"
-                AutoToolTipPlacement="TopLeft"
-                Style="{DynamicResource Horizontal_Slider}"
-                Template="{DynamicResource Slider}">
-                <Slider.Resources>
-                    <Style TargetType="ToolTip">
-                        <Setter Property="OverridesDefaultStyle" Value="True" />
-                        <Setter Property="SnapsToDevicePixels" Value="True" />
-                        <Setter Property="Foreground" Value="#dcdcdc" />
-                        <Setter Property="FontFamily" Value="Minecraft" />
-                        <Setter Property="FontSize" Value="15" />
-                        <Setter Property="Margin" Value="0,-4,0,0" />
+            <StackPanel Grid.Row="0" Grid.Column="1">
+                <Slider
+                    x:Name="RamSlider"
+                    Grid.Row="0"
+                    Grid.Column="1"
+                    Height="24"
+                    Margin="32,398,31,278"
+                    AutoToolTipPlacement="TopLeft"
+                    Cursor="Hand"
+                    IsSnapToTickEnabled="True"
+                    Maximum="16384"
+                    Style="{DynamicResource Horizontal_Slider}"
+                    Template="{DynamicResource Slider}"
+                    TickFrequency="64">
+                    <Slider.Resources>
+                        <Style TargetType="ToolTip">
+                            <Setter Property="OverridesDefaultStyle" Value="True" />
+                            <Setter Property="SnapsToDevicePixels" Value="True" />
+                            <Setter Property="Foreground" Value="#dcdcdc" />
+                            <Setter Property="FontFamily" Value="Minecraft" />
+                            <Setter Property="FontSize" Value="15" />
+                            <Setter Property="Margin" Value="0,-4,0,0" />
 
-                        <Setter Property="Template">
-                            <Setter.Value>
-                                <ControlTemplate TargetType="ToolTip">
-                                    <ContentPresenter />
-                                </ControlTemplate>
-                            </Setter.Value>
-                        </Setter>
-                    </Style>
-                </Slider.Resources>
-            </Slider>
+                            <Setter Property="Template">
+                                <Setter.Value>
+                                    <ControlTemplate TargetType="ToolTip">
+                                        <ContentPresenter />
+                                    </ControlTemplate>
+                                </Setter.Value>
+                            </Setter>
+                        </Style>
+                    </Slider.Resources>
+                </Slider>
+                <Rectangle
+                    Width="100"
+                    Height="34"
+                    Margin="171,-685,0,0"
+                    Fill="#595959"
+                    RadiusX="3"
+                    RadiusY="3" />
+                <Rectangle
+                    Width="100"
+                    Height="3"
+                    Margin="171,-654,0,0"
+                    Fill="#ff9a3c"
+                    RadiusX="1"
+                    RadiusY="1" />
+                <TextBlock
+                    Width="100"
+                    Height="30"
+                    Margin="171,-685,0,0"
+                    FontFamily="Minecraft"
+                    FontSize="20"
+                    Foreground="#dcdcdc"
+                    Text="{Binding ElementName=RamSlider, Path=Value}"
+                    TextAlignment="Center" />
+                <TextBlock
+                    Width="36"
+                    Height="30"
+                    Margin="316,-681,0,0"
+                    FontFamily="Minecraft"
+                    FontSize="20"
+                    Foreground="#dcdcdc"
+                    Text="MB"
+                    TextAlignment="Center" />
+            </StackPanel>
+
+
 
 
             <Slider
@@ -145,7 +186,7 @@
                 Height="24"
                 Margin="30,642,59,34"
                 Style="{DynamicResource Horizontal_Slider}"
-                Template="{DynamicResource Slider}" />
+                Template="{DynamicResource Slider2}" />
 
             <TextBlock
                 Grid.Row="0"
