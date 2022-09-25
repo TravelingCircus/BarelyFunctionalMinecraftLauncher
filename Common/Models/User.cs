@@ -1,39 +1,34 @@
-﻿namespace CommonData;
+﻿namespace CommonData.Models;
 
 [Serializable]
 public class User
 {
-    public string Nickname
-    {
-        get => _nickname;
-        set => _nickname = value;
-    }
-
-    public string Password
-    {
-        get => _password;
-        set => _password = value;
-    }
 
     public int GryvnyasPaid
     {
         get => _gryvnyasPaid;
-        set => _gryvnyasPaid = value;
+        set
+        {
+            if (value < _gryvnyasPaid) throw new ArgumentException("Can't subtract money paid by user");
+            _gryvnyasPaid = value;
+        }
     }
 
-    private string _nickname;
-    private string _password;
+    public string SkinPath;
+    public readonly string Nickname;
+    public readonly string PasswordHash;
     private int _gryvnyasPaid;
 
-    public User()
+    public User(string skinPath)
     {
-        
+        SkinPath = skinPath;
     }
     
-    public User(string nickname, string password, int gryvnyasPaid)
+    public User(string nickname, string passwordHash, int gryvnyasPaid, string skinPath)
     {
-        _nickname = nickname;
-        _password = password;
+        Nickname = nickname;
+        PasswordHash = passwordHash;
         _gryvnyasPaid = gryvnyasPaid;
+        SkinPath = skinPath;
     }
 }

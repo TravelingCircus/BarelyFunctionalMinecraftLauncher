@@ -29,6 +29,7 @@ public class DataHandlerConsumersQueue<T> where T : DataHandler
 
             TaskCompletionSource releaseSource = new TaskCompletionSource();
             _handler.Borrow(releaseSource);
+            
             consumer.SetResult(_handler);
             await releaseSource.Task;
         }

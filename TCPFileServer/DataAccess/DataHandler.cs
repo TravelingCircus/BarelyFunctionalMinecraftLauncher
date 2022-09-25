@@ -24,6 +24,11 @@ public abstract class DataHandler
         return fileStream;
     }
     
+    public byte[] ReadFromRepository(string filePath)
+    {
+        return ReadFromRepository(filePath, GetFileSize(filePath));
+    }
+    
     protected byte[] ReadFromRepository(string filePath, int fileSize)
     {
         using FileStream fileStream = new FileStream(filePath, FileMode.Open);
@@ -33,7 +38,7 @@ public abstract class DataHandler
         return fileBytes;
     }
     
-    protected int GetFileSizeBytes(string path)
+    protected int GetFileSize(string path)
     {
         long size = new FileInfo(path).Length;
         if (size > Int32.MaxValue) throw new OverflowException("Can't send files larger than 2GB");

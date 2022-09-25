@@ -1,4 +1,5 @@
 ﻿using CommonData;
+using CommonData.Models;
 
 namespace HTTPFileServer.DataAccess;
 
@@ -22,7 +23,9 @@ public class SmallDataHandler: DataHandler
     {
         string fileName = username + ".xml";
         string filePath = _repositoryPath + fileName;
-        return UserDataSerializer.FromXML(ReadFromRepository(filePath, fileName));
+        User result = UserDataSerializer.FromXML(ReadFromRepository(filePath, fileName));
+        if (result is null) throw new ArgumentOutOfRangeException(nameof(username), $"User [{username}] doesn't exist.");
+        return result;
     }
     
     public LaunchConfiguration GetLaunchConfig()
@@ -36,6 +39,26 @@ public class SmallDataHandler: DataHandler
     //TODO Version class and GetVersion();
 
     public override Task WriteToRepository()
+    {
+        throw new NotImplementedException();
+    }
+
+    public string[] GetAllNicknames()
+    {
+        throw new NotImplementedException();
+    }
+    
+    public string SaveSkin(byte[] data)
+    {
+        throw new NotImplementedException();
+    }
+
+    public bool UserExists(string name)
+    {
+        throw new NotImplementedException();
+    }
+
+    public Task RewriteUser(User newUser)
     {
         throw new NotImplementedException();
     }
