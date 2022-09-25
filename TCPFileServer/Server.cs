@@ -21,15 +21,16 @@ public class Server
 
     public void Start()
     {
+        CancellationToken cancellationToken = _cancellationTokenSource.Token;
+        
         //Repository repository = new Repository(@"WSTAW SIUDA SWOYE MISTSE");
-        Repository repository = new Repository(@"C:\Users\maksy\Desktope\TestRepo");
+        Repository repository = new Repository(@"C:\Users\maksy\Desktope\TestRepo", cancellationToken);
         //Repository repository = new Repository(@"D:\Home\Desktope\TestDownload");
         HandlerPicker.RegisterHandler(nameof(RegistrationRequest), new RegistrationHandler(repository));
         HandlerPicker.RegisterHandler(nameof(LoginRequest), new LoginHandler(repository));
         //TODO properly register handlers
         
         _tcpListener.Start();
-        CancellationToken cancellationToken = _cancellationTokenSource.Token;
         IsRunning = true;
         Console.WriteLine($"STARTED thread_{Thread.CurrentThread.ManagedThreadId}");
         Task.Run(() =>

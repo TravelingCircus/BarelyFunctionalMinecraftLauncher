@@ -2,33 +2,42 @@
 
 namespace HTTPFileServer.DataAccess;
 
-public class Repository
+public sealed class Repository
 {
-    private string _path;
+    private readonly string _path;
+    private readonly CancellationToken _cancellationToken;
+    private readonly DataHandlerConsumersQueue<SmallDataHandler> _smallDataHandlerQueue;
+    private readonly DataHandlerConsumersQueue<LargeDataHandler> _largeDataHandlerQueue;
 
-    public Repository(string path)
+    public Repository(string path, CancellationToken cancellationToken)
     {
         _path = path;
+        _cancellationToken = cancellationToken;
+        SmallDataHandler smallDataHandler = new SmallDataHandler();
+        _smallDataHandlerQueue = new DataHandlerConsumersQueue<SmallDataHandler>(smallDataHandler);
+        LargeDataHandler largeDataHandler = new LargeDataHandler();
+        _largeDataHandlerQueue = new DataHandlerConsumersQueue<LargeDataHandler>(largeDataHandler);
     }
 
-    public Task<bool> AddNewUser(User user)
+    public void Initialize()
     {
-        string filePath = _path + $"/{user.Nickname}.xml";
-        if (File.Exists(filePath)) return Task.FromResult(false);
-
-        using (FileStream fileStream = File.Create(filePath))
+        Task.Run(()=>
         {
-            UserDataSerializer.ToXML(user, fileStream);
-        }
-        
-        return Task.FromResult(true);
+            _smallDataHandlerQueue.RunBlocking(_cancellationToken).GetAwaiter();
+        }, _cancellationToken);
+        Task.Run(()=>
+        {
+            _largeDataHandlerQueue.RunBlocking(_cancellationToken).GetAwaiter();
+        }, _cancellationToken);
     }
     
-    public Task<bool> CheckUser(User user)
+    public async Task<User> GetUser(string name)
     {
-        string filePath = _path + $"/{user.Nickname}.xml";
-        if (File.Exists(filePath)) return Task.FromResult(true);
-
-        return Task.FromResult(false);
+        SmallDataHandler dataHandler = await _smallDataHandlerQueue.GetDataHandler();
+        
+        //TODO implement
+        
+        dataHandler.Release();
+        throw new NotImplementedException();
     }
 }

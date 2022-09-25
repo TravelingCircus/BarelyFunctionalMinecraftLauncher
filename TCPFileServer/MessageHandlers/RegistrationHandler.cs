@@ -29,8 +29,9 @@ public sealed class RegistrationHandler : MessageHandler
         Console.WriteLine($"HANDLING REGISTRATION REQUEST thread_{Thread.CurrentThread.ManagedThreadId}");
         RegistrationRequest request = new RegistrationRequest();
         request.ApplyData(dataStream);
-        bool success = await _repository.AddNewUser(new User(request.NickName, request.PasswordHash, 0));
+        throw new NotImplementedException();
+        /*bool success = await _repository.AddNewUser(new User(request.NickName, request.PasswordHash, 0));
         Console.WriteLine($"SENT RESPONSE:{success} thread_{Thread.CurrentThread.ManagedThreadId}");
-        return new RegistrationResponse(success);
+        return new RegistrationResponse(success);*/
     }
 }
