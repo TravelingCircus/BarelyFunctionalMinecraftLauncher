@@ -6,6 +6,7 @@ using CmlLib.Core;
 using CmlLib.Core.Auth;
 using CmlLib.Core.Version;
 using CommonData;
+using CommonData.Models;
 using TCPFileClient;
 
 namespace BFML.Core;

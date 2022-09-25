@@ -1,6 +1,7 @@
 ﻿using System.Collections.Concurrent;
 using System.Net.Sockets;
 using CommonData;
+using CommonData.Models;
 using CommonData.Network;
 
 namespace TCPFileClient;

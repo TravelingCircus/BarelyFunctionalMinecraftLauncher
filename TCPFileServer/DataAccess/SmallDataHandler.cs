@@ -62,4 +62,9 @@ public class SmallDataHandler: DataHandler
     {
         throw new NotImplementedException();
     }
+
+    public void RemoveSkin(string userSkinPath)
+    {
+        throw new NotImplementedException();
+    }
 }

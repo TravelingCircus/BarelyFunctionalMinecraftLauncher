@@ -1,4 +1,5 @@
-﻿using CommonData.Models;
+﻿using CommonData;
+using CommonData.Models;
 
 namespace HTTPFileServer.DataAccess;
 
@@ -31,8 +32,18 @@ public sealed class Repository
         }, _cancellationToken);
     }
 
-    #region Interface
+    #region SmallDataInterface
 
+    public async Task<LaunchConfiguration> GetLaunchConfiguration()
+    {
+        SmallDataHandler dataHandler = await _smallDataHandlerQueue.GetDataHandler();
+
+        LaunchConfiguration launchConfiguration = dataHandler.GetLaunchConfig();
+        
+        dataHandler.Release();
+        return launchConfiguration;
+    }
+    
     public async Task<User> GetUser(string name)
     {
         SmallDataHandler dataHandler = await _smallDataHandlerQueue.GetDataHandler();
@@ -74,6 +85,7 @@ public sealed class Repository
 
         User user = dataHandler.GetUser(name);
         string newSkinPath = dataHandler.SaveSkin(skin);
+        dataHandler.RemoveSkin(user.SkinPath);
         user.SkinPath = newSkinPath;
         await dataHandler.RewriteUser(user);
         

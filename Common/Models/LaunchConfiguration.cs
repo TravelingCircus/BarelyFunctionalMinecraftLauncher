@@ -1,8 +1,15 @@
-﻿namespace CommonData;
+﻿namespace CommonData.Models;
 
 public class LaunchConfiguration
 {
-    public string VanillaVersion;
-    public string ForgeVersion;
-    public string ModsChecksum;
+    public readonly string VanillaVersion;
+    public readonly string ForgeVersion;
+    public readonly string ModsChecksum;
+
+    public LaunchConfiguration(string vanillaVersion, string forgeVersion, string modsChecksum)
+    {
+        VanillaVersion = vanillaVersion;
+        ForgeVersion = forgeVersion;
+        ModsChecksum = modsChecksum;
+    }
 }
