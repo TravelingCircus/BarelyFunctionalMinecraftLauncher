@@ -2,12 +2,14 @@
 
 public class LargeDataHandler: DataHandler
 {
-    public override Task WriteToRepository()
+    private readonly string _repositoryPath;
+    
+    public LargeDataHandler(string repositoryPath)
     {
-        throw new NotImplementedException();
+        _repositoryPath = repositoryPath;
     }
-
-    public override byte[] ReadFromRepository()
+    
+    public override Task WriteToRepository()
     {
         throw new NotImplementedException();
     }
