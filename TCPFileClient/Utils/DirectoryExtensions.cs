@@ -1,4 +1,4 @@
-﻿namespace FileClient.Utils;
+﻿namespace TCPFileClient.Utils;
 
 public static class DirectoryExtensions
 {

@@ -8,15 +8,24 @@ public abstract class Message
 
     public Task WriteDataTo(Stream targetStream)
     {
-        Stream source = GetData();
+        using Stream source = GetData();
+        source.Flush();
+        source.Position = 0;
         byte[] buffer = new byte[source.Length];
         source.Read(buffer, 0, buffer.Length);
         return targetStream.WriteAsync(buffer, 0, buffer.Length);
     }
 
-    public abstract void FromData(Stream stream);
+    public abstract void ApplyData(Stream stream);
 
     protected abstract Stream GetData();
+    
+    protected byte[] ByteArrayReadStream(Stream stream, int arrayLength)
+    {
+        byte[] bytes = new byte[arrayLength];
+        stream.Read(bytes, 0, arrayLength);
+        return bytes;
+    }
 
     protected String StringReadStream(Stream stream)
     {
