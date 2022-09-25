@@ -13,9 +13,9 @@ public sealed class Repository
     {
         _path = path;
         _cancellationToken = cancellationToken;
-        SmallDataHandler smallDataHandler = new SmallDataHandler();
+        SmallDataHandler smallDataHandler = new SmallDataHandler(_path);
         _smallDataHandlerQueue = new DataHandlerConsumersQueue<SmallDataHandler>(smallDataHandler);
-        LargeDataHandler largeDataHandler = new LargeDataHandler();
+        LargeDataHandler largeDataHandler = new LargeDataHandler(_path);
         _largeDataHandlerQueue = new DataHandlerConsumersQueue<LargeDataHandler>(largeDataHandler);
     }
 
