@@ -104,4 +104,16 @@ public partial class MainWindow : Window
             MessageBox.Show(ex.Message);
         }
     }
+
+    private void SkinFileDrop_Drop(object sender, DragEventArgs e)
+    {
+        if (e.Data.GetDataPresent(DataFormats.FileDrop))
+        {
+            string[] files = (string[])e.Data.GetData(DataFormats.FileDrop);
+
+            string filename = Path.GetFileName(files[0]);
+
+            FileName.Content = filename;
+        }
+    }
 }
