@@ -1,8 +1,8 @@
 ﻿using System.Collections.Concurrent;
 using System.Net.Sockets;
-using CommonData;
 using CommonData.Models;
 using CommonData.Network;
+using CommonData.Network.Messages;
 
 namespace TCPFileClient;
 
@@ -19,6 +19,32 @@ public sealed class FileClient
         _requests = new ConcurrentQueue<Query>();
         _cancellationTokenSource = new CancellationTokenSource();
     }
+
+    #region Interface
+
+    public Task<string> DownloadForgeFiles()
+    {
+        throw new NotImplementedException();
+    }
+
+    public Task<LaunchConfiguration> DownloadLaunchConfiguration()
+    {
+        throw new NotImplementedException();
+    }
+
+    public async Task<RegistrationResponse> SendRegistrationRequest(User user)
+    {
+        Message response = await GetResponseFor(new RegistrationRequest(user.Nickname, user.PasswordHash));
+        return (RegistrationResponse)response;
+    }
+    
+    public async Task<LoginResponse> SendLoginRequest(User user)
+    {
+        Message response = await GetResponseFor(new LoginRequest(user.Nickname, user.PasswordHash));
+        return (LoginResponse)response;
+    }
+
+    #endregion
     
     public bool ConnectToServer()
     {
@@ -39,16 +65,6 @@ public sealed class FileClient
         }
 
         return true;
-    }
-
-    public Task<string> DownloadForgeFiles()
-    {
-        throw new NotImplementedException();
-    }
-
-    public Task<LaunchConfiguration> DownloadLaunchConfiguration()
-    {
-        throw new NotImplementedException();
     }
 
     private async Task SendRequestsWhenAvailable(NetworkChannel networkChannel, 
