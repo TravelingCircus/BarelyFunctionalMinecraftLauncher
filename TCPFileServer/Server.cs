@@ -2,6 +2,8 @@
 using System.Net.Sockets;
 using CommonData.Network;
 using CommonData.Network.Messages;
+using CommonData.Network.Messages.Login;
+using CommonData.Network.Messages.Registration;
 using HTTPFileServer.DataAccess;
 using HTTPFileServer.MessageHandlers;
 

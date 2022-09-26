@@ -1,5 +1,7 @@
 ﻿using System.ComponentModel;
 using CommonData.Network.Messages;
+using CommonData.Network.Messages.Login;
+using CommonData.Network.Messages.Registration;
 
 namespace CommonData.Network;
 

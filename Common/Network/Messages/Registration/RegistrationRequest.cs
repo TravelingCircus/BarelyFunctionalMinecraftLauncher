@@ -1,26 +1,25 @@
 ﻿using System.Text;
 
-namespace CommonData.Network.Messages;
+namespace CommonData.Network.Messages.Registration;
 
-public class LoginRequest: Message
+public class RegistrationRequest : Message
 {
     public string NickName;
     public string PasswordHash;
 
-    public LoginRequest()
+    public RegistrationRequest()
     {
-        
     }
 
-    public LoginRequest(string nickName, string passwordHash)
+    public RegistrationRequest(string nickName, string passwordHash)
     {
         NickName = nickName;
         PasswordHash = passwordHash;
     }
-    
+
     public override MessageHeader GetHeader()
     {
-        return new MessageHeader(MessageRegistry.GetKeyForMessageType(typeof(LoginRequest)), 
+        return new MessageHeader(MessageRegistry.GetKeyForMessageType(typeof(RegistrationRequest)), 
             2 * sizeof(int)
             +NickName.Length
             +PasswordHash.Length);

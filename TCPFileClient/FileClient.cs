@@ -3,6 +3,8 @@ using System.Net.Sockets;
 using CommonData.Models;
 using CommonData.Network;
 using CommonData.Network.Messages;
+using CommonData.Network.Messages.Login;
+using CommonData.Network.Messages.Registration;
 
 namespace TCPFileClient;
 

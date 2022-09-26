@@ -7,6 +7,8 @@ using OpenTK.Mathematics;
 using System.Windows.Input;
 using CommonData.Models;
 using CommonData.Network.Messages;
+using CommonData.Network.Messages.Login;
+using CommonData.Network.Messages.Registration;
 using TCPFileClient;
 
 namespace BFML.WPF;
