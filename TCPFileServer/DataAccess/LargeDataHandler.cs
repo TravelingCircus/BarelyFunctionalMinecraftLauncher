@@ -3,6 +3,8 @@
 public class LargeDataHandler: DataHandler
 {
     private readonly string _repositoryPath;
+    private string _forgeArchivePath;
+    
     
     public LargeDataHandler(string repositoryPath)
     {
@@ -16,6 +18,7 @@ public class LargeDataHandler: DataHandler
 
     public BorrowableReadonlyStream GetStreamToForgeArchive()
     {
-        throw new NotImplementedException();
+        FileStream underlyingStream = File.OpenRead(_forgeArchivePath);
+        return new BorrowableReadonlyStream(underlyingStream, this);
     }
 }
