@@ -14,6 +14,7 @@
                 <ResourceDictionary Source="Styles/TitleButton.xaml" />
                 <ResourceDictionary Source="Styles/SliderDictionary.xaml" />
                 <ResourceDictionary Source="Styles/Transparent.xaml" />
+                <ResourceDictionary Source="Styles/Scroll.xaml" />
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Application.Resources>
