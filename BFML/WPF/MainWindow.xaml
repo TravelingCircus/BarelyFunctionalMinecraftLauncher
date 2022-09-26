@@ -15,7 +15,117 @@
     WindowStyle="None"
     mc:Ignorable="d">
 
-    <Window.Resources />
+    <Window.Resources>
+        <ResourceDictionary>
+            <Style x:Key="ScrollThumb" TargetType="{x:Type Thumb}">
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate>
+                            <Grid x:Name="Grid">
+                                <Rectangle
+                                    Width="Auto"
+                                    HorizontalAlignment="Stretch"
+                                    VerticalAlignment="Stretch"
+                                    Fill="Transparent" />
+                                <Border
+                                    x:Name="Rectangle1"
+                                    Width="Auto"
+                                    Height="Auto"
+                                    HorizontalAlignment="Stretch"
+                                    VerticalAlignment="Stretch"
+                                    Background="{TemplateBinding Background}"
+                                    CornerRadius="2">
+                                    <Border.Effect>
+                                        <DropShadowEffect
+                                            BlurRadius="30"
+                                            Direction="270"
+                                            Opacity="1"
+                                            ShadowDepth="0"
+                                            Color="#ff9a3c" />
+                                    </Border.Effect>
+
+                                </Border>
+                            </Grid>
+                            <ControlTemplate.Triggers>
+                                <Trigger Property="Tag" Value="Horizontal">
+                                    <Setter TargetName="Rectangle1" Property="Width" Value="Auto" />
+                                    <Setter TargetName="Rectangle1" Property="Height" Value="7" />
+                                </Trigger>
+                            </ControlTemplate.Triggers>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Style>
+
+            <Style x:Key="{x:Type ScrollBar}" TargetType="{x:Type ScrollBar}">
+                <Setter Property="Stylus.IsFlicksEnabled" Value="False" />
+                <Setter Property="Foreground" Value="#ff9a3c" />
+                <Setter Property="Background" Value="#434343" />
+                <Setter Property="Width" Value="10" />
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="{x:Type ScrollBar}">
+                            <Grid
+                                x:Name="GridRoot"
+                                Width="15"
+                                Background="{x:Null}">
+                                <Track
+                                    x:Name="PART_Track"
+                                    Grid.Row="0"
+                                    Focusable="False"
+                                    IsDirectionReversed="true">
+                                    <Track.Thumb>
+                                        <Thumb
+                                            x:Name="Thumb"
+                                            Background="{TemplateBinding Foreground}"
+                                            Style="{DynamicResource ScrollThumb}" />
+                                    </Track.Thumb>
+                                    <Track.IncreaseRepeatButton>
+                                        <RepeatButton
+                                            x:Name="PageUp"
+                                            Command="ScrollBar.PageDownCommand"
+                                            Focusable="False"
+                                            Opacity="0" />
+                                    </Track.IncreaseRepeatButton>
+                                    <Track.DecreaseRepeatButton>
+                                        <RepeatButton
+                                            x:Name="PageDown"
+                                            Command="ScrollBar.PageUpCommand"
+                                            Focusable="False"
+                                            Opacity="0" />
+                                    </Track.DecreaseRepeatButton>
+                                </Track>
+                            </Grid>
+                            <ControlTemplate.Triggers>
+
+                                <Trigger Property="IsEnabled" Value="false">
+                                    <Setter TargetName="Thumb" Property="Visibility" Value="Collapsed" />
+                                </Trigger>
+                                <Trigger Property="Orientation" Value="Horizontal">
+                                    <Setter TargetName="GridRoot" Property="LayoutTransform">
+                                        <Setter.Value>
+                                            <RotateTransform Angle="-90" />
+                                        </Setter.Value>
+                                    </Setter>
+                                    <Setter TargetName="PART_Track" Property="LayoutTransform">
+                                        <Setter.Value>
+                                            <RotateTransform Angle="-90" />
+                                        </Setter.Value>
+                                    </Setter>
+                                    <Setter Property="Width" Value="Auto" />
+                                    <Setter Property="Height" Value="12" />
+                                    <Setter TargetName="Thumb" Property="Tag" Value="Horizontal" />
+                                    <Setter TargetName="PageDown" Property="Command" Value="ScrollBar.PageLeftCommand" />
+                                    <Setter TargetName="PageUp" Property="Command" Value="ScrollBar.PageRightCommand" />
+                                </Trigger>
+                            </ControlTemplate.Triggers>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+
+            </Style>
+        </ResourceDictionary>
+    </Window.Resources>
 
     <Border Background="#383838" CornerRadius="8">
         <Grid>
@@ -24,6 +134,50 @@
                 <ColumnDefinition Width="400" />
                 <ColumnDefinition Width="400" />
             </Grid.ColumnDefinitions>
+
+            <StackPanel
+                Width="365"
+                Height="44"
+                Margin="30,6,10,640">
+
+                <Rectangle
+                    Width="311"
+                    Height="37"
+                    HorizontalAlignment="Left"
+                    Fill="#454545"
+                    RadiusX="3"
+                    RadiusY="3" />
+                <TextBlock
+                    Width="331"
+                    Height="26"
+                    Margin="0,-36,8,0"
+                    FontFamily="Minecraft"
+                    FontSize="18"
+                    Foreground="#dcdcdc"
+                    Text="PASASI" />
+                <Rectangle
+                    Width="311"
+                    Height="3"
+                    Margin="0,-3,0,0"
+                    HorizontalAlignment="Left"
+                    Fill="#ff9a3c"
+                    RadiusX="0.5"
+                    RadiusY="0.5" />
+                <Button
+                    Width="42"
+                    Height="37"
+                    Margin="312,-36,0,0"
+                    Background="#383838"
+                    Cursor="Hand"
+                    Style="{DynamicResource Transparent}" />
+                <Image
+                    Width="36"
+                    Height="33"
+                    Margin="316,-37,0,0"
+                    IsHitTestVisible="False"
+                    Source="Images/LogOutIcon.png" />
+
+            </StackPanel>
 
             <Rectangle
                 Grid.Row="0"
@@ -63,6 +217,26 @@
                 Fill="#434343"
                 RadiusX="4"
                 RadiusY="4" />
+            <Rectangle
+                Grid.Column="2"
+                Width="9"
+                Height="564"
+                Margin="352,98,37,38"
+                Fill="#595959"
+                RadiusX="2"
+                RadiusY="2" />
+            <ScrollViewer Grid.Column="2" Margin="32,98,34,38">
+                <Grid Height="5000">
+                    <TextBlock
+                        Margin="10,10,23,0"
+                        FontFamily="Minecraft"
+                        FontSize="18"
+                        Foreground="#dcdcdc"
+                        Text="@Alif-Lam-Ra. Dies ist ein Buch, das Wir zu dir hinabgesandt haben, damit du die Menschen mit der Erlaubnis ihres Herrn aus den Finsternissen hinaus ins Licht bringst, auf den Weg des Allmächtigen und Lobenswürdigen, Aliflamra kitabun anzalnahu ilayka litukhrija annasa mina aththulumati ila annoori biithni rabbihim ila sirati alAAazeezi alhameed (den Weg) Allahs, Dessen ist, was in den Himmeln und was auf der Erde. Und wehe den Ungläubigen vor einer strengen Strafe! Allahi allathee lahu ma fee assamawati wama fee alardi wawaylun lilkafireena min AAathabin shadeed Diejenigen, die das diesseitige Leben mehr lieben als das Jenseits und von Allahs Weg abhalten und danach trachten, ihn krumm zu machen; sie befinden sich in weit(reichend)em Irrtum. Allatheena yastahibboona alhayata addunya AAala alakhirati wayasuddoona AAan sabeeli Allahi wayabghoonaha AAiwajan olaika fee dalalin baAAeed Und Wir haben keinen Gesandten gesandt, außer in der Sprache seines Volkes, damit er ihnen (die Botschaft) klar macht. Allah läßt dann in die Irre gehen, wen Er will, und leitet recht, wen Er will. Und Er ist der Allmächtige und Allweise. Wama arsalna min rasoolin illa bilisani qawmihi liyubayyina lahum fayudillu Allahu man yashao wayahdee man yashao wahuwa alAAazeezu alhakeem Und Wir sandten ja bereits Musa mit Unseren Zeichen: Bringe dein Volk aus den Finsternissen hinaus ins Licht, und erinnere sie an die Tage Allahs. Darin sind wahrlich Zeichen für jeden sehr Standhaften und sehr Dankbaren. Walaqad arsalna moosa biayatina an akhrij qawmaka mina aththulumati ila annoori wathakkirhum biayyami Allahi inna fee thalika laayatin likulli sabbarin shakoor وَمَآ أَرۡسَلۡنَا مِن رَّسُولٍ إِلَّا بِلِسَانِ قَوۡمِهِۦ لِيُبَيِّنَ لَهُمۡۖ فَيُضِلُّ ٱللَّهُ مَن يَشَآءُ وَيَهۡدِي مَن يَشَآءُۚ وَهُوَ ٱلۡعَزِيزُ ٱلۡحَكِي"
+                        TextWrapping="Wrap" />
+
+                </Grid>
+            </ScrollViewer>
 
             <Rectangle
                 Grid.Row="0"
@@ -316,8 +490,8 @@
                 Height="26"
                 Margin="361,0,0,674"
                 Background="#434343"
+                Click="ShutDown"
                 Cursor="Hand"
-                PreviewMouseLeftButtonUp="ShutDown"
                 Style="{DynamicResource TitleButton}" />
             <Button
                 Grid.Row="0"
@@ -326,8 +500,8 @@
                 Height="26"
                 Margin="322,0,39,674"
                 Background="#434343"
+                Click="Minimize"
                 Cursor="Hand"
-                PreviewMouseLeftButtonUp="Minimize"
                 Style="{DynamicResource TitleButton}" />
 
             <StackPanel
@@ -392,6 +566,7 @@
 
 
         </Grid>
+
 
     </Border>
 </Window>

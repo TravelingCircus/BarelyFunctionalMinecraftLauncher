@@ -82,7 +82,7 @@ public partial class MainWindow : Window
         }
     }
 
-    private void ShutDown(object sender, MouseButtonEventArgs e)
+    private void ShutDown(object sender, RoutedEventArgs e)
     {
         try
         {
@@ -93,7 +93,7 @@ public partial class MainWindow : Window
             MessageBox.Show(ex.Message);
         }
     }
-    private void Minimize(object sender, MouseButtonEventArgs e)
+    private void Minimize(object sender, RoutedEventArgs e)
     {
         try
         {

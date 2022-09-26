@@ -13,6 +13,7 @@
                 <ResourceDictionary Source="Styles/DefaultButtonDictionary.xaml" />
                 <ResourceDictionary Source="Styles/TitleButton.xaml" />
                 <ResourceDictionary Source="Styles/SliderDictionary.xaml" />
+                <ResourceDictionary Source="Styles/Transparent.xaml" />
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Application.Resources>
