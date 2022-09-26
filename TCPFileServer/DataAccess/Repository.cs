@@ -131,8 +131,14 @@ public sealed class Repository
     public async Task<BorrowableReadonlyStream> GetForgeArchiveStream()
     {
         LargeDataHandler dataHandler = await _largeDataHandlerQueue.GetDataHandler();
-        return dataHandler.GetStreamToForgeArchive();
+        return dataHandler.GetForgeArchiveStream();
     }
+    
+    public async Task<BorrowableReadonlyStream> GetModsArchiveStream()
+    {
+        LargeDataHandler dataHandler = await _largeDataHandlerQueue.GetDataHandler();
+        return dataHandler.GetModsArchiveStream();
+    } 
 
     #endregion
 }

@@ -3,7 +3,8 @@
 public abstract class DataHandler
 {
     private TaskCompletionSource _releaseSource;
-    public abstract Task WriteToRepository();
+
+    public virtual Task WriteToRepository() => throw new NotImplementedException();
     
     public void Borrow(TaskCompletionSource releaseSource)
     {
