@@ -1,4 +1,4 @@
-﻿namespace CommonData.Network.Messages;
+﻿namespace CommonData.Network.Messages.Login;
 
 public class LoginResponse: Message
 {

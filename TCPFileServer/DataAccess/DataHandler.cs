@@ -1,4 +1,4 @@
-﻿namespace HTTPFileServer.DataAccess;
+﻿namespace TCPFileServer.DataAccess;
 
 public abstract class DataHandler
 {
@@ -10,7 +10,6 @@ public abstract class DataHandler
     {
         borrows++;
         _releaseSource = releaseSource;
-        Console.WriteLine($"BORROWED DATA HANDLER: {borrows}");
     }
 
     public void Release()
@@ -18,7 +17,6 @@ public abstract class DataHandler
         if (_releaseSource is null)
             throw new NullReferenceException("Trying to release handler that was never borrowed");
         Task.Run(() => _releaseSource.SetResult());
-        Console.WriteLine($"RELEASED DATA HANDLER: {borrows}");
     }
 
     protected Stream ReadFromRepository(string repositoryPath, string fileName)

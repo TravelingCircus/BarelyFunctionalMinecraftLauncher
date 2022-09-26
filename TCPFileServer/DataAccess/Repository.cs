@@ -1,7 +1,7 @@
 ﻿using CommonData;
 using CommonData.Models;
 
-namespace HTTPFileServer.DataAccess;
+namespace TCPFileServer.DataAccess;
 
 public sealed class Repository
 {
@@ -33,6 +33,16 @@ public sealed class Repository
     }
 
     #region SmallDataInterface
+
+    public async Task<ConfigurationVersion> GetConfigurationVersion()
+    {
+        SmallDataHandler dataHandler = await _smallDataHandlerQueue.GetDataHandler();
+
+        ConfigurationVersion configVersion = dataHandler.GetConfigVersion();
+        
+        dataHandler.Release();
+        return configVersion;
+    }
 
     public async Task<LaunchConfiguration> GetLaunchConfiguration()
     {

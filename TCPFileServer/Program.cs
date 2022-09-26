@@ -1,4 +1,4 @@
-﻿namespace HTTPFileServer;
+﻿namespace TCPFileServer;
 
 internal static class Program
 {

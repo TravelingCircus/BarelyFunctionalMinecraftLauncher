@@ -2,10 +2,12 @@
 using System.Net.Sockets;
 using CommonData.Network;
 using CommonData.Network.Messages;
-using HTTPFileServer.DataAccess;
-using HTTPFileServer.MessageHandlers;
+using CommonData.Network.Messages.Login;
+using CommonData.Network.Messages.Registration;
+using TCPFileServer.DataAccess;
+using TCPFileServer.MessageHandlers;
 
-namespace HTTPFileServer;
+namespace TCPFileServer;
 
 public class Server
 {

@@ -2,9 +2,10 @@
 using CommonData.Models;
 using CommonData.Network;
 using CommonData.Network.Messages;
-using HTTPFileServer.DataAccess;
+using CommonData.Network.Messages.Registration;
+using TCPFileServer.DataAccess;
 
-namespace HTTPFileServer.MessageHandlers;
+namespace TCPFileServer.MessageHandlers;
 
 public sealed class RegistrationHandler : MessageHandler
 {
@@ -13,11 +14,6 @@ public sealed class RegistrationHandler : MessageHandler
     public RegistrationHandler(Repository repository)
     {
         _repository = repository;
-    }
-
-    public override bool CanHandle(MessageHeader messageHeader)
-    {
-        return MessageRegistry.GetMessageTypeName(messageHeader) == nameof(RegistrationRequest);
     }
 
     public override Task Handle(Stream dataStream)

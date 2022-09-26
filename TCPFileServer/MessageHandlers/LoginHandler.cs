@@ -1,10 +1,8 @@
-﻿using CommonData;
-using CommonData.Models;
-using CommonData.Network;
-using CommonData.Network.Messages;
-using HTTPFileServer.DataAccess;
+﻿using CommonData.Network;
+using CommonData.Network.Messages.Login;
+using TCPFileServer.DataAccess;
 
-namespace HTTPFileServer.MessageHandlers;
+namespace TCPFileServer.MessageHandlers;
 
 public class LoginHandler: MessageHandler
 {
@@ -13,11 +11,6 @@ public class LoginHandler: MessageHandler
     public LoginHandler(Repository repository)
     {
         _repository = repository;
-    }
-
-    public override bool CanHandle(MessageHeader messageHeader)
-    {
-        return MessageRegistry.GetMessageTypeName(messageHeader) == nameof(LoginRequest);
     }
 
     public override Task Handle(Stream dataStream)
@@ -31,7 +24,6 @@ public class LoginHandler: MessageHandler
         LoginRequest request = new LoginRequest();
         request.ApplyData(dataStream);
         bool success = await _repository.TryLogIn(request.NickName, request.PasswordHash);
-        Console.WriteLine($"SENT RESPONSE:{success} thread_{Thread.CurrentThread.ManagedThreadId}");
         return new LoginResponse(success);
     }
 }

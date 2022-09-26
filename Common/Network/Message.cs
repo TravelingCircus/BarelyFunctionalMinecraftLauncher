@@ -49,18 +49,20 @@ public abstract class Message
         return BitConverter.ToBoolean(byteBuffer);
     }
 
-    protected void WriteStream(Stream stream, String value)
+    protected void WriteToStream(Stream stream, string value)
     {
-        
+        byte[] stringBytes = Encoding.UTF8.GetBytes(value);
+        stream.Write(BitConverter.GetBytes(stringBytes.Length));
+        stream.Write(stringBytes);
     }
 
-    protected void WriteStream(Stream stream, int value)
+    protected void WriteToStream(Stream stream, int value)
     {
-        
+        stream.Write(BitConverter.GetBytes(value));
     }
 
-    protected void WriteStream(Stream stream, bool value)
+    protected void WriteToStream(Stream stream, bool value)
     {
-        
+        stream.Write(BitConverter.GetBytes(value));
     }
 }

@@ -1,5 +1,9 @@
 ﻿using System.ComponentModel;
+using CommonData.Models;
 using CommonData.Network.Messages;
+using CommonData.Network.Messages.LaunchConfiguration;
+using CommonData.Network.Messages.Login;
+using CommonData.Network.Messages.Registration;
 
 namespace CommonData.Network;
 
@@ -11,7 +15,9 @@ public static class MessageRegistry
         {2, typeof(RegistrationResponse)},
         {3, typeof(LoginRequest)},
         {4, typeof(LoginResponse)},
-        {5, typeof(ForgeDownloadRequest)}
+        {5, typeof(ForgeDownloadRequest)},
+        {6, typeof(LaunchConfigurationRequest)},
+        {7, typeof(LaunchConfigurationResponse)}
     };
 
     public static Message GetMessageFor(MessageHeader header)

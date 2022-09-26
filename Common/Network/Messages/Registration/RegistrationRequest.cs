@@ -1,6 +1,6 @@
 ﻿using System.Text;
 
-namespace CommonData.Network.Messages;
+namespace CommonData.Network.Messages.Registration;
 
 public class RegistrationRequest : Message
 {
@@ -35,6 +35,8 @@ public class RegistrationRequest : Message
         buffer.Write(nicknameBytes);
         buffer.Write(BitConverter.GetBytes(passwordBytes.Length));
         buffer.Write(passwordBytes);
+        
+        buffer.Flush();
         buffer.Position = 0;
         return buffer;
     }
