@@ -1,15 +1,13 @@
 ﻿using System;
+using System.IO;
+using System.Net.Http;
 using System.Threading.Tasks;
 using System.Windows;
 using BFML._3D;
 using OpenTK.Graphics.OpenGL4;
 using OpenTK.Mathematics;
+using OpenTK.Wpf;
 using System.Windows.Input;
-using CommonData.Models;
-using CommonData.Network.Messages;
-using CommonData.Network.Messages.Login;
-using CommonData.Network.Messages.Registration;
-using TCPFileClient;
 
 namespace BFML.WPF;
 
@@ -20,10 +18,6 @@ public partial class MainWindow : Window
     public MainWindow()
     {
         InitializeComponent();
-        
-        ClearLogs();
-        LogLine("YA YEBY SOBAK");
-        
         /*GLWpfControlSettings settings = new GLWpfControlSettings
         {
             MajorVersion = 4,
@@ -32,43 +26,36 @@ public partial class MainWindow : Window
         //OpenTkControl.Start(settings);
         //_skinPreviewRenderer = new SkinPreviewRenderer();
         //_skinPreviewRenderer.SetUp();
-    }
-
-    private FileClient _fileClient;
-
-    private async void PlayButton(object sender, RoutedEventArgs e)
-    {
-        _fileClient = ConnectToServer();
-        User user = new User("pisos", "iousdgfab");
         
-        LogLine("SENT REGISTRATION REQUEST");
-        RegistrationResponse registrationResponse = await Register(user);
-        LogLine($"RESULT: {registrationResponse.Success}");
-        
-        LogLine("SENT LOGIN REQUEST");
-        LoginResponse loginResponse = await Login(user);
-        LogLine($"RESULT: {loginResponse.Success}");
-
-    }
-    
-    private FileClient ConnectToServer()
-    {
-        FileClient fileClient = new FileClient();
-        string log = fileClient.ConnectToServer() ? "CONNECTED" : "FAILED TO CONNECT";
-        LogLine(log);
-        return fileClient;
     }
 
-    private Task<RegistrationResponse> Register(User user)
+    private void PlayButtonOnClick(object sender, RoutedEventArgs e)
     {
-        return _fileClient.SendRegistrationRequest(user);
+        throw new NotImplementedException();
     }
 
-    private Task<LoginResponse> Login(User user)
+    private async void DownloadButtonOnClick(object sender, RoutedEventArgs e)
     {
-        return _fileClient.SendLoginRequest(user);
+        await DownloadSomethingViaHttpClient();
     }
-    
+
+    private async Task DownloadSomethingViaHttpClient()
+    {
+        Uri url = new Uri(
+            "https://upload.wikimedia.org/wikipedia/commons/4/47/PNG_transparency_demonstration_1.png");
+        string savePath = @"C:\Users\maksy\Desktope\TestDownload\PNG_transparency_demonstration_1.png";
+
+        using HttpClient client = new HttpClient();
+        await using Stream stream = await client.GetStreamAsync(url);
+        await using FileStream fileStream = new FileStream(savePath, FileMode.OpenOrCreate);
+        await stream.CopyToAsync(fileStream);
+    }
+
+    private void InstallButtonOnClick(object sender, RoutedEventArgs e)
+    {
+        throw new NotImplementedException();
+    }
+
     private async void SkinPreviewOnRender(TimeSpan obj)
     {
         GL.ClearColor(Color4.White);
@@ -77,43 +64,55 @@ public partial class MainWindow : Window
         //await _skinPreviewRenderer.Render(obj).ConfigureAwait(false);
     }
 
-    #region Navigation
-    
+    private void ServerButtonOnClick(object sender, RoutedEventArgs e)
+    {
+        //BFMLFileClient.ConnectToServer();
+    }
+
     private void MoveWindow(object sender, MouseEventArgs e)
     {
-        if (e.LeftButton != MouseButtonState.Pressed) return;
-        
-        if (WindowState == WindowState.Maximized) 
+        if (e.LeftButton == MouseButtonState.Pressed)
         {
-            WindowState = WindowState.Normal;
-            Application.Current.MainWindow.Top = 3;
+            if (this.WindowState == WindowState.Maximized) 
+            {
+                this.WindowState = WindowState.Normal;
+                Application.Current.MainWindow.Top = 3;
+            }
+            this.DragMove();
         }
-        DragMove();
     }
 
     private void ShutDown(object sender, RoutedEventArgs e)
     {
-        App.Current.Shutdown();
+        try
+        {
+            App.Current.Shutdown();
+        }
+        catch (Exception ex)
+        {
+            MessageBox.Show(ex.Message);
+        }
     }
-    
     private void Minimize(object sender, RoutedEventArgs e)
     {
-        WindowState = WindowState.Minimized;
+        try
+        {
+            this.WindowState = WindowState.Minimized;
+        }
+        catch (Exception ex)
+        {
+            MessageBox.Show(ex.Message);
+        }
     }
 
-    #endregion
-
-    #region Logs
-
-    private void LogLine(string line)
+    private void SkinFileDrop_Drop(object sender, DragEventArgs e)
     {
-        ChangeLog.Text += "\n" + line;
-    }
+        if (e.Data.GetDataPresent(DataFormats.FileDrop))
+        {
+            string[] files = (string[])e.Data.GetData(DataFormats.FileDrop);
 
-    private void ClearLogs()
-    {
-        ChangeLog.Text = String.Empty;
+            string filename = Path.GetFileName(files[0]);
+           
+        }
     }
-
-    #endregion
 }

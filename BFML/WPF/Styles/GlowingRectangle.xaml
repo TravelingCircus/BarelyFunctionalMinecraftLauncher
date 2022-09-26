@@ -1,0 +1,14 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <Style x:Key="GlowingRectangle" TargetType="{x:Type Rectangle}">
+        <Setter Property="Rectangle.Effect">
+            <Setter.Value>
+                <DropShadowEffect
+                    BlurRadius="20"
+                    Direction="0"
+                    Opacity="1"
+                    ShadowDepth="0"
+                    Color="#ff9a3c" />
+            </Setter.Value>
+        </Setter>
+    </Style>
+</ResourceDictionary>
