@@ -51,8 +51,9 @@ public abstract class Message
 
     protected void WriteToStream(Stream stream, string value)
     {
-        stream.Write(BitConverter.GetBytes(value.Length));
-        stream.Write(Encoding.UTF8.GetBytes(value));
+        byte[] stringBytes = Encoding.UTF8.GetBytes(value);
+        stream.Write(BitConverter.GetBytes(stringBytes.Length));
+        stream.Write(stringBytes);
     }
 
     protected void WriteToStream(Stream stream, int value)
