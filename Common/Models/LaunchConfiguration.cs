@@ -1,6 +1,7 @@
 ﻿namespace CommonData.Models;
 
-public class LaunchConfiguration
+[Serializable]
+public sealed class LaunchConfiguration
 {
     public readonly string VanillaVersion;
     public readonly string ForgeVersion;

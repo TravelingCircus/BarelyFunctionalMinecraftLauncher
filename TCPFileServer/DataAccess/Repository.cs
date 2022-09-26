@@ -84,7 +84,7 @@ public sealed class Repository
         SmallDataHandler dataHandler = await _smallDataHandlerQueue.GetDataHandler();
 
         User user = dataHandler.GetUser(name);
-        string newSkinPath = dataHandler.SaveSkin(skin);
+        string newSkinPath = dataHandler.SaveSkin(name, skin);
         dataHandler.RemoveSkin(user.SkinPath);
         user.SkinPath = newSkinPath;
         await dataHandler.RewriteUser(user);

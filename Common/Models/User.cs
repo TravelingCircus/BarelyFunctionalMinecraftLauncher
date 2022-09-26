@@ -1,7 +1,7 @@
 ﻿namespace CommonData.Models;
 
 [Serializable]
-public class User
+public sealed class User
 {
 
     public int GryvnyasPaid
@@ -19,11 +19,11 @@ public class User
     public readonly string PasswordHash;
     private int _gryvnyasPaid;
 
-    public User(string skinPath)
+    public User()
     {
-        SkinPath = skinPath;
+        
     }
-    
+
     public User(string nickname, string passwordHash, int gryvnyasPaid, string skinPath)
     {
         Nickname = nickname;
