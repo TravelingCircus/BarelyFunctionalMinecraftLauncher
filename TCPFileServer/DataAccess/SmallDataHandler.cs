@@ -48,11 +48,6 @@ public sealed class SmallDataHandler: DataHandler
         return version;
     }
 
-    public override Task WriteToRepository()
-    {
-        throw new NotImplementedException();
-    }
-
     public string[] GetAllNicknames()
     {
         DirectoryInfo usersDirectory = new DirectoryInfo(_usersDirectory);

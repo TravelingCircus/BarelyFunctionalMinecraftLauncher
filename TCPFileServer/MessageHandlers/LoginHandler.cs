@@ -1,4 +1,5 @@
 ﻿using CommonData;
+using CommonData.Models;
 using CommonData.Network;
 using CommonData.Network.Messages;
 using HTTPFileServer.DataAccess;
@@ -29,9 +30,8 @@ public class LoginHandler: MessageHandler
         Console.WriteLine($"HANDLING LOGIN REQUEST thread_{Thread.CurrentThread.ManagedThreadId}");
         LoginRequest request = new LoginRequest();
         request.ApplyData(dataStream);
-        throw new NotImplementedException();
-        /*bool success = await _repository.CheckUser(new User(request.NickName, request.PasswordHash, 0));
+        bool success = await _repository.TryLogIn(request.NickName, request.PasswordHash);
         Console.WriteLine($"SENT RESPONSE:{success} thread_{Thread.CurrentThread.ManagedThreadId}");
-        return new LoginResponse(success);*/
+        return new LoginResponse(success);
     }
 }
