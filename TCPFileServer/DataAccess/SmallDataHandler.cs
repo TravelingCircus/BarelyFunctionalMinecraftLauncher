@@ -6,15 +6,19 @@ namespace HTTPFileServer.DataAccess;
 public class SmallDataHandler: DataHandler
 {
     private readonly string _repositoryPath;
+    private readonly string _usersDirectory;
+    private readonly string _skinsDirectory;
     
     public SmallDataHandler(string repositoryPath)
     {
         _repositoryPath = repositoryPath;
+        _usersDirectory = repositoryPath + @"Users\";
+        _skinsDirectory = repositoryPath + @"Skins\";
     }
 
-    public bool CheckUser(string fileName)
+    public bool UserExists(string fileName)
     {
-        string filePath = _repositoryPath + fileName;
+        string filePath = _usersDirectory + fileName;
         if (File.Exists(filePath)) return true;
         return false;
     }
@@ -22,7 +26,7 @@ public class SmallDataHandler: DataHandler
     public User GetUser(string username)
     {
         string fileName = username + ".xml";
-        string filePath = _repositoryPath + fileName;
+        string filePath = _usersDirectory + fileName;
         User result = UserDataSerializer.FromXML(ReadFromRepository(filePath, fileName));
         if (result is null) throw new ArgumentOutOfRangeException(nameof(username), $"User [{username}] doesn't exist.");
         return result;
@@ -45,26 +49,39 @@ public class SmallDataHandler: DataHandler
 
     public string[] GetAllNicknames()
     {
-        throw new NotImplementedException();
+        DirectoryInfo usersDirectory = new DirectoryInfo(_usersDirectory);
+        FileInfo[] files = usersDirectory.GetFiles("*.xml");
+        
+        string[] nicknames = new string[files.Length];
+        for (int i = 0; i < nicknames.Length; i++)
+        {
+            FileInfo file = files[i];
+            nicknames[i] = file.Name;
+        }
+
+        return nicknames;
     }
     
-    public string SaveSkin(byte[] data)
+    public string SaveSkin(string nickname, byte[] data)
     {
-        throw new NotImplementedException();
-    }
-
-    public bool UserExists(string name)
-    {
-        throw new NotImplementedException();
+        string skinPath = _skinsDirectory + nickname + ".png";
+        using FileStream fileStream = new FileStream(skinPath, FileMode.OpenOrCreate);
+        fileStream.Write(data, 0, data.Length);
+        return skinPath;
     }
 
     public Task RewriteUser(User newUser)
     {
-        throw new NotImplementedException();
+        string path = _usersDirectory + newUser.Nickname + ".xml";
+        using FileStream fileStream = new FileStream(path, FileMode.Truncate);
+        UserDataSerializer.ToXML(newUser, fileStream);
+        return Task.CompletedTask;
     }
 
     public void RemoveSkin(string userSkinPath)
     {
-        throw new NotImplementedException();
+        string path = _skinsDirectory + userSkinPath;
+        if (!File.Exists(path)) throw new ArgumentException($"{userSkinPath} doesn't exists");
+        File.Delete(path);
     }
 }
