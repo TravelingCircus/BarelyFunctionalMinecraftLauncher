@@ -15,9 +15,7 @@
     WindowStyle="None"
     mc:Ignorable="d">
 
-    <Window.Resources>
-        
-    </Window.Resources>
+    <Window.Resources />
 
     <Border Background="#383838" CornerRadius="8">
         <Grid>
@@ -70,6 +68,27 @@
                     Source="Images/LogOutIcon.png" />
 
             </StackPanel>
+
+            <Button
+                Width="311"
+                Height="516"
+                Margin="30,98,59,85"
+                Background="#383838"
+                Style="{DynamicResource Transparent2}" />
+            <Label
+                x:Name="FileName"
+                HorizontalAlignment="Center"
+                VerticalAlignment="Center"
+                Content="Vo0chko"
+                FontSize="40"
+                Foreground="#dcdcdc" />
+            <StackPanel
+                x:Name="SkinFileDrop"
+                Width="311"
+                Height="516"
+                Margin="30,98,59,85"
+                AllowDrop="True"
+                Drop="SkinFileDrop_Drop" />
 
             <Rectangle
                 Grid.Row="0"
@@ -192,7 +211,7 @@
                     Maximum="16384"
                     Style="{DynamicResource Horizontal_Slider}"
                     Template="{DynamicResource Slider}"
-                    TickFrequency="64">
+                    TickFrequency="512">
                     <Slider.Resources>
                         <Style TargetType="ToolTip">
                             <Setter Property="OverridesDefaultStyle" Value="True" />
@@ -245,9 +264,6 @@
                     Text="MB"
                     TextAlignment="Center" />
             </StackPanel>
-
-
-
 
             <Slider
                 Grid.Row="0"
@@ -459,11 +475,6 @@
                     RadiusX="1"
                     RadiusY="1" />
             </StackPanel>
-
-
-
         </Grid>
-
-
     </Border>
 </Window>
