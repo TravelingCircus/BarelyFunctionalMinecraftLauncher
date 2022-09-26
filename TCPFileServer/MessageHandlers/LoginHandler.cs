@@ -1,8 +1,8 @@
 ﻿using CommonData.Network;
 using CommonData.Network.Messages.Login;
-using HTTPFileServer.DataAccess;
+using TCPFileServer.DataAccess;
 
-namespace HTTPFileServer.MessageHandlers;
+namespace TCPFileServer.MessageHandlers;
 
 public class LoginHandler: MessageHandler
 {

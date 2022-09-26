@@ -1,9 +1,9 @@
 ﻿using CommonData.Models;
 using CommonData.Network;
 using CommonData.Network.Messages.LaunchConfiguration;
-using HTTPFileServer.DataAccess;
+using TCPFileServer.DataAccess;
 
-namespace HTTPFileServer.MessageHandlers;
+namespace TCPFileServer.MessageHandlers;
 
 public class LaunchConfigurationHandler: MessageHandler
 {

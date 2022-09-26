@@ -3,9 +3,14 @@
 [Serializable]
 public sealed class ConfigurationVersion
 {
-    public readonly int MajorVersion;
-    public readonly int MinorVersion;
-    public readonly string Changelog;
+    public int MajorVersion;
+    public int MinorVersion;
+    public string Changelog;
+
+    public ConfigurationVersion()
+    {
+        
+    }
 
     public ConfigurationVersion(int majorVersion, int minorVersion, string changelog)
     {

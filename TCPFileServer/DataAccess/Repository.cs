@@ -1,7 +1,7 @@
 ﻿using CommonData;
 using CommonData.Models;
 
-namespace HTTPFileServer.DataAccess;
+namespace TCPFileServer.DataAccess;
 
 public sealed class Repository
 {

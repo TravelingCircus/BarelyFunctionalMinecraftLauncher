@@ -5,7 +5,6 @@
         <TargetFramework>net6.0</TargetFramework>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>warnings</Nullable>
-        <RootNamespace>HTTPFileServer</RootNamespace>
     </PropertyGroup>
 
     <ItemGroup>

@@ -4,10 +4,10 @@ using CommonData.Network;
 using CommonData.Network.Messages;
 using CommonData.Network.Messages.Login;
 using CommonData.Network.Messages.Registration;
-using HTTPFileServer.DataAccess;
-using HTTPFileServer.MessageHandlers;
+using TCPFileServer.DataAccess;
+using TCPFileServer.MessageHandlers;
 
-namespace HTTPFileServer;
+namespace TCPFileServer;
 
 public class Server
 {

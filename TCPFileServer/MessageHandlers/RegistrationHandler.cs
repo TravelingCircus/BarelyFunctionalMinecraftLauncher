@@ -3,9 +3,9 @@ using CommonData.Models;
 using CommonData.Network;
 using CommonData.Network.Messages;
 using CommonData.Network.Messages.Registration;
-using HTTPFileServer.DataAccess;
+using TCPFileServer.DataAccess;
 
-namespace HTTPFileServer.MessageHandlers;
+namespace TCPFileServer.MessageHandlers;
 
 public sealed class RegistrationHandler : MessageHandler
 {

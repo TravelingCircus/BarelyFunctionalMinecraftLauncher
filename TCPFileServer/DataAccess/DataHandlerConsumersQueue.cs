@@ -1,6 +1,6 @@
 ﻿using System.Collections.Concurrent;
 
-namespace HTTPFileServer.DataAccess;
+namespace TCPFileServer.DataAccess;
 
 public class DataHandlerConsumersQueue<T> where T : DataHandler
 {

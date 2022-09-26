@@ -1,4 +1,4 @@
-﻿namespace HTTPFileServer.DataAccess;
+﻿namespace TCPFileServer.DataAccess;
 
 public abstract class DataHandler
 {

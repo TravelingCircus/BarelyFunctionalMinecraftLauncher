@@ -3,9 +3,14 @@
 [Serializable]
 public sealed class LaunchConfiguration
 {
-    public readonly string VanillaVersion;
-    public readonly string ForgeVersion;
-    public readonly string ModsChecksum;
+    public string VanillaVersion;
+    public string ForgeVersion;
+    public string ModsChecksum;
+
+    public LaunchConfiguration()
+    {
+        
+    }
 
     public LaunchConfiguration(string vanillaVersion, string forgeVersion, string modsChecksum)
     {
