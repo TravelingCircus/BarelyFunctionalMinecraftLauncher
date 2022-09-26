@@ -1,21 +1,28 @@
 ﻿namespace HTTPFileServer.DataAccess;
 
-public class LargeDataHandler: DataHandler
+public sealed class LargeDataHandler: DataHandler
 {
     private readonly string _repositoryPath;
-    
+    private readonly string _forgeArchivePath;
+    private readonly string _modsArchivePath;
+
+
     public LargeDataHandler(string repositoryPath)
     {
         _repositoryPath = repositoryPath;
+        _forgeArchivePath = repositoryPath + @"Forge\";
+        _modsArchivePath = repositoryPath + @"Mods\";
     }
     
-    public override Task WriteToRepository()
+    public BorrowableReadonlyStream GetForgeArchiveStream()
     {
-        throw new NotImplementedException();
+        FileStream underlyingStream = File.OpenRead(_forgeArchivePath);
+        return new BorrowableReadonlyStream(underlyingStream, this);
     }
 
-    public BorrowableReadonlyStream GetStreamToForgeArchive()
+    public BorrowableReadonlyStream GetModsArchiveStream()
     {
-        throw new NotImplementedException();
+        FileStream underlyingStream = File.OpenRead(_modsArchivePath);
+        return new BorrowableReadonlyStream(underlyingStream, this);
     }
 }

@@ -3,17 +3,22 @@
 public abstract class DataHandler
 {
     private TaskCompletionSource _releaseSource;
-    public abstract Task WriteToRepository();
-    
+
+    private int borrows = 0;
+
     public void Borrow(TaskCompletionSource releaseSource)
     {
+        borrows++;
         _releaseSource = releaseSource;
+        Console.WriteLine($"BORROWED DATA HANDLER: {borrows}");
     }
-    
+
     public void Release()
     {
-        if (_releaseSource is null) throw new NullReferenceException("Trying to release handler that was never borrowed");
-        _releaseSource.SetResult();
+        if (_releaseSource is null)
+            throw new NullReferenceException("Trying to release handler that was never borrowed");
+        Task.Run(() => _releaseSource.SetResult());
+        Console.WriteLine($"RELEASED DATA HANDLER: {borrows}");
     }
 
     protected Stream ReadFromRepository(string repositoryPath, string fileName)
@@ -23,12 +28,12 @@ public abstract class DataHandler
         fileStream.Position = 0;
         return fileStream;
     }
-    
+
     public byte[] ReadFromRepository(string filePath)
     {
         return ReadFromRepository(filePath, GetFileSize(filePath));
     }
-    
+
     protected byte[] ReadFromRepository(string filePath, int fileSize)
     {
         using FileStream fileStream = new FileStream(filePath, FileMode.Open);
@@ -37,7 +42,7 @@ public abstract class DataHandler
         if (bytesRead != fileSize) throw new IOException($"Read {bytesRead} from {fileSize}");
         return fileBytes;
     }
-    
+
     protected int GetFileSize(string path)
     {
         long size = new FileInfo(path).Length;

@@ -2,16 +2,16 @@
 
 public class LoginResponse: Message
 {
-    public bool LoginSuccess;
+    public bool Success;
 
     public LoginResponse()
     {
         
     }
     
-    public LoginResponse(bool loginSuccess)
+    public LoginResponse(bool success)
     {
-        LoginSuccess = loginSuccess;
+        Success = success;
     }
 
     public override MessageHeader GetHeader()
@@ -21,13 +21,13 @@ public class LoginResponse: Message
 
     public override void ApplyData(Stream stream)
     {
-        LoginSuccess = BoolReadStream(stream);
+        Success = BoolReadStream(stream);
     }
 
     protected override Stream GetData()
     {
         MemoryStream buffer = new MemoryStream(1);
-        byte[] successBytes = BitConverter.GetBytes(LoginSuccess);
+        byte[] successBytes = BitConverter.GetBytes(Success);
         buffer.Write(successBytes);
         return buffer;
     }

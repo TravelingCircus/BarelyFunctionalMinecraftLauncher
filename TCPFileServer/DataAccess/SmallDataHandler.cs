@@ -3,18 +3,22 @@ using CommonData.Models;
 
 namespace HTTPFileServer.DataAccess;
 
-public class SmallDataHandler: DataHandler
+public sealed class SmallDataHandler: DataHandler
 {
     private readonly string _repositoryPath;
+    private readonly string _usersDirectory;
+    private readonly string _skinsDirectory;
     
     public SmallDataHandler(string repositoryPath)
     {
         _repositoryPath = repositoryPath;
+        _usersDirectory = repositoryPath + @"\Users\";
+        _skinsDirectory = repositoryPath + @"\Skins\";
     }
 
-    public bool CheckUser(string fileName)
+    public bool UserExists(string username)
     {
-        string filePath = _repositoryPath + fileName;
+        string filePath = _usersDirectory + username + ".xml";
         if (File.Exists(filePath)) return true;
         return false;
     }
@@ -22,8 +26,8 @@ public class SmallDataHandler: DataHandler
     public User GetUser(string username)
     {
         string fileName = username + ".xml";
-        string filePath = _repositoryPath + fileName;
-        User result = UserDataSerializer.FromXML(ReadFromRepository(filePath, fileName));
+        using Stream fileStream = ReadFromRepository(_usersDirectory, fileName);
+        User result = DataSerializer.UserFromXml(fileStream);
         if (result is null) throw new ArgumentOutOfRangeException(nameof(username), $"User [{username}] doesn't exist.");
         return result;
     }
@@ -32,39 +36,59 @@ public class SmallDataHandler: DataHandler
     {
         string fileName = "LaunchConfiguration.xml";
         string filePath = _repositoryPath + fileName;
-        //TODO LaunchConfig FromXML(ReadFromRepository(filePath, fileName));
-        throw new NotImplementedException();
+        LaunchConfiguration launchConfig = DataSerializer.LaunchConfigFromXml(ReadFromRepository(filePath, fileName));
+        return launchConfig;
     }
-    
-    //TODO Version class and GetVersion();
 
-    public override Task WriteToRepository()
+    public ConfigurationVersion GetConfigVersion()
     {
-        throw new NotImplementedException();
+        string fileName = "Version.xml";
+        string filePath = _repositoryPath + fileName;
+        ConfigurationVersion version = DataSerializer.ConfigVersionFromXml(ReadFromRepository(filePath, fileName));
+        return version;
     }
 
     public string[] GetAllNicknames()
     {
-        throw new NotImplementedException();
+        DirectoryInfo usersDirectory = new DirectoryInfo(_usersDirectory);
+        FileInfo[] files = usersDirectory.GetFiles("*.xml");
+        
+        string[] nicknames = new string[files.Length];
+        for (int i = 0; i < nicknames.Length; i++)
+        {
+            FileInfo file = files[i];
+            nicknames[i] = file.Name;
+        }
+
+        return nicknames;
     }
     
-    public string SaveSkin(byte[] data)
+    public string SaveSkin(string nickname, byte[] data)
     {
-        throw new NotImplementedException();
+        string skinPath = _skinsDirectory + nickname + ".png";
+        using FileStream fileStream = new FileStream(skinPath, FileMode.OpenOrCreate);
+        fileStream.Write(data, 0, data.Length);
+        return skinPath;
     }
-
-    public bool UserExists(string name)
-    {
-        throw new NotImplementedException();
-    }
-
-    public Task RewriteUser(User newUser)
-    {
-        throw new NotImplementedException();
-    }
-
+    
     public void RemoveSkin(string userSkinPath)
     {
-        throw new NotImplementedException();
+        string path = _skinsDirectory + userSkinPath;
+        if (!File.Exists(path)) throw new ArgumentException($"{userSkinPath} doesn't exists");
+        File.Delete(path);
+    }
+    
+    public Task RewriteUser(User newUser) 
+    {
+        string path = _usersDirectory + newUser.Nickname + ".xml";
+        if (UserExists(newUser.Nickname)) File.Delete(path);
+        CreateUser(newUser, path);
+        return Task.CompletedTask;
+    }
+    
+    private void CreateUser(User newUser, string path) 
+    {
+        using FileStream fileStream = new FileStream(path, FileMode.Create);
+        DataSerializer.UserToXml(newUser, fileStream);
     }
 }

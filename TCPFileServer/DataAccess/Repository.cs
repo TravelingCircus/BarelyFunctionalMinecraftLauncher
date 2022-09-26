@@ -84,7 +84,7 @@ public sealed class Repository
         SmallDataHandler dataHandler = await _smallDataHandlerQueue.GetDataHandler();
 
         User user = dataHandler.GetUser(name);
-        string newSkinPath = dataHandler.SaveSkin(skin);
+        string newSkinPath = dataHandler.SaveSkin(name, skin);
         dataHandler.RemoveSkin(user.SkinPath);
         user.SkinPath = newSkinPath;
         await dataHandler.RewriteUser(user);
@@ -131,8 +131,14 @@ public sealed class Repository
     public async Task<BorrowableReadonlyStream> GetForgeArchiveStream()
     {
         LargeDataHandler dataHandler = await _largeDataHandlerQueue.GetDataHandler();
-        return dataHandler.GetStreamToForgeArchive();
+        return dataHandler.GetForgeArchiveStream();
     }
+    
+    public async Task<BorrowableReadonlyStream> GetModsArchiveStream()
+    {
+        LargeDataHandler dataHandler = await _largeDataHandlerQueue.GetDataHandler();
+        return dataHandler.GetModsArchiveStream();
+    } 
 
     #endregion
 }

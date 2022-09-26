@@ -25,6 +25,7 @@ public class Server
         
         //Repository repository = new Repository(@"WSTAW SIUDA SWOYE MISTSE");
         Repository repository = new Repository(@"C:\Users\maksy\Desktope\TestRepo", cancellationToken);
+        repository.Initialize();
         //Repository repository = new Repository(@"D:\Home\Desktope\TestDownload");
         HandlerPicker.RegisterHandler(nameof(RegistrationRequest), new RegistrationHandler(repository));
         HandlerPicker.RegisterHandler(nameof(LoginRequest), new LoginHandler(repository));
