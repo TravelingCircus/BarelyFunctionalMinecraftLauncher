@@ -4,6 +4,10 @@ public class LaunchConfigurationResponse: Message
 {
     public Models.LaunchConfiguration LaunchConfiguration;
 
+    public LaunchConfigurationResponse()
+    {
+    }
+
     public LaunchConfigurationResponse(Models.LaunchConfiguration launchConfiguration)
     {
         LaunchConfiguration = launchConfiguration;
@@ -28,9 +32,9 @@ public class LaunchConfigurationResponse: Message
     protected override Stream GetData()
     {
         MemoryStream buffer = new MemoryStream(GetHeader().DataLength);
+        WriteToStream(buffer, LaunchConfiguration.VanillaVersion);
         WriteToStream(buffer, LaunchConfiguration.ForgeVersion);
         WriteToStream(buffer, LaunchConfiguration.ModsChecksum);
-        WriteToStream(buffer, LaunchConfiguration.VanillaVersion);
         
         buffer.Flush();
         buffer.Position = 0;

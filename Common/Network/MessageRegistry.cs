@@ -4,6 +4,7 @@ using CommonData.Network.Messages;
 using CommonData.Network.Messages.LaunchConfiguration;
 using CommonData.Network.Messages.Login;
 using CommonData.Network.Messages.Registration;
+using CommonData.Network.Messages.Version;
 
 namespace CommonData.Network;
 
@@ -17,7 +18,9 @@ public static class MessageRegistry
         {4, typeof(LoginResponse)},
         {5, typeof(ForgeDownloadRequest)},
         {6, typeof(LaunchConfigurationRequest)},
-        {7, typeof(LaunchConfigurationResponse)}
+        {7, typeof(LaunchConfigurationResponse)},
+        {8, typeof(ConfigVersionRequest)},
+        {9, typeof(ConfigVersionResponse)}
     };
 
     public static Message GetMessageFor(MessageHeader header)
