@@ -35,6 +35,8 @@ public class RegistrationRequest : Message
         buffer.Write(nicknameBytes);
         buffer.Write(BitConverter.GetBytes(passwordBytes.Length));
         buffer.Write(passwordBytes);
+        
+        buffer.Flush();
         buffer.Position = 0;
         return buffer;
     }

@@ -16,11 +16,6 @@ public sealed class RegistrationHandler : MessageHandler
         _repository = repository;
     }
 
-    public override bool CanHandle(MessageHeader messageHeader)
-    {
-        return MessageRegistry.GetMessageTypeName(messageHeader) == nameof(RegistrationRequest);
-    }
-
     public override Task Handle(Stream dataStream)
     {
         throw new NotSupportedException();
