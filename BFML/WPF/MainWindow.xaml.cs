@@ -112,8 +112,7 @@ public partial class MainWindow : Window
             string[] files = (string[])e.Data.GetData(DataFormats.FileDrop);
 
             string filename = Path.GetFileName(files[0]);
-
-            FileName.Content = filename;
+           
         }
     }
 }
