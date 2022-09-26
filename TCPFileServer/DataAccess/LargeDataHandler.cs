@@ -1,15 +1,17 @@
 ﻿namespace HTTPFileServer.DataAccess;
 
-public class LargeDataHandler: DataHandler
+public sealed class LargeDataHandler: DataHandler
 {
     private readonly string _repositoryPath;
-    private string _forgeArchivePath;
-    private string _modsArchivePath;
+    private readonly string _forgeArchivePath;
+    private readonly string _modsArchivePath;
 
 
     public LargeDataHandler(string repositoryPath)
     {
         _repositoryPath = repositoryPath;
+        _forgeArchivePath = repositoryPath + @"Forge\";
+        _modsArchivePath = repositoryPath + @"Mods\";
     }
     
     public BorrowableReadonlyStream GetForgeArchiveStream()
