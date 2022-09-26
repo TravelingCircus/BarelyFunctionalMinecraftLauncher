@@ -13,4 +13,9 @@ public class LargeDataHandler: DataHandler
     {
         throw new NotImplementedException();
     }
+
+    public BorrowableReadonlyStream GetStreamToForgeArchive()
+    {
+        throw new NotImplementedException();
+    }
 }

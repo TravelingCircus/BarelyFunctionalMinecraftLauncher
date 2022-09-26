@@ -125,4 +125,14 @@ public sealed class Repository
     }
     
     #endregion
+
+    #region LargeDataInterface
+
+    public async Task<BorrowableReadonlyStream> GetForgeArchiveStream()
+    {
+        LargeDataHandler dataHandler = await _largeDataHandlerQueue.GetDataHandler();
+        return dataHandler.GetStreamToForgeArchive();
+    }
+
+    #endregion
 }
