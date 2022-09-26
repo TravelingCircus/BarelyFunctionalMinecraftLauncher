@@ -305,7 +305,8 @@
                 FontFamily="Minecraft"
                 FontSize="60"
                 Foreground="#383838"
-                Style="{DynamicResource PlayButton}" />
+                Style="{DynamicResource PlayButton}" 
+                Click="PlayButton"/>
 
             <Button
                 Grid.Row="0"

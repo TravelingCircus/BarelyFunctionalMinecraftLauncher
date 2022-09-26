@@ -15,8 +15,8 @@ public sealed class User
     }
 
     public string SkinPath;
-    public readonly string Nickname;
-    public readonly string PasswordHash;
+    public string Nickname;
+    public string PasswordHash;
     private int _gryvnyasPaid;
 
     public User()
@@ -24,13 +24,7 @@ public sealed class User
         
     }
 
-    public User(string nickname, string passwordHash)
-    {
-        Nickname = nickname;
-        PasswordHash = passwordHash;
-    }
-
-    public User(string nickname, string passwordHash, int gryvnyasPaid, string skinPath)
+    public User(string nickname, string passwordHash, int gryvnyasPaid = 0, string skinPath = "")
     {
         Nickname = nickname;
         PasswordHash = passwordHash;

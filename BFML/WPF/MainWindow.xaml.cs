@@ -33,11 +33,11 @@ public partial class MainWindow : Window
     }
 
     private FileClient _fileClient;
-    
-    public override async void EndInit()
+
+    private async void PlayButton(object sender, RoutedEventArgs e)
     {
         _fileClient = ConnectToServer();
-        User user = new User("", "iousdgfab", 0, "");
+        User user = new User("pisos", "iousdgfab");
         
         LogLine("SENT REGISTRATION REQUEST");
         RegistrationResponse registrationResponse = await Register(user);
@@ -47,9 +47,8 @@ public partial class MainWindow : Window
         LoginResponse loginResponse = await Login(user);
         LogLine($"RESULT: {loginResponse.Success}");
 
-        base.EndInit();
     }
-
+    
     private FileClient ConnectToServer()
     {
         FileClient fileClient = new FileClient();

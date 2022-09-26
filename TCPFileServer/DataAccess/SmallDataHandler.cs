@@ -12,13 +12,13 @@ public sealed class SmallDataHandler: DataHandler
     public SmallDataHandler(string repositoryPath)
     {
         _repositoryPath = repositoryPath;
-        _usersDirectory = repositoryPath + @"Users\";
-        _skinsDirectory = repositoryPath + @"Skins\";
+        _usersDirectory = repositoryPath + @"\Users\";
+        _skinsDirectory = repositoryPath + @"\Skins\";
     }
 
-    public bool UserExists(string fileName)
+    public bool UserExists(string username)
     {
-        string filePath = _usersDirectory + fileName;
+        string filePath = _usersDirectory + username + ".xml";
         if (File.Exists(filePath)) return true;
         return false;
     }
@@ -26,8 +26,8 @@ public sealed class SmallDataHandler: DataHandler
     public User GetUser(string username)
     {
         string fileName = username + ".xml";
-        string filePath = _usersDirectory + fileName;
-        User result = DataSerializer.UserFromXml(ReadFromRepository(filePath, fileName));
+        using Stream fileStream = ReadFromRepository(_usersDirectory, fileName);
+        User result = DataSerializer.UserFromXml(fileStream);
         if (result is null) throw new ArgumentOutOfRangeException(nameof(username), $"User [{username}] doesn't exist.");
         return result;
     }

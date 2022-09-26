@@ -6,6 +6,7 @@ public class DataHandlerConsumersQueue<T> where T : DataHandler
 {
     private T _handler;
     private ConcurrentQueue<TaskCompletionSource<T>> _queue;
+    private TaskCompletionSource _releaseSource;
 
     public DataHandlerConsumersQueue(T handler)
     {
@@ -22,16 +23,22 @@ public class DataHandlerConsumersQueue<T> where T : DataHandler
 
     public async Task RunBlocking(CancellationToken cancellationToken)
     {
-        TaskCompletionSource<T> consumer = null;
+        TaskCompletionSource<T> consumer;
         while (!cancellationToken.IsCancellationRequested)
         {
-            if (consumer is null && !_queue.TryDequeue(out consumer)) continue;
-
-            TaskCompletionSource releaseSource = new TaskCompletionSource();
-            _handler.Borrow(releaseSource);
+            if (!_queue.TryDequeue(out TaskCompletionSource<T> queuedConsumer)) continue;
+            consumer = queuedConsumer;
             
-            consumer.SetResult(_handler);
-            await releaseSource.Task;
+            await BorrowHandler(consumer).ConfigureAwait(false);
         }
+    }
+
+    private Task BorrowHandler(TaskCompletionSource<T> consumer)
+    {
+        _releaseSource = new TaskCompletionSource();
+        _handler.Borrow(_releaseSource);
+            
+        consumer.SetResult(_handler);
+        return _releaseSource.Task;
     }
 }
