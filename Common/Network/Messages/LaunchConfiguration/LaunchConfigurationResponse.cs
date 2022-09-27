@@ -18,7 +18,7 @@ public class LaunchConfigurationResponse: Message
         return new MessageHeader(MessageRegistry.GetKeyForMessageType(typeof(LaunchConfigurationResponse)), 
             LaunchConfiguration.ForgeVersion.Length + 
             LaunchConfiguration.ModsChecksum.Length + 
-            LaunchConfiguration.VanillaVersion.Length);    
+            LaunchConfiguration.VanillaVersion.Length + sizeof(int));    
     }
 
     public override void ApplyData(Stream stream)
@@ -36,6 +36,7 @@ public class LaunchConfigurationResponse: Message
         WriteToStream(buffer, LaunchConfiguration.VanillaVersion);
         WriteToStream(buffer, LaunchConfiguration.ForgeVersion);
         WriteToStream(buffer, LaunchConfiguration.ModsChecksum);
+        WriteToStream(buffer, LaunchConfiguration.RequiredGriwnas);
         
         buffer.Flush();
         buffer.Position = 0;
