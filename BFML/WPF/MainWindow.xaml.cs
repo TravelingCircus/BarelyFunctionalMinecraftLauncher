@@ -8,6 +8,7 @@ using OpenTK.Graphics.OpenGL4;
 using OpenTK.Mathematics;
 using OpenTK.Wpf;
 using System.Windows.Input;
+using BFML.Core;
 using CommonData.Models;
 using CommonData.Network.Messages.Login;
 using CommonData.Network.Messages.Registration;
@@ -22,15 +23,21 @@ public partial class MainWindow : Window
     public MainWindow()
     {
         InitializeComponent();
-/*GLWpfControlSettings settings = new GLWpfControlSettings
-{
-    MajorVersion = 4,
-    MinorVersion = 0
-};*/
-//OpenTkControl.Start(settings);
-//_skinPreviewRenderer = new SkinPreviewRenderer();
-//_skinPreviewRenderer.SetUp();
+        /*GLWpfControlSettings settings = new GLWpfControlSettings
+        {
+            MajorVersion = 4,
+            MinorVersion = 0
+        };*/
+        //OpenTkControl.Start(settings);
+        //_skinPreviewRenderer = new SkinPreviewRenderer();
+        //_skinPreviewRenderer.SetUp();
         ChangeLog.Text = "";
+    }
+
+    public MainWindow(FileClient fileClient, User user, LocalPrefs localPrefs, 
+        string skinPath, ConfigurationVersion configVersion, LaunchConfiguration launchConfig)
+    {
+        
     }
 
     private FileClient _fileClient;
