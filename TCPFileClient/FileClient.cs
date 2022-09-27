@@ -2,11 +2,11 @@
 using System.Net.Sockets;
 using CommonData.Models;
 using CommonData.Network;
-using CommonData.Network.Messages;
 using CommonData.Network.Messages.LaunchConfiguration;
 using CommonData.Network.Messages.Login;
 using CommonData.Network.Messages.Registration;
 using CommonData.Network.Messages.Skin;
+using CommonData.Network.Messages.Version;
 
 namespace TCPFileClient;
 
@@ -35,6 +35,12 @@ public sealed class FileClient
     {
         Message response = await GetResponseFor(new LaunchConfigurationRequest());
         return ((LaunchConfigurationResponse)response).LaunchConfiguration;
+    }
+    
+    public async Task<ConfigurationVersion> DownloadConfigVersion()
+    {
+        Message response = await GetResponseFor(new ConfigVersionRequest());
+        return ((ConfigVersionResponse)response).ConfigurationVersion;
     }
 
     public async Task<RegistrationResponse> SendRegistrationRequest(User user)
