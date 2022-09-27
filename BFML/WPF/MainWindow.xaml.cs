@@ -8,74 +8,71 @@ using OpenTK.Graphics.OpenGL4;
 using OpenTK.Mathematics;
 using OpenTK.Wpf;
 using System.Windows.Input;
+using BFML.Core;
 using CommonData.Models;
-using CommonData.Network.Messages.Login;
-using CommonData.Network.Messages.Registration;
 using TCPFileClient;
 
 namespace BFML.WPF;
 
 public partial class MainWindow : Window
 {
+    private readonly FileClient _fileClient;
+    private readonly User _user;
+    private readonly LocalPrefs _localPrefs;
+    private readonly string _skinPath;
+    private readonly ConfigurationVersion _configVersion;
+    private readonly LaunchConfiguration _launchConfig;
     private readonly SkinPreviewRenderer _skinPreviewRenderer;
 
-    public MainWindow()
+    public MainWindow(FileClient fileClient, User user, LocalPrefs localPrefs, string skinPath, LaunchConfiguration launchConfig, ConfigurationVersion configVersion)
     {
         InitializeComponent();
-/*GLWpfControlSettings settings = new GLWpfControlSettings
-{
-    MajorVersion = 4,
-    MinorVersion = 0
-};*/
-//OpenTkControl.Start(settings);
-//_skinPreviewRenderer = new SkinPreviewRenderer();
-//_skinPreviewRenderer.SetUp();
-        ChangeLog.Text = "";
+        _fileClient = fileClient;
+        _user = user;
+        _localPrefs = localPrefs;
+        _skinPath = skinPath;
+        _launchConfig = launchConfig;
+        _configVersion = configVersion;
+
+        Loaded += OnWindowLoaded;
     }
 
-    private FileClient _fileClient;
-
-    private async void PlayButtonOnClick(object sender, RoutedEventArgs e)
+    private void OnWindowLoaded(object sender, RoutedEventArgs args)
     {
-        _fileClient = ConnectToServer();
-        User user = new User("pisos", "iousdgfab");
-
-        LogLine("SENT REGISTRATION REQUEST");
-        RegistrationResponse registrationResponse = await Register(user);
-        LogLine($"RESULT: {registrationResponse.Success}");
-
-        LogLine("SENT LOGIN REQUEST");
-        LoginResponse loginResponse = await Login(user);
-        LogLine($"RESULT: {loginResponse.Success}");
-
-        LogLine("SENT LC REQUEST");
-        LaunchConfiguration launchConfiguration = await GetConfig();
-        LogLine($"LAUNCH CONFIGURATION: [valilla:{launchConfiguration.VanillaVersion}] [forge:{launchConfiguration.ForgeVersion}]");
+        
     }
 
-    private FileClient ConnectToServer()
+    private void CheckIfUserPaid()
     {
-        FileClient fileClient = new FileClient();
-        string log = fileClient.ConnectToServer() ? "CONNECTED" : "FAILED TO CONNECT";
-        //LogLine(log);
-        return fileClient;
+        if (_user.GryvnyasPaid >= _launchConfig.RequiredGriwnas)
+        {
+            
+        }
+        else
+        {
+            
+        }
     }
 
-    private Task<RegistrationResponse> Register(User user)
+    private void DisablePlayButton()
     {
-        return _fileClient.SendRegistrationRequest(user);
+        
     }
+    
+    #region PlayerModelRendering
 
-    private Task<LoginResponse> Login(User user)
+    private void SetUpSkinRenderer()
     {
-        return _fileClient.SendLoginRequest(user);
+        GLWpfControlSettings settings = new GLWpfControlSettings
+        {
+            MajorVersion = 4,
+            MinorVersion = 0
+        };
+        // OpenTkControl.Start(settings);
+        // _skinPreviewRenderer = new SkinPreviewRenderer();
+        // _skinPreviewRenderer.SetUp();
     }
-
-    private Task<LaunchConfiguration> GetConfig()
-    {
-        return _fileClient.DownloadLaunchConfiguration();
-    }
-
+    
     private async void SkinPreviewOnRender(TimeSpan obj)
     {
         GL.ClearColor(Color4.White);
@@ -84,18 +81,20 @@ public partial class MainWindow : Window
         //await _skinPreviewRenderer.Render(obj).ConfigureAwait(false);
     }
 
+    #endregion
+
     #region Navigation
 
     private void MoveWindow(object sender, MouseEventArgs e)
     {
         if (e.LeftButton == MouseButtonState.Pressed)
         {
-            if (this.WindowState == WindowState.Maximized) 
+            if (WindowState == WindowState.Maximized) 
             {
-                this.WindowState = WindowState.Normal;
+                WindowState = WindowState.Normal;
                 Application.Current.MainWindow.Top = 3;
             }
-            this.DragMove();
+            DragMove();
         }
     }
 
@@ -124,12 +123,7 @@ public partial class MainWindow : Window
 
     #endregion
 
-    private void LogLine(string line)
-    {
-        ChangeLog.Text += "\n" + line;
-    }
-    
-    private async void SkinFileDrop_Drop(object sender, DragEventArgs e)
+    private async void OnSkinFileDrop(object sender, DragEventArgs e)
     {
         if (!e.Data.GetDataPresent(DataFormats.FileDrop)) return;
 
@@ -138,5 +132,10 @@ public partial class MainWindow : Window
         string pngName = Path.GetFileName(files[0]);
 
         await _fileClient.SendSkinChangeRequest("pisos", pngDirectory, pngName);
+    }
+
+    private void OnPlayButton(object sender, RoutedEventArgs e)
+    {
+        throw new NotImplementedException();
     }
 }

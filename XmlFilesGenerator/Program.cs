@@ -54,8 +54,11 @@ namespace XmlFilesGenerator
                     
             Console.WriteLine("Enter modsChecksum:");
             string modsChecksum = Console.ReadLine();
+            
+            Console.WriteLine("Enter required griwnas:");
+            int requiredGriwnas = Convert.ToInt32(Console.ReadLine());
 
-            LaunchConfiguration launchConfig = new LaunchConfiguration(vanillaVersion, forgeVersion, modsChecksum);
+            LaunchConfiguration launchConfig = new LaunchConfiguration(vanillaVersion, forgeVersion, modsChecksum, requiredGriwnas);
             
             using FileStream fileStream = new FileStream(path, FileMode.Create);
 

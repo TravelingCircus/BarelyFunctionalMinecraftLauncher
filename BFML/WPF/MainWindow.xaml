@@ -73,7 +73,7 @@
                 Margin="30,98,59,85"
                 AllowDrop="True"
                 Background="#383838"
-                Drop="SkinFileDrop_Drop"
+                Drop="OnSkinFileDrop"
                 Style="{DynamicResource Transparent2}" />
 
             <StackPanel
@@ -323,7 +323,7 @@
                 Width="360"
                 Margin="20,560,20,30"
                 Background="#ff9a3c"
-                Click="PlayButtonOnClick"
+                Click="OnPlayButton"
                 Content="Play"
                 Cursor="Hand"
                 FontFamily="Minecraft"
