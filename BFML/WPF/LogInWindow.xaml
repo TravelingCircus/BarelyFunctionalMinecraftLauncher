@@ -22,6 +22,16 @@
                 <ColumnDefinition Width="400" />
             </Grid.ColumnDefinitions>
 
+            <TextBlock
+                Margin="0,25,0,295"
+                HorizontalAlignment="Center"
+                FontFamily="Minecraft"
+                FontSize="56"
+                Foreground="#ff9a3c"
+                Style="{DynamicResource GlowText}"
+                Text="BFML" />
+
+
             <StackPanel
                 Width="340"
                 Height="40"
@@ -34,6 +44,28 @@
                     FontFamily="Minecraft"
                     FontSize="18"
                     Style="{DynamicResource TextBox}" />
+                <Rectangle
+                    Width="340"
+                    Height="3"
+                    Margin="0,-3,0,0"
+                    VerticalAlignment="Center"
+                    Fill="#ff9a3c"
+                    RadiusX="1"
+                    RadiusY="1"
+                    Style="{DynamicResource GlowingRectangle}" />
+            </StackPanel>
+            <StackPanel
+                Width="340"
+                Height="40"
+                Margin="30,214,30,146">
+                <TextBox
+                    Width="340"
+                    Height="40"
+                    Margin="0,0,0,0"
+                    Background="#000000"
+                    FontFamily="Minecraft"
+                    FontSize="18"
+                    Style="{DynamicResource TextBox2}" />
                 <Rectangle
                     Width="340"
                     Height="3"
@@ -134,6 +166,31 @@
                     RadiusX="1"
                     RadiusY="1" />
             </StackPanel>
+
+            <Button
+                Width="160"
+                Height="50"
+                Margin="30,318,0,0"
+                HorizontalAlignment="Left"
+                VerticalAlignment="Top"
+                Background="#ff9a3c"
+                Content="Register"
+                FontFamily="Minecraft"
+                FontSize="24"
+                Foreground="#434343"
+                Style="{DynamicResource PlayButton}" />
+            <Button
+                Width="160"
+                Height="50"
+                Margin="210,318,0,0"
+                HorizontalAlignment="Left"
+                VerticalAlignment="Top"
+                Background="#ff9a3c"
+                Content="Log In"
+                FontFamily="Minecraft"
+                FontSize="24"
+                Foreground="#434343"
+                Style="{DynamicResource PlayButton}" />
         </Grid>
     </Border>
 </Window>

@@ -62,11 +62,11 @@
                         Background="#484848"
                         CornerRadius="4">
 
-                        <Grid>
+                        <Grid Margin="0,-4,0,0">
                             <Rectangle StrokeThickness="1" />
                             <TextBox
                                 x:Name="NicknameBar"
-                                Margin="1"
+                                Margin="2"
                                 Padding="5"
                                 VerticalContentAlignment="Center"
                                 Background="#00000000"
