@@ -32,7 +32,11 @@ public sealed class LocalPrefs
     
     public static LocalPrefs GetLocalPrefs()
     {
-        if (!File.Exists(PrefsPath)) throw new FileNotFoundException("Local prefs file doesn't exists");
+        if (!File.Exists(PrefsPath))
+        {
+            SaveLocalPrefs("None", "None");
+            return new LocalPrefs("None", "None");
+        }
         using FileStream fileStream = new FileStream(PrefsPath, FileMode.Open);
         XmlSerializer serializer = new XmlSerializer(typeof(LocalPrefs));
         LocalPrefs prefs = (serializer.Deserialize(fileStream) as LocalPrefs)!;
