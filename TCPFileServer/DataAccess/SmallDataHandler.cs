@@ -1,5 +1,4 @@
-﻿using CommonData;
-using CommonData.Models;
+﻿using CommonData.Models;
 
 namespace TCPFileServer.DataAccess;
 
@@ -35,16 +34,14 @@ public sealed class SmallDataHandler: DataHandler
     public LaunchConfiguration GetLaunchConfig()
     {
         string fileName = "LaunchConfiguration.xml";
-        string filePath = _repositoryPath + fileName;
-        LaunchConfiguration launchConfig = DataSerializer.LaunchConfigFromXml(ReadFromRepository(filePath, fileName));
+        LaunchConfiguration launchConfig = DataSerializer.LaunchConfigFromXml(ReadFromRepository(_repositoryPath, fileName));
         return launchConfig;
     }
 
     public ConfigurationVersion GetConfigVersion()
     {
         string fileName = "Version.xml";
-        string filePath = _repositoryPath + fileName;
-        ConfigurationVersion version = DataSerializer.ConfigVersionFromXml(ReadFromRepository(filePath, fileName));
+        ConfigurationVersion version = DataSerializer.ConfigVersionFromXml(ReadFromRepository(_repositoryPath, fileName));
         return version;
     }
 

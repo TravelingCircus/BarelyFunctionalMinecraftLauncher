@@ -3,6 +3,7 @@ using System.Net.Sockets;
 using CommonData.Models;
 using CommonData.Network;
 using CommonData.Network.Messages;
+using CommonData.Network.Messages.LaunchConfiguration;
 using CommonData.Network.Messages.Login;
 using CommonData.Network.Messages.Registration;
 
@@ -29,9 +30,10 @@ public sealed class FileClient
         throw new NotImplementedException();
     }
 
-    public Task<LaunchConfiguration> DownloadLaunchConfiguration()
+    public async Task<LaunchConfiguration> DownloadLaunchConfiguration()
     {
-        throw new NotImplementedException();
+        Message response = await GetResponseFor(new LaunchConfigurationRequest());
+        return ((LaunchConfigurationResponse)response).LaunchConfiguration;
     }
 
     public async Task<RegistrationResponse> SendRegistrationRequest(User user)

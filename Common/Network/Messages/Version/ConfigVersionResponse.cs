@@ -6,6 +6,10 @@ public class ConfigVersionResponse : Message
 {
     public ConfigurationVersion ConfigurationVersion;
 
+    public ConfigVersionResponse()
+    {
+    }
+
     public ConfigVersionResponse(ConfigurationVersion configVersion)
     {
         ConfigurationVersion = configVersion;
