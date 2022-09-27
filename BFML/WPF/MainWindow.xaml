@@ -73,7 +73,7 @@
                 Margin="30,98,59,85"
                 AllowDrop="True"
                 Background="#383838"
-                Drop="SkinFileDrop_Drop"
+                Drop="OnSkinFileDrop"
                 Style="{DynamicResource Transparent2}" />
 
             <StackPanel
