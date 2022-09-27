@@ -1,5 +1,4 @@
-﻿using CommonData;
-using CommonData.Models;
+﻿using CommonData.Models;
 
 namespace TCPFileServer.DataAccess;
 
@@ -89,17 +88,18 @@ public sealed class Repository
         return result;
     }
 
-    public async Task UpdateUserSkin(string name, byte[] skin)
+    public async Task<bool> UpdateUserSkin(string name, byte[] skin)
     {
         SmallDataHandler dataHandler = await _smallDataHandlerQueue.GetDataHandler();
 
+        if(!dataHandler.UserExists(name)) return false;
         User user = dataHandler.GetUser(name);
         string newSkinPath = dataHandler.SaveSkin(name, skin);
-        dataHandler.RemoveSkin(user.SkinPath);
         user.SkinPath = newSkinPath;
         await dataHandler.RewriteUser(user);
         
         dataHandler.Release();
+        return true;
     }
 
     public async Task<bool> TryRegisterUser(User newUser)

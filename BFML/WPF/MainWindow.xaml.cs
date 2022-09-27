@@ -129,12 +129,14 @@ public partial class MainWindow : Window
         ChangeLog.Text += "\n" + line;
     }
     
-    private void SkinFileDrop_Drop(object sender, DragEventArgs e)
+    private async void SkinFileDrop_Drop(object sender, DragEventArgs e)
     {
         if (!e.Data.GetDataPresent(DataFormats.FileDrop)) return;
 
         string[] files = (string[])e.Data.GetData(DataFormats.FileDrop);
         string pngDirectory = Path.GetDirectoryName(files[0]);
         string pngName = Path.GetFileName(files[0]);
+
+        await _fileClient.SendSkinChangeRequest("pisos", pngDirectory, pngName);
     }
 }
