@@ -80,13 +80,12 @@
             <Rectangle
                 Grid.Row="0"
                 Grid.Column="0"
-                Height="26"
-                Margin="346,0,0,374"
+                Margin="346,9,0,374"
                 Fill="#434343" />
             <Rectangle
                 Grid.Row="0"
                 Grid.Column="0"
-                Margin="322,0,0,382"
+                Margin="322,0,14,382"
                 Fill="#434343" />
             <Button
                 Grid.Row="0"

@@ -394,13 +394,12 @@
             <Rectangle
                 Grid.Row="0"
                 Grid.Column="2"
-                Height="26"
-                Margin="346,0,0,674"
+                Margin="346,9,0,674"
                 Fill="#434343" />
             <Rectangle
                 Grid.Row="0"
                 Grid.Column="2"
-                Margin="322,0,0,682"
+                Margin="322,0,14,682"
                 Fill="#434343" />
 
             <Button
