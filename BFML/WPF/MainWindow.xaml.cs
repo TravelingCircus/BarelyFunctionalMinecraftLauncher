@@ -1,7 +1,5 @@
 ﻿using System;
 using System.IO;
-using System.Net.Http;
-using System.Threading.Tasks;
 using System.Windows;
 using BFML._3D;
 using OpenTK.Graphics.OpenGL4;
@@ -24,13 +22,14 @@ public partial class MainWindow : Window
     private readonly LaunchConfiguration _launchConfig;
     private readonly SkinPreviewRenderer _skinPreviewRenderer;
 
-    public MainWindow(FileClient fileClient, User user, LocalPrefs localPrefs, string skinPath, LaunchConfiguration launchConfig, ConfigurationVersion configVersion)
+    public MainWindow(FileClient fileClient, User user, LocalPrefs localPrefs, 
+        string skinPath, LaunchConfiguration launchConfig, ConfigurationVersion configVersion)
     {
         InitializeComponent();
         _fileClient = fileClient;
         _user = user;
         _localPrefs = localPrefs;
-        _skinPath = skinPath;
+        _skinPath = skinPath; //TODO should correspond to skin.png in .minecraft/BFML/skin.png
         _launchConfig = launchConfig;
         _configVersion = configVersion;
 
@@ -39,29 +38,27 @@ public partial class MainWindow : Window
 
     private void OnWindowLoaded(object sender, RoutedEventArgs args)
     {
-        
+        CheckIfUserPaid();
+        SetUpSkinRenderer(_skinPath);
+        Loaded -= OnWindowLoaded;
     }
 
     private void CheckIfUserPaid()
     {
-        if (_user.GryvnyasPaid >= _launchConfig.RequiredGriwnas)
+        if (_user.GryvnyasPaid < _launchConfig.RequiredGriwnas)
         {
-            
-        }
-        else
-        {
-            
+            DisablePlayButton();
         }
     }
 
     private void DisablePlayButton()
     {
-        
+        throw new NotImplementedException();
     }
     
     #region PlayerModelRendering
 
-    private void SetUpSkinRenderer()
+    private void SetUpSkinRenderer(string skinPath)
     {
         GLWpfControlSettings settings = new GLWpfControlSettings
         {
