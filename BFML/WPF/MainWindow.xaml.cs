@@ -30,7 +30,7 @@ public partial class MainWindow : Window
 //OpenTkControl.Start(settings);
 //_skinPreviewRenderer = new SkinPreviewRenderer();
 //_skinPreviewRenderer.SetUp();
-        
+        ChangeLog.Text = "";
     }
 
     private FileClient _fileClient;
@@ -40,17 +40,17 @@ public partial class MainWindow : Window
         _fileClient = ConnectToServer();
         User user = new User("pisos", "iousdgfab");
 
-        //LogLine("SENT REGISTRATION REQUEST");
+        LogLine("SENT REGISTRATION REQUEST");
         RegistrationResponse registrationResponse = await Register(user);
-        //LogLine($"RESULT: {registrationResponse.Success}");
+        LogLine($"RESULT: {registrationResponse.Success}");
 
-        //LogLine("SENT LOGIN REQUEST");
+        LogLine("SENT LOGIN REQUEST");
         LoginResponse loginResponse = await Login(user);
-        //LogLine($"RESULT: {loginResponse.Success}");
+        LogLine($"RESULT: {loginResponse.Success}");
 
-        //LogLine("SENT LC REQUEST");
+        LogLine("SENT LC REQUEST");
         LaunchConfiguration launchConfiguration = await GetConfig();
-        //LogLine($"LAUNCH CONFIGURATION: [valilla:{launchConfiguration.VanillaVersion}] [forge:{launchConfiguration.ForgeVersion}]");
+        LogLine($"LAUNCH CONFIGURATION: [valilla:{launchConfiguration.VanillaVersion}] [forge:{launchConfiguration.ForgeVersion}]");
     }
 
     private FileClient ConnectToServer()
@@ -124,6 +124,11 @@ public partial class MainWindow : Window
 
     #endregion
 
+    private void LogLine(string line)
+    {
+        ChangeLog.Text += "\n" + line;
+    }
+    
     private void SkinFileDrop_Drop(object sender, DragEventArgs e)
     {
         if (!e.Data.GetDataPresent(DataFormats.FileDrop)) return;
