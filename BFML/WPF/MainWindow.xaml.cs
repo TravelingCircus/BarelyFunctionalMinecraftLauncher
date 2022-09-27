@@ -24,12 +24,13 @@ public partial class MainWindow : Window
     private readonly LaunchConfiguration _launchConfig;
     private readonly SkinPreviewRenderer _skinPreviewRenderer;
 
-    public MainWindow(FileClient fileClient, User user, LocalPrefs localPrefs)
+    public MainWindow(FileClient fileClient, User user, LocalPrefs localPrefs, string skinPath)
     {
         InitializeComponent();
         _fileClient = fileClient;
         _user = user;
         _localPrefs = localPrefs;
+        _skinPath = skinPath;
 
         Loaded += OnWindowLoaded;
     }
