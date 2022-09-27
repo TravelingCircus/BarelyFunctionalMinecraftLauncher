@@ -14,6 +14,7 @@
     ResizeMode="NoResize"
     WindowStyle="None"
     mc:Ignorable="d">
+    <Window.Resources />
 
     <Border Background="#383838" CornerRadius="8">
         <Grid>
@@ -21,7 +22,118 @@
                 <ColumnDefinition Width="400" />
             </Grid.ColumnDefinitions>
 
+            <StackPanel
+                Width="340"
+                Height="40"
+                Margin="30,132,30,228">
+                <TextBox
+                    Width="340"
+                    Height="40"
+                    Margin="0,0,0,0"
+                    Background="#000000"
+                    FontFamily="Minecraft"
+                    FontSize="18"
+                    Style="{DynamicResource TextBox}" />
+                <Rectangle
+                    Width="340"
+                    Height="3"
+                    Margin="0,-3,0,0"
+                    VerticalAlignment="Center"
+                    Fill="#ff9a3c"
+                    RadiusX="1"
+                    RadiusY="1"
+                    Style="{DynamicResource GlowingRectangle}" />
+            </StackPanel>
 
+            <Rectangle
+                Grid.Row="0"
+                Grid.Column="0"
+                Height="26"
+                Margin="346,0,0,374"
+                Fill="#434343" />
+            <Rectangle
+                Grid.Row="0"
+                Grid.Column="0"
+                Margin="322,0,0,382"
+                Fill="#434343" />
+            <Button
+                Grid.Row="0"
+                Grid.Column="0"
+                Width="39"
+                Height="26"
+                Margin="361,0,0,374"
+                Background="#434343"
+                Click="ShutDown"
+                Cursor="Hand"
+                Style="{DynamicResource TitleButton}" />
+            <Button
+                Grid.Row="0"
+                Grid.Column="2"
+                Width="39"
+                Height="26"
+                Margin="322,0,39,374"
+                Background="#434343"
+                Click="Minimize"
+                Cursor="Hand"
+                Style="{DynamicResource TitleButton}" />
+            <StackPanel
+                Grid.Row="0"
+                Grid.Column="0"
+                Width="39"
+                Height="26"
+                Margin="361,0,0,374">
+                <Rectangle
+                    Width="18"
+                    Height="2"
+                    Margin="0,12,0,0"
+                    Fill="#dcdcdc"
+                    IsHitTestVisible="False"
+                    RadiusX="1"
+                    RadiusY="1"
+                    RenderTransformOrigin="0.5,0.5">
+                    <Rectangle.RenderTransform>
+                        <TransformGroup>
+                            <ScaleTransform />
+                            <SkewTransform />
+                            <RotateTransform Angle="45" />
+                            <TranslateTransform />
+                        </TransformGroup>
+                    </Rectangle.RenderTransform>
+                </Rectangle>
+                <Rectangle
+                    Width="18"
+                    Height="2"
+                    Margin="0,-2,0,0"
+                    Fill="#dcdcdc"
+                    IsHitTestVisible="False"
+                    RadiusX="1"
+                    RadiusY="1"
+                    RenderTransformOrigin="0.5,0.5">
+                    <Rectangle.RenderTransform>
+                        <TransformGroup>
+                            <ScaleTransform />
+                            <SkewTransform />
+                            <RotateTransform Angle="-45" />
+                            <TranslateTransform />
+                        </TransformGroup>
+                    </Rectangle.RenderTransform>
+                </Rectangle>
+            </StackPanel>
+            <StackPanel
+                Grid.Row="0"
+                Grid.Column="2"
+                Width="39"
+                Height="26"
+                Margin="322,0,39,374">
+                <Rectangle
+                    Width="14"
+                    Height="2"
+                    Margin="0,12,0,0"
+                    Fill="#dcdcdc"
+                    IsHitTestVisible="False"
+                    RadiusX="1"
+                    RadiusY="1" />
+            </StackPanel>
         </Grid>
     </Border>
 </Window>
