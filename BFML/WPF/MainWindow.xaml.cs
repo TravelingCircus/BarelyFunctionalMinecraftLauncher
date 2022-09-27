@@ -37,7 +37,24 @@ public partial class MainWindow : Window
         Loaded += OnWindowLoaded;
     }
 
-    private async void OnWindowLoaded(object sender, RoutedEventArgs args)
+    private void OnWindowLoaded(object sender, RoutedEventArgs args)
+    {
+        
+    }
+
+    private void CheckIfUserPaid()
+    {
+        if (_user.GryvnyasPaid >= _launchConfig.RequiredGriwnas)
+        {
+            
+        }
+        else
+        {
+            
+        }
+    }
+
+    private void DisablePlayButton()
     {
         
     }
@@ -115,5 +132,10 @@ public partial class MainWindow : Window
         string pngName = Path.GetFileName(files[0]);
 
         await _fileClient.SendSkinChangeRequest("pisos", pngDirectory, pngName);
+    }
+
+    private void OnPlayButton(object sender, RoutedEventArgs e)
+    {
+        throw new NotImplementedException();
     }
 }

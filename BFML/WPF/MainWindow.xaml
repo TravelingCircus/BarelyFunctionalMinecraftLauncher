@@ -323,7 +323,7 @@
                 Width="360"
                 Margin="20,560,20,30"
                 Background="#ff9a3c"
-                Click="PlayButtonOnClick"
+                Click="OnPlayButton"
                 Content="Play"
                 Cursor="Hand"
                 FontFamily="Minecraft"
