@@ -8,6 +8,10 @@ using OpenTK.Graphics.OpenGL4;
 using OpenTK.Mathematics;
 using OpenTK.Wpf;
 using System.Windows.Input;
+using CommonData.Models;
+using CommonData.Network.Messages.Login;
+using CommonData.Network.Messages.Registration;
+using TCPFileClient;
 
 namespace BFML.WPF;
 
@@ -18,42 +22,58 @@ public partial class MainWindow : Window
     public MainWindow()
     {
         InitializeComponent();
-        /*GLWpfControlSettings settings = new GLWpfControlSettings
-        {
-            MajorVersion = 4,
-            MinorVersion = 0
-        };*/
-        //OpenTkControl.Start(settings);
-        //_skinPreviewRenderer = new SkinPreviewRenderer();
-        //_skinPreviewRenderer.SetUp();
+/*GLWpfControlSettings settings = new GLWpfControlSettings
+{
+    MajorVersion = 4,
+    MinorVersion = 0
+};*/
+//OpenTkControl.Start(settings);
+//_skinPreviewRenderer = new SkinPreviewRenderer();
+//_skinPreviewRenderer.SetUp();
         
     }
 
-    private void PlayButtonOnClick(object sender, RoutedEventArgs e)
+    private FileClient _fileClient;
+
+    private async void PlayButtonOnClick(object sender, RoutedEventArgs e)
     {
-        throw new NotImplementedException();
+        _fileClient = ConnectToServer();
+        User user = new User("pisos", "iousdgfab");
+
+        //LogLine("SENT REGISTRATION REQUEST");
+        RegistrationResponse registrationResponse = await Register(user);
+        //LogLine($"RESULT: {registrationResponse.Success}");
+
+        //LogLine("SENT LOGIN REQUEST");
+        LoginResponse loginResponse = await Login(user);
+        //LogLine($"RESULT: {loginResponse.Success}");
+
+        //LogLine("SENT LC REQUEST");
+        LaunchConfiguration launchConfiguration = await GetConfig();
+        //LogLine($"LAUNCH CONFIGURATION: [valilla:{launchConfiguration.VanillaVersion}] [forge:{launchConfiguration.ForgeVersion}]");
     }
 
-    private async void DownloadButtonOnClick(object sender, RoutedEventArgs e)
+    private FileClient ConnectToServer()
     {
-        await DownloadSomethingViaHttpClient();
+        FileClient fileClient = new FileClient();
+        string log = fileClient.ConnectToServer() ? "CONNECTED" : "FAILED TO CONNECT";
+        //LogLine(log);
+        return fileClient;
     }
 
-    private async Task DownloadSomethingViaHttpClient()
+    private Task<RegistrationResponse> Register(User user)
     {
-        Uri url = new Uri(
-            "https://upload.wikimedia.org/wikipedia/commons/4/47/PNG_transparency_demonstration_1.png");
-        string savePath = @"C:\Users\maksy\Desktope\TestDownload\PNG_transparency_demonstration_1.png";
-
-        using HttpClient client = new HttpClient();
-        await using Stream stream = await client.GetStreamAsync(url);
-        await using FileStream fileStream = new FileStream(savePath, FileMode.OpenOrCreate);
-        await stream.CopyToAsync(fileStream);
+        return _fileClient.SendRegistrationRequest(user);
     }
 
-    private void InstallButtonOnClick(object sender, RoutedEventArgs e)
+    private Task<LoginResponse> Login(User user)
     {
-        throw new NotImplementedException();
+        return _fileClient.SendLoginRequest(user);
+    }
+
+    private Task<LaunchConfiguration> GetConfig()
+    {
+        return _fileClient.DownloadLaunchConfiguration();
     }
 
     private async void SkinPreviewOnRender(TimeSpan obj)
@@ -64,10 +84,7 @@ public partial class MainWindow : Window
         //await _skinPreviewRenderer.Render(obj).ConfigureAwait(false);
     }
 
-    private void ServerButtonOnClick(object sender, RoutedEventArgs e)
-    {
-        //BFMLFileClient.ConnectToServer();
-    }
+    #region Navigation
 
     private void MoveWindow(object sender, MouseEventArgs e)
     {
@@ -105,14 +122,14 @@ public partial class MainWindow : Window
         }
     }
 
+    #endregion
+
     private void SkinFileDrop_Drop(object sender, DragEventArgs e)
     {
-        if (e.Data.GetDataPresent(DataFormats.FileDrop))
-        {
-            string[] files = (string[])e.Data.GetData(DataFormats.FileDrop);
+        if (!e.Data.GetDataPresent(DataFormats.FileDrop)) return;
 
-            string filename = Path.GetFileName(files[0]);
-           
-        }
+        string[] files = (string[])e.Data.GetData(DataFormats.FileDrop);
+        string pngDirectory = Path.GetDirectoryName(files[0]);
+        string pngName = Path.GetFileName(files[0]);
     }
 }

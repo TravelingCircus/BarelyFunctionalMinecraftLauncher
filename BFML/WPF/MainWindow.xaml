@@ -71,16 +71,10 @@
                 Width="311"
                 Height="516"
                 Margin="30,98,59,85"
-                Background="#383838"
-                Style="{DynamicResource Transparent2}" />
-
-            <StackPanel
-                x:Name="SkinFileDrop"
-                Width="311"
-                Height="516"
-                Margin="30,98,59,85"
                 AllowDrop="True"
-                Drop="SkinFileDrop_Drop" />
+                Background="#383838"
+                Drop="SkinFileDrop_Drop"
+                Style="{DynamicResource Transparent2}" />
 
             <StackPanel
                 Width="220"
@@ -329,6 +323,7 @@
                 Width="360"
                 Margin="20,560,20,30"
                 Background="#ff9a3c"
+                Click="PlayButtonOnClick"
                 Content="Play"
                 Cursor="Hand"
                 FontFamily="Minecraft"
