@@ -11,8 +11,8 @@ public sealed class SmallDataHandler: DataHandler
     public SmallDataHandler(string repositoryPath)
     {
         _repositoryPath = repositoryPath;
-        _usersDirectory = repositoryPath + @"\Users\";
-        _skinsDirectory = repositoryPath + @"\Skins\";
+        _usersDirectory = repositoryPath + @"Users\";
+        _skinsDirectory = repositoryPath + @"Skins\";
     }
 
     public bool UserExists(string username)

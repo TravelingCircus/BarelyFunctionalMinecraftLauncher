@@ -6,6 +6,7 @@ using CommonData.Network.Messages;
 using CommonData.Network.Messages.LaunchConfiguration;
 using CommonData.Network.Messages.Login;
 using CommonData.Network.Messages.Registration;
+using CommonData.Network.Messages.Skin;
 
 namespace TCPFileClient;
 
@@ -46,6 +47,21 @@ public sealed class FileClient
     {
         Message response = await GetResponseFor(new LoginRequest(user.Nickname, user.PasswordHash));
         return (LoginResponse)response;
+    }
+    
+    public async Task<SkinChangeResponse> SendSkinChangeRequest(string nickname, string pngDirectory, string pngName)
+    {
+        DirectoryInfo directoryInfo = new DirectoryInfo(pngDirectory);
+        int bytesLength = (int)directoryInfo.GetFiles(pngName)[0].Length;
+
+        byte[] bytes = new byte[bytesLength];
+        string pngPath = pngDirectory + $"\\{pngName}";
+        
+        await using FileStream fileStream = new FileStream(pngPath, FileMode.Open);
+        _ = fileStream.Read(bytes, 0, bytesLength);
+        
+        Message response = await GetResponseFor(new SkinChangeRequest(nickname, bytes, bytesLength));
+        return (SkinChangeResponse)response;
     }
 
     #endregion

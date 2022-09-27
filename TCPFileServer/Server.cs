@@ -1,11 +1,10 @@
 ﻿using System.Net;
 using System.Net.Sockets;
-using CommonData.Models;
 using CommonData.Network;
-using CommonData.Network.Messages;
 using CommonData.Network.Messages.LaunchConfiguration;
 using CommonData.Network.Messages.Login;
 using CommonData.Network.Messages.Registration;
+using CommonData.Network.Messages.Skin;
 using CommonData.Network.Messages.Version;
 using TCPFileServer.DataAccess;
 using TCPFileServer.MessageHandlers;
@@ -29,13 +28,14 @@ public class Server
         CancellationToken cancellationToken = _cancellationTokenSource.Token;
         
         //Repository repository = new Repository(@"WSTAW SIUDA SWOYE MISTSE");
-        Repository repository = new Repository(@"C:\Users\maksy\Desktope\TestRepo\", cancellationToken);
+        //Repository repository = new Repository(@"C:\Users\maksy\Desktope\TestRepo\", cancellationToken);
+        Repository repository = new Repository(@"D:\Home\Desktope\TestDownloads\", cancellationToken);
         repository.Initialize();
-        //Repository repository = new Repository(@"D:\Home\Desktope\TestDownload");
         HandlerPicker.RegisterHandler(nameof(RegistrationRequest), new RegistrationHandler(repository));
         HandlerPicker.RegisterHandler(nameof(LoginRequest), new LoginHandler(repository));
         HandlerPicker.RegisterHandler(nameof(LaunchConfigurationRequest), new LaunchConfigurationHandler(repository));
         HandlerPicker.RegisterHandler(nameof(ConfigVersionRequest), new ConfigVersionHandler(repository));
+        HandlerPicker.RegisterHandler(nameof(SkinChangeRequest), new SkinChangeHandler(repository));
         //TODO properly register handlers
         
         _tcpListener.Start();
