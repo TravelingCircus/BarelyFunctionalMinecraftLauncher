@@ -19,9 +19,8 @@ public sealed class User
     public string PasswordHash;
     private int _gryvnyasPaid;
 
-    public User()
+    public User() : this("None", "None")
     {
-        
     }
 
     public User(string nickname, string passwordHash, int gryvnyasPaid = 0, string skinPath = "")

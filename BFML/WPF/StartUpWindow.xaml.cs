@@ -41,7 +41,7 @@ public partial class StartUpWindow : Window
         }
         else
         {
-            LogInWindow logInWindow = new LogInWindow();
+            LogInWindow logInWindow = new LogInWindow(fileClient, launchConfig, version);
             logInWindow.Show();
             Close();
         }

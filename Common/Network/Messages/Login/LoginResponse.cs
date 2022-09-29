@@ -36,6 +36,7 @@ public class LoginResponse : Message
         string passwordHash = StringReadStream(stream);
         int grywniasPaid = IntReadStream(stream);
         int skinDataLength = IntReadStream(stream);
+        SkinData = new byte[skinDataLength];
         _ = stream.Read(SkinData, 0, skinDataLength);
         User = new User(nickname, passwordHash, grywniasPaid);
     }
