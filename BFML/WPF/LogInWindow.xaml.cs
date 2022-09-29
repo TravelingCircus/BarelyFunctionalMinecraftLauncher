@@ -1,16 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
+using BFML.Core;
+using CommonData.Models;
+using CommonData.Network.Messages.Login;
+using CommonData.Network.Messages.Registration;
+using TCPFileClient;
 
 namespace BFML.WPF
 {
@@ -19,9 +14,16 @@ namespace BFML.WPF
     /// </summary>
     public partial class LogInWindow : Window
     {
-        public LogInWindow()
+        private readonly FileClient _fileClient;
+        private readonly LaunchConfiguration _launchConfiguration;
+        private readonly ConfigurationVersion _version;
+        
+        public LogInWindow(FileClient fileClient, LaunchConfiguration launchConfiguration, ConfigurationVersion version)
         {
             InitializeComponent();
+            _fileClient = fileClient;
+            _launchConfiguration = launchConfiguration;
+            _version = version;
         }
 
         private void ShutDown(object sender, RoutedEventArgs e)
@@ -58,6 +60,48 @@ namespace BFML.WPF
                 }
                 this.DragMove();
             }
+        }
+
+        private async void RegisterButtonOnClick(object sender, RoutedEventArgs e)
+        {
+            string nickname = NicknameBar.Text;
+            string password = PasswordBar.Text;
+
+            User newUser = new User(nickname, password);
+            RegistrationResponse response = await _fileClient.SendRegistrationRequest(newUser);
+            if (!response.Success)
+            {
+                //TODO Display that user exists
+                return;
+            }
+
+            LocalPrefs.SaveLocalPrefs(nickname, password);
+            LocalPrefs localPrefs = LocalPrefs.GetLocalPrefs();
+            MainWindow mainWindow = new MainWindow(_fileClient, newUser, localPrefs, _launchConfiguration, _version);
+        }
+
+        private async void LogInButtonOnClick(object sender, RoutedEventArgs e)
+        {
+            string nickname = NicknameBar.Text;
+            string password = PasswordBar.Text;
+            
+            User newUser = new User(nickname, password);
+            LoginResponse response = await _fileClient.SendLoginRequest(newUser);
+            if (!response.Success)
+            {
+                //TODO Display that user doesn't exists
+                return;
+            }
+
+            LocalPrefs.SaveLocalPrefs(nickname, password);
+            LocalPrefs localPrefs = LocalPrefs.GetLocalPrefs();
+            MainWindow mainWindow = new MainWindow(_fileClient, newUser, localPrefs, _launchConfiguration, _version);
+        }
+
+        private void DebugButtonOnClick(object sender, RoutedEventArgs e)
+        {
+            string nickname = NicknameBar.Text;
+            string password = PasswordBar.Text;
         }
     }
 }

@@ -37,6 +37,7 @@
                 Height="40"
                 Margin="30,132,30,228">
                 <TextBox
+                    x:Name="NicknameBar"
                     Width="340"
                     Height="40"
                     Margin="0,0,0,0"
@@ -59,6 +60,7 @@
                 Height="40"
                 Margin="30,214,30,146">
                 <TextBox
+                    x:Name="PasswordBar"
                     Width="340"
                     Height="40"
                     Margin="0,0,0,0"
@@ -177,7 +179,9 @@
                 FontFamily="Minecraft"
                 FontSize="24"
                 Foreground="#434343"
-                Style="{DynamicResource PlayButton}" />
+                Style="{DynamicResource PlayButton}" 
+                Click="RegisterButtonOnClick" />
+            
             <Button
                 Width="160"
                 Height="50"
@@ -189,7 +193,8 @@
                 FontFamily="Minecraft"
                 FontSize="24"
                 Foreground="#434343"
-                Style="{DynamicResource PlayButton}" />
+                Style="{DynamicResource PlayButton}" 
+                Click="DebugButtonOnClick" />
         </Grid>
     </Border>
 </Window>

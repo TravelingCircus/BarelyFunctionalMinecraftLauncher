@@ -65,7 +65,7 @@
                         <Grid Margin="0,-4,0,0">
                             <Rectangle StrokeThickness="1" />
                             <TextBox
-                                x:Name="NicknameBar"
+                                x:Name="PasswordBar"
                                 Margin="2"
                                 Padding="5"
                                 VerticalContentAlignment="Center"
@@ -87,7 +87,7 @@
                                 <TextBlock.Style>
                                     <Style TargetType="{x:Type TextBlock}">
                                         <Style.Triggers>
-                                            <DataTrigger Binding="{Binding Text, ElementName=NicknameBar}" Value="">
+                                            <DataTrigger Binding="{Binding Text, ElementName=PasswordBar}" Value="">
                                                 <Setter Property="Visibility" Value="Visible" />
                                             </DataTrigger>
                                         </Style.Triggers>
