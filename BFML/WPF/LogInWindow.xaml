@@ -15,7 +15,7 @@
     WindowStyle="None"
     mc:Ignorable="d">
     <Window.Resources>
-        <Style x:Key="TextBox" TargetType="{x:Type TextBox}">
+        <!--<Style x:Key="TextBox" TargetType="{x:Type TextBox}">
             <Setter Property="Control.Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="{x:Type TextBox}">
@@ -66,7 +66,7 @@
                     </ControlTemplate>
                 </Setter.Value>
             </Setter>
-        </Style>
+        </Style>-->
 
         <Style x:Key="TextBox2" TargetType="{x:Type TextBox}">
             <Setter Property="Control.Template">
@@ -151,7 +151,62 @@
                     Background="#000000"
                     FontFamily="Minecraft"
                     FontSize="18"
-                    Style="{DynamicResource TextBox}" />
+                    Style="{DynamicResource TextBox}">
+                    <TextBox.Resources>
+                        <Style x:Key="TextBox" TargetType="{x:Type TextBox}">
+                            <Setter Property="Control.Template">
+                                <Setter.Value>
+                                    <ControlTemplate TargetType="{x:Type TextBox}">
+                                        <Border
+                                            Width="340"
+                                            Height="40"
+                                            Background="#484848"
+                                            CornerRadius="4">
+
+                                            <Grid Margin="0,-4,0,0">
+                                                <Rectangle StrokeThickness="1" />
+                                                <TextBox
+                                                    x:Name="NicknameBar"
+                                                    Margin="2"
+                                                    Padding="5"
+                                                    VerticalContentAlignment="Center"
+                                                    Background="#00000000"
+                                                    BorderThickness="0"
+                                                    Foreground="#dcdcdc"
+                                                    MaxLength="16"
+                                                    Text="{TemplateBinding Text}" />
+
+                                                <TextBlock
+                                                    Margin="10,0,0,0"
+                                                    VerticalAlignment="Center"
+                                                    FontFamily="Minecraft"
+                                                    FontSize="18"
+                                                    Foreground="#787878"
+                                                    IsHitTestVisible="False"
+                                                    Text="Nickname">
+
+                                                    <TextBlock.Style>
+                                                        <Style TargetType="{x:Type TextBlock}">
+                                                            <Style.Triggers>
+                                                                <DataTrigger Binding="{Binding Text, ElementName=NicknameBar}" Value="">
+                                                                    <Setter Property="Visibility" Value="Visible" />
+                                                                </DataTrigger>
+                                                            </Style.Triggers>
+                                                            <Setter Property="Visibility" Value="Hidden" />
+                                                        </Style>
+                                                    </TextBlock.Style>
+
+                                                </TextBlock>
+
+                                            </Grid>
+
+                                        </Border>
+                                    </ControlTemplate>
+                                </Setter.Value>
+                            </Setter>
+                        </Style>
+                    </TextBox.Resources>
+                </TextBox>
                 <Rectangle
                     Width="340"
                     Height="3"
@@ -282,13 +337,13 @@
                 HorizontalAlignment="Left"
                 VerticalAlignment="Top"
                 Background="#ff9a3c"
+                Click="RegisterButtonOnClick"
                 Content="Register"
                 FontFamily="Minecraft"
                 FontSize="24"
                 Foreground="#434343"
-                Style="{DynamicResource PlayButton}" 
-                Click="RegisterButtonOnClick" />
-            
+                Style="{DynamicResource PlayButton}" />
+
             <Button
                 Width="160"
                 Height="50"
@@ -296,12 +351,12 @@
                 HorizontalAlignment="Left"
                 VerticalAlignment="Top"
                 Background="#ff9a3c"
+                Click="DebugButtonOnClick"
                 Content="Log In"
                 FontFamily="Minecraft"
                 FontSize="24"
                 Foreground="#434343"
-                Style="{DynamicResource PlayButton}" 
-                Click="DebugButtonOnClick" />
+                Style="{DynamicResource PlayButton}" />
         </Grid>
     </Border>
 </Window>
