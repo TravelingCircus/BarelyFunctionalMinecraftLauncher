@@ -127,7 +127,7 @@ public partial class MainWindow : Window
         string pngDirectory = Path.GetDirectoryName(files[0]);
         string pngName = Path.GetFileName(files[0]);
 
-        await _fileClient.SendSkinChangeRequest("pisos", pngDirectory, pngName);
+        await _fileClient.SendSkinChangeRequest(_user.Nickname, pngDirectory, pngName);
     }
 
     private void OnPlayButton(object sender, RoutedEventArgs e)
