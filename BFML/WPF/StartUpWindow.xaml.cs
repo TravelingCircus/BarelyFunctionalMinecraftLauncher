@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using BFML.Core;
 using BFML.WPF;
+using CmlLib.Core;
 using CommonData.Models;
 using CommonData.Network.Messages.Login;
 using TCPFileClient;
@@ -48,7 +49,7 @@ public partial class StartUpWindow : Window
     
     private FileClient ConnectToServer()
     {
-        FileClient fileClient = new FileClient();
+        FileClient fileClient = new FileClient(new MinecraftPath().BasePath);
         bool success = fileClient.ConnectToServer();
         if (!success) throw new Exception("Failed connect to the server");
         return fileClient;
