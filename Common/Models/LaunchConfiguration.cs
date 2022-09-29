@@ -3,8 +3,6 @@
 [Serializable]
 public sealed class LaunchConfiguration
 {
-    //TODO rewrite messages with new field
-    
     public string VanillaVersion;
     public string ForgeVersion;
     public string ModsChecksum;
@@ -12,7 +10,6 @@ public sealed class LaunchConfiguration
 
     public LaunchConfiguration()
     {
-        
     }
 
     public LaunchConfiguration(string vanillaVersion, string forgeVersion, string modsChecksum, int requiredGriwnas)

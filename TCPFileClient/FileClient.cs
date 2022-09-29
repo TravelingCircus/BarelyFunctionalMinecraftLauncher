@@ -12,14 +12,16 @@ namespace TCPFileClient;
 
 public sealed class FileClient
 {
+    private string _minecraftPath;
     private TcpClient _client;
     private NetworkStream _networkStream;
     private NetworkChannel _networkChannel;
     private readonly ConcurrentQueue<Query> _requests;
     private readonly CancellationTokenSource _cancellationTokenSource;
 
-    public FileClient()
+    public FileClient(string minecraftPath)
     {
+        _minecraftPath = minecraftPath;
         _requests = new ConcurrentQueue<Query>();
         _cancellationTokenSource = new CancellationTokenSource();
     }
@@ -51,8 +53,14 @@ public sealed class FileClient
     
     public async Task<LoginResponse> SendLoginRequest(User user)
     {
-        Message response = await GetResponseFor(new LoginRequest(user.Nickname, user.PasswordHash));
-        return (LoginResponse)response;
+        LoginResponse response = (LoginResponse)await GetResponseFor(new LoginRequest(user.Nickname, user.PasswordHash));
+
+        string skinPath = _minecraftPath + @"\BFML\skin.png";
+        await using FileStream stream = File.Open(skinPath, FileMode.OpenOrCreate);
+        stream.Write(response.SkinData, 0, response.SkinData.Length);
+        response.User.SkinPath = skinPath;
+
+        return response;
     }
     
     public async Task<SkinChangeResponse> SendSkinChangeRequest(string nickname, string pngDirectory, string pngName)
@@ -61,7 +69,7 @@ public sealed class FileClient
         int bytesLength = (int)directoryInfo.GetFiles(pngName)[0].Length;
 
         byte[] bytes = new byte[bytesLength];
-        string pngPath = pngDirectory + $"\\{pngName}";
+        string pngPath = pngDirectory + @"\{pngName}";
         
         await using FileStream fileStream = new FileStream(pngPath, FileMode.Open);
         _ = fileStream.Read(bytes, 0, bytesLength);

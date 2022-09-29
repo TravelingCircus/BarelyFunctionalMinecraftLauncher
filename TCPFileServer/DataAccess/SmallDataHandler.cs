@@ -4,6 +4,7 @@ namespace TCPFileServer.DataAccess;
 
 public sealed class SmallDataHandler: DataHandler
 {
+    public readonly string DefaultSkinPath;
     private readonly string _repositoryPath;
     private readonly string _usersDirectory;
     private readonly string _skinsDirectory;
@@ -13,6 +14,7 @@ public sealed class SmallDataHandler: DataHandler
         _repositoryPath = repositoryPath;
         _usersDirectory = repositoryPath + @"Users\";
         _skinsDirectory = repositoryPath + @"Skins\";
+        DefaultSkinPath = repositoryPath + @"DefaultSkin.png";
     }
 
     public bool UserExists(string username)

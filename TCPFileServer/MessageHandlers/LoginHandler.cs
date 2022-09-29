@@ -26,6 +26,7 @@ public class LoginHandler: MessageHandler
         request.ApplyData(dataStream);
         bool success = await _repository.TryLogIn(request.NickName, request.PasswordHash);
         User user = success ? await _repository.GetUser(request.NickName) : new User();
-        return new LoginResponse(success, user);
+        byte[] skinData = success ? await _repository.GetSkin(request.NickName) : Array.Empty<byte>();
+        return new LoginResponse(success, user, skinData);
     }
 }
