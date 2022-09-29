@@ -16,7 +16,6 @@
                 <ResourceDictionary Source="Styles/Transparent.xaml" />
                 <ResourceDictionary Source="Styles/Scroll.xaml" />
                 <ResourceDictionary Source="Styles/GlowingRectangle.xaml" />
-                <ResourceDictionary Source="Styles/TextBox.xaml" />
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Application.Resources>
