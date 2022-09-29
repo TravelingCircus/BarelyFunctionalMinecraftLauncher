@@ -14,7 +14,6 @@ public partial class StartUpWindow : Window
     public StartUpWindow()
     {
         InitializeComponent();
-
         Loaded += OnWindowLoaded;
     }
 
@@ -28,15 +27,17 @@ public partial class StartUpWindow : Window
         
         if (await TryLogIn(fileClient, localPrefs))
         {
-            User user = await GetUser(fileClient, localPrefs);
+            User user = new User();//await GetUser(fileClient, localPrefs);
             //TODO Download userSkin from server, save on PC and rewrite skinPath;
             MainWindow mainWindow = new MainWindow(fileClient, user, localPrefs, user.SkinPath, launchConfig, version);
             mainWindow.Show();
+            Close();
         }
         else
         {
             LogInWindow logInWindow = new LogInWindow();
             logInWindow.Show();
+            Close();
         }
     }
     

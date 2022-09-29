@@ -47,7 +47,7 @@ public partial class MainWindow : Window
     {
         if (_user.GryvnyasPaid < _launchConfig.RequiredGriwnas)
         {
-            DisablePlayButton();
+            //DisablePlayButton();
         }
     }
 

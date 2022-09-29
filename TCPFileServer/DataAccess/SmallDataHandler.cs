@@ -34,14 +34,16 @@ public sealed class SmallDataHandler: DataHandler
     public LaunchConfiguration GetLaunchConfig()
     {
         string fileName = "LaunchConfiguration.xml";
-        LaunchConfiguration launchConfig = DataSerializer.LaunchConfigFromXml(ReadFromRepository(_repositoryPath, fileName));
+        using Stream fileStream = ReadFromRepository(_repositoryPath, fileName);
+        LaunchConfiguration launchConfig = DataSerializer.LaunchConfigFromXml(fileStream);
         return launchConfig;
     }
 
     public ConfigurationVersion GetConfigVersion()
     {
         string fileName = "ConfigVersion.xml";
-        ConfigurationVersion version = DataSerializer.ConfigVersionFromXml(ReadFromRepository(_repositoryPath, fileName));
+        using Stream fileStream = ReadFromRepository(_repositoryPath, fileName);
+        ConfigurationVersion version = DataSerializer.ConfigVersionFromXml(fileStream);
         return version;
     }
 
