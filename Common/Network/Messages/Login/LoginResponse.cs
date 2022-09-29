@@ -1,22 +1,29 @@
-﻿namespace CommonData.Network.Messages.Login;
+﻿using CommonData.Models;
 
-public class LoginResponse: Message
+namespace CommonData.Network.Messages.Login;
+
+public class LoginResponse : Message
 {
     public bool Success;
+    public User User;
+    private byte[] SkinData;
 
     public LoginResponse()
     {
-        
     }
-    
-    public LoginResponse(bool success)
+
+    public LoginResponse(bool success, User user, byte[] skinData = null!)
     {
         Success = success;
+        User = user;
+        SkinData = skinData;
     }
 
     public override MessageHeader GetHeader()
     {
-        return new MessageHeader(MessageRegistry.GetKeyForMessageType(typeof(LoginResponse)), 1);
+        int skinDataLength = SkinData is null ? 0 : SkinData.Length;
+        return new MessageHeader(MessageRegistry.GetKeyForMessageType(typeof(LoginResponse)), 
+            1);
     }
 
     public override void ApplyData(Stream stream)

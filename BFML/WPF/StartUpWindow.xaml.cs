@@ -22,14 +22,19 @@ public partial class StartUpWindow : Window
         FileClient fileClient = ConnectToServer();
         LocalPrefs localPrefs = LocalPrefs.GetLocalPrefs();
         
-        ConfigurationVersion version = await GetVersion(fileClient, localPrefs);
-        LaunchConfiguration launchConfig = await GetLaunchConfig(fileClient, localPrefs);
-        
-        if (await TryLogIn(fileClient, localPrefs))
+        ConfigurationVersion version = await fileClient.DownloadConfigVersion();
+        LaunchConfiguration launchConfig = await fileClient.DownloadLaunchConfiguration();
+
+        LoginResponse loginResponse = await TryLogIn(fileClient, localPrefs);
+        if (loginResponse.Success)
         {
-            User user = new User();//await GetUser(fileClient, localPrefs);
-            //TODO Download userSkin from server, save on PC and rewrite skinPath;
-            MainWindow mainWindow = new MainWindow(fileClient, user, localPrefs, user.SkinPath, launchConfig, version);
+            MainWindow mainWindow = new MainWindow(
+                fileClient, 
+                loginResponse.User, 
+                localPrefs,
+                launchConfig, 
+                version);
+            
             mainWindow.Show();
             Close();
         }
@@ -49,27 +54,9 @@ public partial class StartUpWindow : Window
         return fileClient;
     }
 
-    private async Task<bool> TryLogIn(FileClient fileClient, LocalPrefs localPrefs)
+    private Task<LoginResponse> TryLogIn(FileClient fileClient, LocalPrefs localPrefs)
     {
         User user = new User(localPrefs.Nickname, localPrefs.Password);
-        //TODO rewrite LogIn response(Get user from it)
-        LoginResponse response = await fileClient.SendLoginRequest(user);
-        return response.Success;
-    }
-
-    private async Task<User> GetUser(FileClient fileClient, LocalPrefs localPrefs)
-    {
-        //TODO rewrite LogIn response
-        throw new NotImplementedException();
-    }
-
-    private Task<ConfigurationVersion> GetVersion(FileClient fileClient, LocalPrefs localPrefs)
-    {
-        return fileClient.DownloadConfigVersion();
-    }
-    
-    private Task<LaunchConfiguration> GetLaunchConfig(FileClient fileClient, LocalPrefs localPrefs)
-    {
-        return fileClient.DownloadLaunchConfiguration();
+        return fileClient.SendLoginRequest(user);
     }
 }

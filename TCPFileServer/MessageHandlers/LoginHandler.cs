@@ -1,4 +1,5 @@
-﻿using CommonData.Network;
+﻿using CommonData.Models;
+using CommonData.Network;
 using CommonData.Network.Messages.Login;
 using TCPFileServer.DataAccess;
 
@@ -24,6 +25,7 @@ public class LoginHandler: MessageHandler
         LoginRequest request = new LoginRequest();
         request.ApplyData(dataStream);
         bool success = await _repository.TryLogIn(request.NickName, request.PasswordHash);
-        return new LoginResponse(success);
+        User user = success ? await _repository.GetUser(request.NickName) : new User();
+        return new LoginResponse(success, user);
     }
 }
