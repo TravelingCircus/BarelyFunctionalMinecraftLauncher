@@ -104,6 +104,7 @@ public sealed class Repository
 
     public async Task<bool> TryRegisterUser(User newUser)
     {
+        //TODO assign default skin
         SmallDataHandler dataHandler = await _smallDataHandlerQueue.GetDataHandler();
 
         if (dataHandler.UserExists(newUser.Nickname))
@@ -112,6 +113,7 @@ public sealed class Repository
             return false;
         }
 
+        newUser.SkinPath = dataHandler.DefaultSkinPath;
         await dataHandler.RewriteUser(newUser);
         
         dataHandler.Release();
@@ -122,6 +124,11 @@ public sealed class Repository
     {
         SmallDataHandler dataHandler = await _smallDataHandlerQueue.GetDataHandler();
 
+        if (!dataHandler.UserExists(name))
+        {
+            dataHandler.Release();
+            return false;
+        }
         User user = dataHandler.GetUser(name);
 
         dataHandler.Release();

@@ -18,7 +18,7 @@ public class LaunchConfigurationResponse: Message
         return new MessageHeader(MessageRegistry.GetKeyForMessageType(typeof(LaunchConfigurationResponse)), 
             LaunchConfiguration.ForgeVersion.Length + 
             LaunchConfiguration.ModsChecksum.Length + 
-            LaunchConfiguration.VanillaVersion.Length + sizeof(int));    
+            LaunchConfiguration.VanillaVersion.Length + sizeof(int) * 4);    
     }
 
     public override void ApplyData(Stream stream)

@@ -17,19 +17,18 @@ public partial class MainWindow : Window
     private readonly FileClient _fileClient;
     private readonly User _user;
     private readonly LocalPrefs _localPrefs;
-    private readonly string _skinPath;
     private readonly ConfigurationVersion _configVersion;
     private readonly LaunchConfiguration _launchConfig;
     private readonly SkinPreviewRenderer _skinPreviewRenderer;
 
     public MainWindow(FileClient fileClient, User user, LocalPrefs localPrefs, 
-        string skinPath, LaunchConfiguration launchConfig, ConfigurationVersion configVersion)
+       LaunchConfiguration launchConfig, ConfigurationVersion configVersion)
     {
         InitializeComponent();
         _fileClient = fileClient;
         _user = user;
         _localPrefs = localPrefs;
-        _skinPath = skinPath; //TODO should correspond to skin.png in .minecraft/BFML/skin.png
+        //TODO should correspond to skin.png in .minecraft/BFML/skin.png
         _launchConfig = launchConfig;
         _configVersion = configVersion;
 
@@ -39,7 +38,7 @@ public partial class MainWindow : Window
     private void OnWindowLoaded(object sender, RoutedEventArgs args)
     {
         CheckIfUserPaid();
-        SetUpSkinRenderer(_skinPath);
+        //SetUpSkinRenderer(_skinPath);
         Loaded -= OnWindowLoaded;
     }
 
@@ -47,7 +46,7 @@ public partial class MainWindow : Window
     {
         if (_user.GryvnyasPaid < _launchConfig.RequiredGriwnas)
         {
-            DisablePlayButton();
+            //DisablePlayButton();
         }
     }
 
@@ -128,7 +127,7 @@ public partial class MainWindow : Window
         string pngDirectory = Path.GetDirectoryName(files[0]);
         string pngName = Path.GetFileName(files[0]);
 
-        await _fileClient.SendSkinChangeRequest("pisos", pngDirectory, pngName);
+        await _fileClient.SendSkinChangeRequest(_user.Nickname, pngDirectory, pngName);
     }
 
     private void OnPlayButton(object sender, RoutedEventArgs e)

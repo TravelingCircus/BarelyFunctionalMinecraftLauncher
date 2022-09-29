@@ -4,6 +4,7 @@ namespace TCPFileServer.DataAccess;
 
 public sealed class SmallDataHandler: DataHandler
 {
+    public readonly string DefaultSkinPath;
     private readonly string _repositoryPath;
     private readonly string _usersDirectory;
     private readonly string _skinsDirectory;
@@ -13,6 +14,7 @@ public sealed class SmallDataHandler: DataHandler
         _repositoryPath = repositoryPath;
         _usersDirectory = repositoryPath + @"Users\";
         _skinsDirectory = repositoryPath + @"Skins\";
+        DefaultSkinPath = repositoryPath + @"DefaultSkin.png";
     }
 
     public bool UserExists(string username)
@@ -34,14 +36,16 @@ public sealed class SmallDataHandler: DataHandler
     public LaunchConfiguration GetLaunchConfig()
     {
         string fileName = "LaunchConfiguration.xml";
-        LaunchConfiguration launchConfig = DataSerializer.LaunchConfigFromXml(ReadFromRepository(_repositoryPath, fileName));
+        using Stream fileStream = ReadFromRepository(_repositoryPath, fileName);
+        LaunchConfiguration launchConfig = DataSerializer.LaunchConfigFromXml(fileStream);
         return launchConfig;
     }
 
     public ConfigurationVersion GetConfigVersion()
     {
-        string fileName = "Version.xml";
-        ConfigurationVersion version = DataSerializer.ConfigVersionFromXml(ReadFromRepository(_repositoryPath, fileName));
+        string fileName = "ConfigVersion.xml";
+        using Stream fileStream = ReadFromRepository(_repositoryPath, fileName);
+        ConfigurationVersion version = DataSerializer.ConfigVersionFromXml(fileStream);
         return version;
     }
 

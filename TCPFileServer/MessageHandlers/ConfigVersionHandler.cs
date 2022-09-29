@@ -16,7 +16,7 @@ public class ConfigVersionHandler : MessageHandler
 
     public override Task Handle(Stream dataStream)
     {
-        throw new NotImplementedException();
+        throw new InvalidOperationException();
     }
 
     public override async Task<Message> GetResponse(Stream dataStream)
