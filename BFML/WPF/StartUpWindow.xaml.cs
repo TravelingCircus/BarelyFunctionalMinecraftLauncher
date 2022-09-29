@@ -35,7 +35,8 @@ public partial class StartUpWindow : Window
         }
         else
         {
-            //TODO Open LogIn window
+            LogInWindow logInWindow = new LogInWindow();
+            logInWindow.Show();
         }
     }
     
@@ -61,13 +62,13 @@ public partial class StartUpWindow : Window
         throw new NotImplementedException();
     }
 
-    private async Task<ConfigurationVersion> GetVersion(FileClient fileClient, LocalPrefs localPrefs)
+    private Task<ConfigurationVersion> GetVersion(FileClient fileClient, LocalPrefs localPrefs)
     {
-        return await fileClient.DownloadConfigVersion();
+        return fileClient.DownloadConfigVersion();
     }
     
-    private async Task<LaunchConfiguration> GetLaunchConfig(FileClient fileClient, LocalPrefs localPrefs)
+    private Task<LaunchConfiguration> GetLaunchConfig(FileClient fileClient, LocalPrefs localPrefs)
     {
-        return await fileClient.DownloadLaunchConfiguration();
+        return fileClient.DownloadLaunchConfiguration();
     }
 }

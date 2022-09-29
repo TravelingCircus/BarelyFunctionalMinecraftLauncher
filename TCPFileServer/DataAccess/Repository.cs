@@ -122,6 +122,11 @@ public sealed class Repository
     {
         SmallDataHandler dataHandler = await _smallDataHandlerQueue.GetDataHandler();
 
+        if (!dataHandler.UserExists(name))
+        {
+            dataHandler.Release();
+            return false;
+        }
         User user = dataHandler.GetUser(name);
 
         dataHandler.Release();

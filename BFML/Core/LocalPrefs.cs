@@ -11,6 +11,7 @@ public sealed class LocalPrefs
     public string Nickname;
     public string Password;
     
+    private static readonly string BFMLDirectoryPath = new MinecraftPath().BasePath + "\\BFML";
     private static readonly string PrefsPath = new MinecraftPath().BasePath + "\\BFML\\LocalPrefs.xml";
 
     public LocalPrefs()
@@ -25,6 +26,7 @@ public sealed class LocalPrefs
 
     public static void SaveLocalPrefs(string nickname, string password)
     {
+        if (!Directory.Exists(BFMLDirectoryPath)) Directory.CreateDirectory(BFMLDirectoryPath);
         using FileStream fileStream = new FileStream(PrefsPath, FileMode.OpenOrCreate);
         XmlSerializer xml = new XmlSerializer(typeof(LocalPrefs));
         xml.Serialize(fileStream, new LocalPrefs(nickname, password));

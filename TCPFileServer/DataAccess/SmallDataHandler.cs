@@ -40,7 +40,7 @@ public sealed class SmallDataHandler: DataHandler
 
     public ConfigurationVersion GetConfigVersion()
     {
-        string fileName = "Version.xml";
+        string fileName = "ConfigVersion.xml";
         ConfigurationVersion version = DataSerializer.ConfigVersionFromXml(ReadFromRepository(_repositoryPath, fileName));
         return version;
     }

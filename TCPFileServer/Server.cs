@@ -27,9 +27,8 @@ public class Server
     {
         CancellationToken cancellationToken = _cancellationTokenSource.Token;
         
-        //Repository repository = new Repository(@"WSTAW SIUDA SWOYE MISTSE");
-        //Repository repository = new Repository(@"C:\Users\maksy\Desktope\TestRepo\", cancellationToken);
-        Repository repository = new Repository(@"D:\Home\Desktope\TestDownloads\", cancellationToken);
+        Repository repository = new Repository(@"C:\Users\maksy\Desktope\TestRepo\", cancellationToken);
+        //Repository repository = new Repository(@"D:\Home\Desktope\TestDownloads\", cancellationToken);
         repository.Initialize();
         HandlerPicker.RegisterHandler(nameof(RegistrationRequest), new RegistrationHandler(repository));
         HandlerPicker.RegisterHandler(nameof(LoginRequest), new LoginHandler(repository));
@@ -73,6 +72,7 @@ public class Server
             MessageHandler messageHandler = HandlerPicker.GetHandler(header);
             Message response = await messageHandler.GetResponse(messageData);
             await networkChannel.SendMessage(response);
+            Console.WriteLine($"SENT RESPONSE thread_{Thread.CurrentThread.ManagedThreadId}");
         }
         
         Console.WriteLine($"HANDLING CONNECTION thread_{Thread.CurrentThread.ManagedThreadId}");

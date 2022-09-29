@@ -18,7 +18,7 @@ public class ConfigVersionResponse : Message
     public override MessageHeader GetHeader()
     {
         return new MessageHeader(MessageRegistry.GetKeyForMessageType(typeof(ConfigVersionResponse)),
-            2 * sizeof(int)
+            3 * sizeof(int)
             + ConfigurationVersion.Changelog.Length);
     }
 

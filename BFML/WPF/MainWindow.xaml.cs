@@ -39,7 +39,7 @@ public partial class MainWindow : Window
     private void OnWindowLoaded(object sender, RoutedEventArgs args)
     {
         CheckIfUserPaid();
-        SetUpSkinRenderer(_skinPath);
+        //SetUpSkinRenderer(_skinPath);
         Loaded -= OnWindowLoaded;
     }
 
