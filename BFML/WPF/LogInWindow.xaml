@@ -54,21 +54,21 @@
                     RadiusX="4"
                     RadiusY="4" />
                 <TextBlock
-                    x:Name="textNickname"
+                    x:Name="TextNickname"
                     Margin="12,-3,0,0"
                     VerticalAlignment="Center"
-                    MouseDown="textNickname_MouseDown"
+                    MouseDown="TextNicknameMouseDown"
                     Style="{StaticResource nickHint}"
                     Text="Nickname" />
                 <TextBox
-                    x:Name="inputNickname"
+                    x:Name="InputNickname"
                     Padding="10,8,0,0"
                     CaretBrush="#dcdcdc"
                     Style="{StaticResource TextBox}"
                     Text=""
-                    TextChanged="inputNickname_TextChanged" />
+                    TextChanged="InputNicknameTextChanged" />
                 <Rectangle
-                    x:Name="underNickname"
+                    x:Name="UnderNickname"
                     Width="340"
                     Height="3"
                     Margin="0,0,0,0"
@@ -93,21 +93,21 @@
                     RadiusX="4"
                     RadiusY="4" />
                 <TextBlock
-                    x:Name="textPassword"
+                    x:Name="TextPassword"
                     Margin="12,-3,0,0"
                     VerticalAlignment="Center"
-                    MouseDown="textPassword_MouseDown"
+                    MouseDown="TextPasswordMouseDown"
                     Style="{StaticResource nickHint}"
                     Text="Password" />
                 <TextBox
-                    x:Name="inputPassword"
+                    x:Name="InputPassword"
                     Padding="10,8,0,0"
                     CaretBrush="#dcdcdc"
                     Style="{StaticResource TextBox}"
                     Text=""
-                    TextChanged="inputPassword_PasswordChanged" />
+                    TextChanged="InputPasswordPasswordChanged" />
                 <Rectangle
-                    x:Name="underPassword"
+                    x:Name="UnderPassword"
                     Width="340"
                     Height="3"
                     Margin="0,0,0,0"
@@ -238,7 +238,7 @@
                 HorizontalAlignment="Left"
                 VerticalAlignment="Top"
                 Background="#ff9a3c"
-                Click="DebugButtonOnClick"
+                Click="LogInButtonOnClick"
                 Content="Log In"
                 FontFamily="Minecraft"
                 FontSize="24"
