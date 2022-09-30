@@ -1,4 +1,6 @@
 ﻿using System;
+using System.ComponentModel;
+using System.Runtime.CompilerServices;
 using System.Windows;
 using System.Windows.Input;
 using BFML.Core;
@@ -17,7 +19,7 @@ namespace BFML.WPF
         private readonly FileClient _fileClient;
         private readonly LaunchConfiguration _launchConfiguration;
         private readonly ConfigurationVersion _version;
-        
+
         public LogInWindow(FileClient fileClient, LaunchConfiguration launchConfiguration, ConfigurationVersion version)
         {
             InitializeComponent();
@@ -64,44 +66,85 @@ namespace BFML.WPF
 
         private async void RegisterButtonOnClick(object sender, RoutedEventArgs e)
         {
-            string nickname = NicknameBar.Text;
-            string password = PasswordBar.Text;
+            //string nickname = NicknameBar.Text;
+            //string password = PasswordBar.Text;
 
-            User newUser = new User(nickname, password);
-            RegistrationResponse response = await _fileClient.SendRegistrationRequest(newUser);
-            if (!response.Success)
-            {
-                //TODO Display that user exists
-                return;
-            }
+            //User newUser = new User(nickname, password);
+            //RegistrationResponse response = await _fileClient.SendRegistrationRequest(newUser);
+            //if (!response.Success)
+            //{
+            //    //TODO Display that user exists
+            //    return;
+            //}
 
-            LocalPrefs.SaveLocalPrefs(nickname, password);
-            LocalPrefs localPrefs = LocalPrefs.GetLocalPrefs();
-            MainWindow mainWindow = new MainWindow(_fileClient, newUser, localPrefs, _launchConfiguration, _version);
+            //LocalPrefs.SaveLocalPrefs(nickname, password);
+            //LocalPrefs localPrefs = LocalPrefs.GetLocalPrefs();
+            //MainWindow mainWindow = new MainWindow(_fileClient, newUser, localPrefs, _launchConfiguration, _version);
         }
 
         private async void LogInButtonOnClick(object sender, RoutedEventArgs e)
         {
-            string nickname = NicknameBar.Text;
-            string password = PasswordBar.Text;
-            
-            User newUser = new User(nickname, password);
-            LoginResponse response = await _fileClient.SendLoginRequest(newUser);
-            if (!response.Success)
-            {
-                //TODO Display that user doesn't exists
-                return;
-            }
+            //string nickname = NicknameBar.Text;
+            //string password = PasswordBar.Text;
 
-            LocalPrefs.SaveLocalPrefs(nickname, password);
-            LocalPrefs localPrefs = LocalPrefs.GetLocalPrefs();
-            MainWindow mainWindow = new MainWindow(_fileClient, newUser, localPrefs, _launchConfiguration, _version);
+            //User newUser = new User(nickname, password);
+            //LoginResponse response = await _fileClient.SendLoginRequest(newUser);
+            //if (!response.Success)
+            //{
+            //    //TODO Display that user doesn't exists
+            //    return;
+            //}
+
+            //LocalPrefs.SaveLocalPrefs(nickname, password);
+            //LocalPrefs localPrefs = LocalPrefs.GetLocalPrefs();
+            //MainWindow mainWindow = new MainWindow(_fileClient, newUser, localPrefs, _launchConfiguration, _version);
+        }
+
+        public LogInWindow()
+        {
         }
 
         private void DebugButtonOnClick(object sender, RoutedEventArgs e)
         {
-            string nickname = NicknameBar.Text;
-            string password = PasswordBar.Text;
+
+            //string password = PasswordBar.Text;
         }
+
+        private void textNickname_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            inputNickname.Focus();
+        }
+
+        private void inputNickname_TextChanged(object sender, System.Windows.Controls.TextChangedEventArgs e)
+        {
+            if (!string.IsNullOrEmpty(inputNickname.Text) && inputNickname.Text.Length > 0)
+            {
+                textNickname.Visibility = Visibility.Collapsed;
+            }
+            else
+            {
+                textNickname.Visibility = Visibility.Visible;
+            }
+        }
+
+        private void textPassword_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            inputPassword.Focus();
+        }
+
+        private void inputPassword_PasswordChanged(object sender, System.Windows.Controls.TextChangedEventArgs e)
+        {
+            if (!string.IsNullOrEmpty(inputPassword.Text) && inputPassword.Text.Length > 0)
+            {
+                textPassword.Visibility = Visibility.Collapsed;
+            }
+            else
+            {
+                textPassword.Visibility = Visibility.Visible;
+            }
+
+
+        }
+
     }
 }
