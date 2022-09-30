@@ -38,6 +38,7 @@ public partial class MainWindow : Window
     private void OnWindowLoaded(object sender, RoutedEventArgs args)
     {
         CheckIfUserPaid();
+        ApplyLocalPrefs();
         //SetUpSkinRenderer(_skinPath);
         Loaded -= OnWindowLoaded;
     }
@@ -48,6 +49,11 @@ public partial class MainWindow : Window
         {
             //DisablePlayButton();
         }
+    }
+
+    private void ApplyLocalPrefs()
+    {
+        RamSlider.Value = _localPrefs.DedicatedRAM;
     }
 
     private void DisablePlayButton()
