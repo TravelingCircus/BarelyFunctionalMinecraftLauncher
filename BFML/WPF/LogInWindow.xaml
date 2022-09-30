@@ -64,6 +64,7 @@
                     x:Name="InputNickname"
                     Padding="10,8,0,0"
                     CaretBrush="#dcdcdc"
+                    MaxLength="16"
                     Style="{StaticResource TextBox}"
                     Text=""
                     TextChanged="InputNicknameTextChanged" />
@@ -103,6 +104,7 @@
                     x:Name="InputPassword"
                     Padding="10,8,0,0"
                     CaretBrush="#dcdcdc"
+                    MaxLength="16"
                     Style="{StaticResource TextBox}"
                     Text=""
                     TextChanged="InputPasswordPasswordChanged" />
