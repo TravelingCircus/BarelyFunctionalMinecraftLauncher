@@ -10,6 +10,8 @@ public sealed class LocalPrefs
 {
     public string Nickname;
     public string Password;
+    public int DedicatedRAM;
+    public bool IsFullscreen;
     
     private static readonly string BFMLDirectoryPath = new MinecraftPath().BasePath + "\\BFML";
     private static readonly string PrefsPath = new MinecraftPath().BasePath + "\\BFML\\LocalPrefs.xml";
@@ -18,10 +20,12 @@ public sealed class LocalPrefs
     {
     }
 
-    public LocalPrefs(string nickname, string password)
+    public LocalPrefs(string nickname, string password, int dedicatedRam = 3072, bool isFullscreen = false)
     {
         Nickname = nickname;
         Password = password;
+        DedicatedRAM = dedicatedRam;
+        IsFullscreen = isFullscreen;
     }
 
     public static void SaveLocalPrefs(string nickname, string password)

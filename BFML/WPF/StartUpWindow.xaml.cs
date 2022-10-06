@@ -35,13 +35,17 @@ public partial class StartUpWindow : Window
                 localPrefs,
                 launchConfig, 
                 version);
-            
+
+            mainWindow.Top = Top;
+            mainWindow.Left = Left + Width / 2;
             mainWindow.Show();
             Close();
         }
         else
         {
             LogInWindow logInWindow = new LogInWindow(fileClient, launchConfig, version);
+            logInWindow.Top = (Top + Height / 2) / 2;
+            logInWindow.Left = Left + logInWindow.Width / 2;
             logInWindow.Show();
             Close();
         }
