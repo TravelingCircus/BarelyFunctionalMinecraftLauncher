@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Drawing;
 using System.IO;
 using System.Windows;
 using BFML._3D;
@@ -19,7 +20,7 @@ public partial class MainWindow : Window
     private readonly LocalPrefs _localPrefs;
     private readonly ConfigurationVersion _configVersion;
     private readonly LaunchConfiguration _launchConfig;
-    private readonly SkinPreviewRenderer _skinPreviewRenderer;
+    private SkinPreviewRenderer _skinPreviewRenderer;
 
     public MainWindow(FileClient fileClient, User user, LocalPrefs localPrefs, 
        LaunchConfiguration launchConfig, ConfigurationVersion configVersion)
@@ -32,13 +33,13 @@ public partial class MainWindow : Window
         _launchConfig = launchConfig;
         _configVersion = configVersion;
 
+        SetUpSkinRenderer();
         Loaded += OnWindowLoaded;
     }
 
     private void OnWindowLoaded(object sender, RoutedEventArgs args)
     {
         CheckIfUserPaid();
-        //SetUpSkinRenderer(_skinPath);
         Loaded -= OnWindowLoaded;
     }
 
@@ -57,24 +58,21 @@ public partial class MainWindow : Window
     
     #region PlayerModelRendering
 
-    private void SetUpSkinRenderer(string skinPath)
+    private void SetUpSkinRenderer()
     {
         GLWpfControlSettings settings = new GLWpfControlSettings
         {
             MajorVersion = 4,
             MinorVersion = 0
         };
-        // OpenTkControl.Start(settings);
-        // _skinPreviewRenderer = new SkinPreviewRenderer();
-        // _skinPreviewRenderer.SetUp();
+        OpenTkControl.Start(settings);
+        _skinPreviewRenderer = new SkinPreviewRenderer();
+        _skinPreviewRenderer.SetUp();
     }
     
-    private async void SkinPreviewOnRender(TimeSpan obj)
+    private void SkinPreviewOnRender(TimeSpan obj)
     {
-        GL.ClearColor(Color4.White);
-        GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
-
-        //await _skinPreviewRenderer.Render(obj).ConfigureAwait(false);
+        _skinPreviewRenderer.Render();
     }
 
     #endregion

@@ -166,7 +166,7 @@
                                             <Grid Margin="0,-4,0,0">
                                                 <Rectangle StrokeThickness="1" />
                                                 <TextBox
-                                                    x:Name="NicknameBar"
+                                                    x:Name="NicknameInput"
                                                     Margin="2"
                                                     Padding="5"
                                                     VerticalContentAlignment="Center"

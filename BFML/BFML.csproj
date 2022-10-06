@@ -29,6 +29,8 @@
       <Content Include="bin\Debug\net6.0-windows\perfection.png" />
       <Content Include="bin\Debug\net6.0-windows\shader.frag" />
       <Content Include="bin\Debug\net6.0-windows\shader.vert" />
+      <Content Include="bin\Debug\net6.0-windows\SkinPreview.obj" />
+      <Content Include="bin\Debug\net6.0-windows\van.png" />
     </ItemGroup>
 
     <ItemGroup>

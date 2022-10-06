@@ -25,6 +25,15 @@
                 <ColumnDefinition Width="400" />
             </Grid.ColumnDefinitions>
 
+            <glWpfControl:GLWpfControl 
+                x:Name="OpenTkControl" 
+                Render="SkinPreviewOnRender"
+                Grid.Column="0"
+                Height="550"
+                Width="350"
+                HorizontalAlignment="Center"
+                VerticalAlignment="Center"/>
+            
             <StackPanel Width="365" Margin="30,11,5,620">
 
                 <Rectangle
@@ -66,22 +75,23 @@
                     Source="Images/LogOutIcon.png" />
 
             </StackPanel>
-
+            
             <Button
                 Width="311"
                 Height="516"
                 Margin="30,98,59,85"
                 AllowDrop="True"
+                Opacity="0"
                 Background="#383838"
                 Drop="OnSkinFileDrop"
                 Style="{DynamicResource Transparent2}" />
-
+            
             <StackPanel
                 Width="220"
                 Height="160"
                 Margin="0,0,29,250"
                 IsHitTestVisible="False">
-
+                
                 <TextBlock
                     HorizontalAlignment="Center"
                     FontFamily="Minecraft"
@@ -93,9 +103,9 @@
                     Height="46"
                     Margin="0,10,0,0"
                     Source="/WPF/Images/PixelArrow.png" />
-
+                
             </StackPanel>
-
+            
             <Rectangle
                 Grid.Row="0"
                 Grid.Column="1"
