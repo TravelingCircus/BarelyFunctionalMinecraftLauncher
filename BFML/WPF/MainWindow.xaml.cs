@@ -1,10 +1,7 @@
 ﻿using System;
-using System.Drawing;
 using System.IO;
 using System.Windows;
 using BFML._3D;
-using OpenTK.Graphics.OpenGL4;
-using OpenTK.Mathematics;
 using OpenTK.Wpf;
 using System.Windows.Input;
 using BFML.Core;
@@ -40,6 +37,7 @@ public partial class MainWindow : Window
     private void OnWindowLoaded(object sender, RoutedEventArgs args)
     {
         CheckIfUserPaid();
+        ApplyLocalPrefs();
         Loaded -= OnWindowLoaded;
     }
 
@@ -131,5 +129,10 @@ public partial class MainWindow : Window
     private void OnPlayButton(object sender, RoutedEventArgs e)
     {
         throw new NotImplementedException();
+    }
+    
+    private void ApplyLocalPrefs()
+    {
+        RamSlider.Value = _localPrefs.DedicatedRAM;
     }
 }

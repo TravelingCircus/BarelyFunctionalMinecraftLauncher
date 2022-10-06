@@ -38,6 +38,7 @@ public partial class LogInWindow : Window
             MessageBox.Show(ex.Message);
         }
     }
+
     private void Minimize(object sender, RoutedEventArgs e)
     {
         try
@@ -59,14 +60,15 @@ public partial class LogInWindow : Window
                 WindowState = WindowState.Normal;
                 Application.Current.MainWindow.Top = 3;
             }
+
             DragMove();
         }
     }
 
     private async void RegisterButtonOnClick(object sender, RoutedEventArgs e)
     {
-        string nickname = NicknameBar.Text;
-        string password = PasswordBar.Text;
+        string nickname = InputNickname.Text;
+        string password = InputPassword.Text;
 
         User newUser = new User(nickname, password);
         RegistrationResponse response = await _fileClient.SendRegistrationRequest(newUser);
@@ -83,9 +85,9 @@ public partial class LogInWindow : Window
 
     private async void LogInButtonOnClick(object sender, RoutedEventArgs e)
     {
-        string nickname = NicknameBar.Text;
-        string password = PasswordBar.Text;
-            
+        string nickname = InputNickname.Text;
+        string password = InputPassword.Text;
+
         User newUser = new User(nickname, password);
         LoginResponse response = await _fileClient.SendLoginRequest(newUser);
         if (!response.Success)
@@ -99,9 +101,37 @@ public partial class LogInWindow : Window
         MainWindow mainWindow = new MainWindow(_fileClient, newUser, localPrefs, _launchConfiguration, _version);
     }
 
-    private void DebugButtonOnClick(object sender, RoutedEventArgs e)
+    private void InputNicknameTextChanged(object sender, System.Windows.Controls.TextChangedEventArgs e)
     {
-        string nickname = NicknameBar.Text;
-        string password = PasswordBar.Text;
+        if (!string.IsNullOrEmpty(InputNickname.Text) && InputNickname.Text.Length > 0)
+        {
+            TextNickname.Visibility = Visibility.Collapsed;
+        }
+        else
+        {
+            TextNickname.Visibility = Visibility.Visible;
+        }
+    }
+
+    private void TextPasswordMouseDown(object sender, MouseButtonEventArgs e)
+    {
+        InputPassword.Focus();
+    }
+    
+    private void TextNicknameMouseDown(object sender, MouseButtonEventArgs e)
+    {
+        InputNickname.Focus();
+    }
+
+    private void InputPasswordPasswordChanged(object sender, System.Windows.Controls.TextChangedEventArgs e)
+    {
+        if (!string.IsNullOrEmpty(InputPassword.Text) && InputPassword.Text.Length > 0)
+        {
+            TextPassword.Visibility = Visibility.Collapsed;
+        }
+        else
+        {
+            TextPassword.Visibility = Visibility.Visible;
+        }
     }
 }
