@@ -32,9 +32,11 @@ public sealed class LocalPrefs
     {
         if (!Directory.Exists(BFMLDirectoryPath)) Directory.CreateDirectory(BFMLDirectoryPath);
         if (File.Exists(PrefsPath)) File.Delete(PrefsPath);
-        using FileStream fileStream = new FileStream(PrefsPath, FileMode.OpenOrCreate);
-        XmlSerializer xml = new XmlSerializer(typeof(LocalPrefs));
-        xml.Serialize(fileStream, new LocalPrefs(nickname, password));
+        using (FileStream fileStream = new FileStream(PrefsPath, FileMode.OpenOrCreate))
+        {
+            XmlSerializer xml = new XmlSerializer(typeof(LocalPrefs));
+            xml.Serialize(fileStream, new LocalPrefs(nickname, password));
+        }
     }
     
     public static LocalPrefs GetLocalPrefs()

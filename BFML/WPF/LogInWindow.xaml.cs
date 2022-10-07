@@ -92,6 +92,7 @@ public partial class LogInWindow : Window
 
         User newUser = new User(nickname, password);
         LoginResponse response = await _fileClient.SendLoginRequest(newUser);
+        newUser = response.User;
         if (!response.Success)
         {
             //TODO Display that user doesn't exists
