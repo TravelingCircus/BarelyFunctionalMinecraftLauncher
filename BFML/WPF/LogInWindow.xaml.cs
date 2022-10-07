@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
 using BFML.Core;
@@ -78,11 +79,7 @@ public partial class LogInWindow : Window
             return;
         }
 
-        LocalPrefs.SaveLocalPrefs(nickname, password);
-        LocalPrefs localPrefs = LocalPrefs.GetLocalPrefs();
-        MainWindow mainWindow = new MainWindow(_fileClient, newUser, localPrefs, _launchConfiguration, _version);
-        mainWindow.Show();
-        Close();
+        await TryLogIn(nickname, password);
     }
 
     private async void LogInButtonOnClick(object sender, RoutedEventArgs e)
@@ -90,6 +87,11 @@ public partial class LogInWindow : Window
         string nickname = InputNickname.Text;
         string password = InputPassword.Text;
 
+        await TryLogIn(nickname, password);
+    }
+
+    private async Task TryLogIn(string nickname, string password)
+    {
         User newUser = new User(nickname, password);
         LoginResponse response = await _fileClient.SendLoginRequest(newUser);
         newUser = response.User;
@@ -105,7 +107,7 @@ public partial class LogInWindow : Window
         mainWindow.Show();
         Close();
     }
-
+    
     private void InputNicknameTextChanged(object sender, System.Windows.Controls.TextChangedEventArgs e)
     {
         if (!string.IsNullOrEmpty(InputNickname.Text) && InputNickname.Text.Length > 0)
