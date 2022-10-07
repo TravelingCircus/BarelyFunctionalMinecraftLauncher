@@ -13,7 +13,7 @@ public class SkinPreviewRenderer
     public void SetUp()
     {
         _camera = new Camera(
-            new Vector3(0f, 0f, -5f), 
+            new Vector3(0f, -1.1f, -5f), 
             Quaternion.Identity
             );
 
@@ -30,19 +30,28 @@ public class SkinPreviewRenderer
         Shader shader = new Shader("shader.vert", "shader.frag");
         Material skinMaterial = new Material(shader, "van.png");
         _skinPreviewRenderObject = RenderObject.Instantiate(skinModel, skinMaterial);
-        _skinPreviewRenderObject.Transform.Rotation = Quaternion.FromEulerAngles(0f, MathHelper.DegreesToRadians(155f), 0f);
-        _skinPreviewRenderObject.Transform.Position = new Vector3(0f, -1.1f, 0f);
+
+        ObjModelLoader dustModelLoader = new ObjModelLoader("plane.obj");
+        Model dustModel =  dustModelLoader.Load();
+        Material dustMaterial = new Material(shader, "shadow.png");
+        _dustRenderObject = RenderObject.Instantiate(dustModel, dustMaterial);
     }
 
-    public void Render()
+    public void Render(float angle)
     {
         GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
 
+        angle += 155f;
+        Quaternion nextRotation = Quaternion.FromEulerAngles(0f, MathHelper.DegreesToRadians(angle), 0f);
+        _skinPreviewRenderObject.Transform.Rotation = nextRotation;
+        _dustRenderObject.Transform.Rotation = nextRotation;
+        
         _skinPreviewRenderObject.Render(_camera);
+        _dustRenderObject.Render(_camera);
     }
 
     public void ChangeSkin(string pngPath)
     {
-        
+        _skinPreviewRenderObject.Material.ChangeTexture(pngPath);
     }
 }

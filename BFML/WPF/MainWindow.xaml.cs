@@ -39,6 +39,7 @@ public partial class MainWindow : Window
     {
         CheckIfUserPaid();
         ApplyLocalPrefs();
+        _skinPreviewRenderer.ChangeSkin(_user.SkinPath);
         Loaded -= OnWindowLoaded;
     }
 
@@ -76,14 +77,14 @@ public partial class MainWindow : Window
         SkinChangeResponse response = await _fileClient.SendSkinChangeRequest(_user.Nickname, files[0]);
         if (response.Success)
         {
-            Utils.SaveSkin(_user.SkinPath);
-            _skinPreviewRenderer.ChangeSkin(files[0]);
+            Utils.SaveSkin(files[0]);
+            _skinPreviewRenderer.ChangeSkin(_user.SkinPath);
         }
     }
     
     private void SkinPreviewOnRender(TimeSpan obj)
     {
-        _skinPreviewRenderer.Render();
+        _skinPreviewRenderer.Render((float)SkinSlider.Value);
     }
 
     #endregion

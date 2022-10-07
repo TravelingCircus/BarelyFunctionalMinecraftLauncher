@@ -284,10 +284,12 @@
             </StackPanel>
 
             <Slider
+                x:Name="SkinSlider"
                 Grid.Row="0"
                 Grid.Column="0"
                 Width="311"
                 Height="24"
+                Maximum="360"
                 Margin="30,642,59,34"
                 Style="{DynamicResource Horizontal_Slider}"
                 Template="{DynamicResource Slider2}" />

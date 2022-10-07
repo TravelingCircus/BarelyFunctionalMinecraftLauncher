@@ -7,8 +7,8 @@ namespace BFML._3D;
 
 public class RenderObject : SceneObject
 {
+    public Material Material { get; private set; }
     private Model _model;
-    private Material _material;
 
     private int _vertexArrayObject;     //this models space in V-RAM
     private int _verticesVBO;           //VertexBufferObject - array of vertices
@@ -40,7 +40,7 @@ public class RenderObject : SceneObject
             _vertexArrayObject = vertexArrayObject,
             _albedoUVsVBO = albedoUVsVBO,
             _verticesVBO = verticesVBO,
-            _material = material,
+            Material = material,
             _model = model
         };
     }
@@ -48,7 +48,7 @@ public class RenderObject : SceneObject
     public void Render(Camera camera)
     {
         GL.BindVertexArray(_vertexArrayObject);
-        _material.Use();
+        Material.Use();
 
         Matrix4 model = Matrix4.CreateFromQuaternion(Transform.Rotation) * Matrix4.CreateTranslation(Transform.Position);
         Matrix4 view = camera.GetViewMatrix();
@@ -56,7 +56,7 @@ public class RenderObject : SceneObject
             Matrix4.CreatePerspectiveFieldOfView(MathHelper.DegreesToRadians(45.0f), 350f / 550f, 0.1f, 100.0f);
         
         Matrix4 transform = model * view * projection;
-        _material.Shader.SetUniformMatrix4("transform", ref transform);
+        Material.Shader.SetUniformMatrix4("transform", ref transform);
         
         GL.DrawArrays(PrimitiveType.Triangles, 0, _model.Vertices.Length/3);
     }
@@ -65,6 +65,6 @@ public class RenderObject : SceneObject
     {
         GL.DeleteBuffer(_verticesVBO);
         GL.DeleteBuffer(_albedoUVsVBO);
-        _material.Shader.Dispose();
+        Material.Shader.Dispose();
     }
 }
