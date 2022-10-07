@@ -132,6 +132,8 @@ public partial class MainWindow : Window
     private void ApplyLocalPrefs()
     {
         RamSlider.Value = _localPrefs.DedicatedRAM;
+        NicknameText.Text = _user.Nickname;
+        ChangeLog.Text = _configVersion.Changelog;
     }
 
     private void CheckIfUserPaid()
