@@ -37,10 +37,11 @@ public partial class MainWindow : Window
 
     private void OnWindowLoaded(object sender, RoutedEventArgs args)
     {
+        Loaded -= OnWindowLoaded;
         CheckIfUserPaid();
         ApplyLocalPrefs();
         _skinPreviewRenderer.ChangeSkin(_user.SkinPath);
-        Loaded -= OnWindowLoaded;
+        if(_user.GryvnyasPaid < _launchConfig.RequiredGriwnas)DisablePlayButton();
     }
 
     private void OnPlayButton(object sender, RoutedEventArgs e)
@@ -50,7 +51,9 @@ public partial class MainWindow : Window
 
     private void DisablePlayButton()
     {
-        throw new NotImplementedException();
+        PlayButton.IsEnabled = false;
+        PlayButton.Content = "Not Paid";
+        PlayButton.Opacity = 0.5f;
     }
     
     #region PlayerModelRendering

@@ -99,11 +99,14 @@
                     FontFamily="Minecraft"
                     FontSize="26"
                     Foreground="#7d7d7d"
+                    Margin="10,0,0,0"
+                    Opacity="0.5"
                     Text="Drop Skin" />
                 <Image
                     Width="33"
                     Height="46"
-                    Margin="0,10,0,0"
+                    Opacity="0.5"
+                    Margin="10,10,0,0"
                     Source="/WPF/Images/PixelArrow.png" />
                 
             </StackPanel>
@@ -332,6 +335,7 @@
                 Template="{DynamicResource ToggleTemplate1}" />
 
             <Button
+                x:Name="PlayButton"
                 Grid.Row="0"
                 Grid.Column="1"
                 Width="360"
