@@ -37,7 +37,6 @@ public partial class MainWindow : Window
     private void OnWindowLoaded(object sender, RoutedEventArgs args)
     {
         CheckIfUserPaid();
-        ApplyLocalPrefs();
         Loaded -= OnWindowLoaded;
     }
 
@@ -134,5 +133,13 @@ public partial class MainWindow : Window
     private void ApplyLocalPrefs()
     {
         RamSlider.Value = _localPrefs.DedicatedRAM;
+    }
+
+    private void ExitAccount(object sender, RoutedEventArgs e)
+    {
+        LocalPrefs.Clear();
+        LogInWindow logInWindow = new LogInWindow(_fileClient, _launchConfig, _configVersion);
+        logInWindow.Show();
+        Close();
     }
 }

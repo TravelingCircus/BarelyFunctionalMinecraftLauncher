@@ -31,6 +31,7 @@ public sealed class LocalPrefs
     public static void SaveLocalPrefs(string nickname, string password)
     {
         if (!Directory.Exists(BFMLDirectoryPath)) Directory.CreateDirectory(BFMLDirectoryPath);
+        if (File.Exists(PrefsPath)) File.Delete(PrefsPath);
         using FileStream fileStream = new FileStream(PrefsPath, FileMode.OpenOrCreate);
         XmlSerializer xml = new XmlSerializer(typeof(LocalPrefs));
         xml.Serialize(fileStream, new LocalPrefs(nickname, password));
@@ -48,6 +49,11 @@ public sealed class LocalPrefs
         LocalPrefs prefs = (serializer.Deserialize(fileStream) as LocalPrefs)!;
         if (prefs is null) throw new InvalidDataException("Invalid local prefs xml stream");
         return prefs;
-        
+    }
+
+    public static void Clear()
+    {
+        File.Delete(PrefsPath);
+        SaveLocalPrefs("None", "None");
     }
 }

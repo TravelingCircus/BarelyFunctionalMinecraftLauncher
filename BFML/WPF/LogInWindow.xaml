@@ -152,7 +152,7 @@
                 Style="{DynamicResource TitleButton}" />
             <Button
                 Grid.Row="0"
-                Grid.Column="2"
+                Grid.Column="0"
                 Width="39"
                 Height="26"
                 Margin="322,0,39,374"
@@ -205,7 +205,7 @@
             </StackPanel>
             <StackPanel
                 Grid.Row="0"
-                Grid.Column="2"
+                Grid.Column="0"
                 Width="39"
                 Height="26"
                 Margin="322,0,39,374">

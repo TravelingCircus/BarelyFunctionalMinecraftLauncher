@@ -81,6 +81,8 @@ public partial class LogInWindow : Window
         LocalPrefs.SaveLocalPrefs(nickname, password);
         LocalPrefs localPrefs = LocalPrefs.GetLocalPrefs();
         MainWindow mainWindow = new MainWindow(_fileClient, newUser, localPrefs, _launchConfiguration, _version);
+        mainWindow.Show();
+        Close();
     }
 
     private async void LogInButtonOnClick(object sender, RoutedEventArgs e)
@@ -99,6 +101,8 @@ public partial class LogInWindow : Window
         LocalPrefs.SaveLocalPrefs(nickname, password);
         LocalPrefs localPrefs = LocalPrefs.GetLocalPrefs();
         MainWindow mainWindow = new MainWindow(_fileClient, newUser, localPrefs, _launchConfiguration, _version);
+        mainWindow.Show();
+        Close();
     }
 
     private void InputNicknameTextChanged(object sender, System.Windows.Controls.TextChangedEventArgs e)

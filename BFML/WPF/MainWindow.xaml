@@ -66,7 +66,8 @@
                     Margin="312,-36,0,0"
                     Background="#383838"
                     Cursor="Hand"
-                    Style="{DynamicResource Transparent}" />
+                    Style="{DynamicResource Transparent}"
+                    Click="ExitAccount"/>
                 <Image
                     Width="36"
                     Height="33"
