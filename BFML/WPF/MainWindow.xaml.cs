@@ -6,6 +6,7 @@ using OpenTK.Wpf;
 using System.Windows.Input;
 using BFML.Core;
 using CommonData.Models;
+using CommonData.Network.Messages.Skin;
 using TCPFileClient;
 
 namespace BFML.WPF;
@@ -37,15 +38,13 @@ public partial class MainWindow : Window
     private void OnWindowLoaded(object sender, RoutedEventArgs args)
     {
         CheckIfUserPaid();
+        ApplyLocalPrefs();
         Loaded -= OnWindowLoaded;
     }
 
-    private void CheckIfUserPaid()
+    private void OnPlayButton(object sender, RoutedEventArgs e)
     {
-        if (_user.GryvnyasPaid < _launchConfig.RequiredGriwnas)
-        {
-            //DisablePlayButton();
-        }
+        throw new NotImplementedException();
     }
 
     private void DisablePlayButton()
@@ -67,6 +66,21 @@ public partial class MainWindow : Window
         _skinPreviewRenderer.SetUp();
     }
     
+    private async void OnSkinFileDrop(object sender, DragEventArgs e)
+    {
+        if (!e.Data.GetDataPresent(DataFormats.FileDrop)) return;
+
+        string[] files = (string[])e.Data.GetData(DataFormats.FileDrop)!;
+        if (files.Length != 1) return;
+
+        SkinChangeResponse response = await _fileClient.SendSkinChangeRequest(_user.Nickname, files[0]);
+        if (response.Success)
+        {
+            Utils.SaveSkin(_user.SkinPath);
+            _skinPreviewRenderer.ChangeSkin(files[0]);
+        }
+    }
+    
     private void SkinPreviewOnRender(TimeSpan obj)
     {
         _skinPreviewRenderer.Render();
@@ -83,7 +97,7 @@ public partial class MainWindow : Window
             if (WindowState == WindowState.Maximized) 
             {
                 WindowState = WindowState.Normal;
-                Application.Current.MainWindow.Top = 3;
+                Application.Current.MainWindow!.Top = 3;
             }
             DragMove();
         }
@@ -93,7 +107,7 @@ public partial class MainWindow : Window
     {
         try
         {
-            App.Current.Shutdown();
+            Application.Current.Shutdown();
         }
         catch (Exception ex)
         {
@@ -104,7 +118,7 @@ public partial class MainWindow : Window
     {
         try
         {
-            this.WindowState = WindowState.Minimized;
+            WindowState = WindowState.Minimized;
         }
         catch (Exception ex)
         {
@@ -114,27 +128,19 @@ public partial class MainWindow : Window
 
     #endregion
 
-    private async void OnSkinFileDrop(object sender, DragEventArgs e)
-    {
-        if (!e.Data.GetDataPresent(DataFormats.FileDrop)) return;
-
-        string[] files = (string[])e.Data.GetData(DataFormats.FileDrop);
-        string pngDirectory = Path.GetDirectoryName(files[0]);
-        string pngName = Path.GetFileName(files[0]);
-
-        await _fileClient.SendSkinChangeRequest(_user.Nickname, pngDirectory, pngName);
-    }
-
-    private void OnPlayButton(object sender, RoutedEventArgs e)
-    {
-        throw new NotImplementedException();
-    }
-    
     private void ApplyLocalPrefs()
     {
         RamSlider.Value = _localPrefs.DedicatedRAM;
     }
 
+    private void CheckIfUserPaid()
+    {
+        if (_user.GryvnyasPaid < _launchConfig.RequiredGriwnas)
+        {
+            //DisablePlayButton();
+        }
+    }
+    
     private void ExitAccount(object sender, RoutedEventArgs e)
     {
         LocalPrefs.Clear();

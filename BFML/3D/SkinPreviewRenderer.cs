@@ -9,8 +9,7 @@ public class SkinPreviewRenderer
     private Camera _camera;
     private RenderObject _skinPreviewRenderObject;
     private RenderObject _dustRenderObject;
-
-
+    
     public void SetUp()
     {
         _camera = new Camera(
@@ -40,5 +39,10 @@ public class SkinPreviewRenderer
         GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
 
         _skinPreviewRenderObject.Render(_camera);
+    }
+
+    public void ChangeSkin(string pngPath)
+    {
+        
     }
 }

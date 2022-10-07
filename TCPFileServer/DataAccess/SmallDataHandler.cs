@@ -67,7 +67,8 @@ public sealed class SmallDataHandler: DataHandler
     public string SaveSkin(string nickname, byte[] data)
     {
         string skinPath = _skinsDirectory + nickname + ".png";
-        using FileStream fileStream = new FileStream(skinPath, FileMode.OpenOrCreate);
+        if(File.Exists(skinPath))File.Delete(skinPath);
+        using FileStream fileStream = new FileStream(skinPath, FileMode.Create);
         fileStream.Write(data, 0, data.Length);
         return skinPath;
     }

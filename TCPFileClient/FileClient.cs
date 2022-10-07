@@ -54,7 +54,7 @@ public sealed class FileClient
     public async Task<LoginResponse> SendLoginRequest(User user)
     {
         LoginResponse response = (LoginResponse)await GetResponseFor(new LoginRequest(user.Nickname, user.PasswordHash));
-
+        
         string skinPath = _minecraftPath + @"\BFML\skin.png";
         await using FileStream stream = File.Open(skinPath, FileMode.OpenOrCreate);
         stream.Write(response.SkinData, 0, response.SkinData.Length);
@@ -63,15 +63,14 @@ public sealed class FileClient
         return response;
     }
     
-    public async Task<SkinChangeResponse> SendSkinChangeRequest(string nickname, string pngDirectory, string pngName)
+    public async Task<SkinChangeResponse> SendSkinChangeRequest(string nickname, string filePath)
     {
-        DirectoryInfo directoryInfo = new DirectoryInfo(pngDirectory);
-        int bytesLength = (int)directoryInfo.GetFiles(pngName)[0].Length;
+        DirectoryInfo directoryInfo = new DirectoryInfo(Path.GetDirectoryName(filePath)!);
+        int bytesLength = (int)directoryInfo.GetFiles(Path.GetFileName(filePath))[0].Length;
 
         byte[] bytes = new byte[bytesLength];
-        string pngPath = pngDirectory + @"\{pngName}";
-        
-        await using FileStream fileStream = new FileStream(pngPath, FileMode.Open);
+
+        await using FileStream fileStream = new FileStream(filePath, FileMode.Open);
         _ = fileStream.Read(bytes, 0, bytesLength);
         
         Message response = await GetResponseFor(new SkinChangeRequest(nickname, bytes, bytesLength));
