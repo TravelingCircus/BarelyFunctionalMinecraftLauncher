@@ -35,6 +35,10 @@ public sealed class LineByLineReader : IDisposable
         ReadOnlyMemory<char> result = LineReadDelegate.Invoke();
         _position += result.Length+1;
         if (_position >= _bufferLength - 1) SwapBuffers();
+        if (result.Length > 1 && result.Span[^1] == '\r')
+        {
+            return result.Slice(0, result.Length - 1);
+        }
         return result;
     }
 
@@ -66,8 +70,8 @@ public sealed class LineByLineReader : IDisposable
             if (iteratorPosition + 1 >= _bufferLength) return GetNextLineOnVerge();
             iteratorPosition++;
         }
-        var result = _activeBuffer.ReadOnlyMemory.Slice(_position, iteratorPosition - _position);
-
+        ReadOnlyMemory<char> result = _activeBuffer.ReadOnlyMemory.Slice(_position, iteratorPosition - _position);
+        
         return result;
     }
 
