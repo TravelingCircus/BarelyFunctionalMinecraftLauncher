@@ -5,6 +5,8 @@ using BFML._3D;
 using OpenTK.Wpf;
 using System.Windows.Input;
 using BFML.Core;
+using CmlLib.Core;
+using CmlLib.Core.Auth;
 using CommonData.Models;
 using CommonData.Network.Messages.Skin;
 using TCPFileClient;
@@ -36,19 +38,29 @@ public partial class MainWindow : Window
         Loaded += OnWindowLoaded;
     }
 
-    private void OnWindowLoaded(object sender, RoutedEventArgs args)
+    private async void OnWindowLoaded(object sender, RoutedEventArgs args)
     {
         Loaded -= OnWindowLoaded;
         CheckIfUserPaid();
         ApplyLocalPrefs();
         _skinPreviewRenderer.ChangeSkin(_user.SkinPath);
-        _game = new Game(_fileClient, _launchConfig);
+        _game = await Game.SetUp(_fileClient, _launchConfig);
     }
 
     private async void OnPlayButton(object sender, RoutedEventArgs e)
     {
         if(_game is null) return;
         PlayButton.IsEnabled = false;
+        
+        // var path = new MinecraftPath();
+        // var launcher = new CMLauncher(path);
+        // var process = await launcher.CreateProcessAsync("1.16.5", new MLaunchOption
+        // {
+        //     MaximumRamMb = 2048,
+        //     Session = MSession.GetOfflineSession("hello123"),
+        // });
+        //
+        // process.Start();
         
         if (!_game.IsReadyToLaunch()) await _game.CleanInstall();
         _game.Launch((int)RamSlider.Value, false, _user.Nickname);

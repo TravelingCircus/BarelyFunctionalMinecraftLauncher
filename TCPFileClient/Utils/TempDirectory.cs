@@ -13,13 +13,13 @@ public sealed class TempDirectory : IDisposable
     {
         string path = Path.GetTempPath() 
                       + "BFMLTemp" 
-                      + new Random().Next() % 100;
+                      + new Random().Next(9999);
 
         return Directory.CreateDirectory(path);
     }
     
     public void Dispose()
     {
-        Directory.Delete(Info.FullName);
+        Info.Delete(true);
     }
 }

@@ -22,15 +22,28 @@ public sealed class Game
     private readonly MinecraftPath _minecraftPath;
     private readonly LaunchConfiguration _launchConfiguration;
 
-    public Game(FileClient fileClient, LaunchConfiguration launchConfiguration)
+    private Game(FileClient fileClient, LaunchConfiguration launchConfiguration, CMLauncher launcher, Vanilla vanilla, Forge forge, MinecraftPath path)
     {
+        _minecraftPath = path;
         _launchConfiguration = launchConfiguration;
         _fileClient = fileClient;
-        _minecraftPath = new MinecraftPath();
-        Vanilla = new Vanilla(new MVersion(launchConfiguration.VanillaVersion), _minecraftPath);
-        Forge = new Forge(new MVersion(launchConfiguration.ForgeVersion), _minecraftPath);
+        Vanilla = vanilla;
+        Forge = forge;
         Mods = new Mods(_minecraftPath);
-        _launcher = new CMLauncher(_minecraftPath);
+        _launcher = launcher;
+    }
+
+    public static async Task<Game> SetUp(FileClient fileClient, LaunchConfiguration launchConfiguration)
+    {
+        MinecraftPath minecraftPath = new MinecraftPath();
+        CMLauncher launcher = new CMLauncher(minecraftPath);
+        MVersion vanillaVersion = await launcher.GetVersionAsync(launchConfiguration.VanillaVersion);
+        MVersion forgeVersion = new MVersion(launchConfiguration.ForgeVersion);
+        forgeVersion.InheritFrom(vanillaVersion);
+        Vanilla vanilla = new Vanilla(vanillaVersion, minecraftPath);
+        Forge forge = new Forge(forgeVersion, minecraftPath);
+        
+        return new Game(fileClient, launchConfiguration, launcher, vanilla, forge, minecraftPath);
     }
 
     public void Launch(int ram, bool fullScreen, string nickname)
@@ -47,13 +60,22 @@ public sealed class Game
     
     public async Task CleanInstall()
     {
-        DeleteAllFiles();
-        await InstallMinecraft().ConfigureAwait(false);
-        Task[] tasks = {
-            InstallForge(),
-            InstallMods()
-        };
-        await Task.WhenAll(tasks).ConfigureAwait(false);
+        using (TempDirectory tempDirectory = new TempDirectory())
+        {
+            //DirectoryInfo bfmlDirectory = new DirectoryInfo(_minecraftPath.BasePath + @"\BFML");
+            //bfmlDirectory.MoveTo(tempDirectory.Info.FullName + @"\" + bfmlDirectory.Name);
+            
+            DeleteAllFiles();
+            await _launcher.CheckAndDownloadAsync(Forge.Version);
+            Task[] tasks =
+            {
+                InstallForge(),
+                InstallMods()
+            };
+            await Task.WhenAll(tasks);
+            
+            //bfmlDirectory.MoveTo(_minecraftPath.BasePath + @"\BFML");
+        }
     }
 
     public bool IsReadyToLaunch()
@@ -69,20 +91,7 @@ public sealed class Game
         string minecraftDirectory = _minecraftPath.BasePath;
         if (!Directory.Exists(minecraftDirectory)) return;
         DirectoryInfo directoryInfo = new DirectoryInfo(minecraftDirectory);
-        foreach (FileInfo file in directoryInfo.GetFiles())
-        {
-            file.Delete();
-        }
-        foreach (DirectoryInfo directory in directoryInfo.GetDirectories())
-        {
-            if (directory.Name != "BFML") directory.Delete();
-        }
-
-    }
-
-    private Task InstallMinecraft()
-    {
-        return _launcher.CheckAndDownloadAsync(Vanilla.Version);
+        directoryInfo.Delete(true);
     }
 
     private async Task InstallForge()
