@@ -36,22 +36,21 @@ public partial class MainWindow : Window
         Loaded += OnWindowLoaded;
     }
 
-    private async void OnWindowLoaded(object sender, RoutedEventArgs args)
+    private void OnWindowLoaded(object sender, RoutedEventArgs args)
     {
         Loaded -= OnWindowLoaded;
         CheckIfUserPaid();
         ApplyLocalPrefs();
         _skinPreviewRenderer.ChangeSkin(_user.SkinPath);
-        _game = await Game.SetUp(_fileClient, _launchConfig);
+        _game = new Game(_fileClient, _launchConfig);
     }
 
     private async void OnPlayButton(object sender, RoutedEventArgs e)
     {
         if(_game is null) return;
-        if (!_game.IsReadyToLaunch())
-        {
-            await _game.CleanInstall();
-        }
+        PlayButton.IsEnabled = false;
+        
+        if (!_game.IsReadyToLaunch()) await _game.CleanInstall();
         _game.Launch((int)RamSlider.Value, false, _user.Nickname);
     }
 

@@ -1,5 +1,4 @@
-﻿using System;
-using CmlLib.Core;
+﻿using CmlLib.Core;
 using CmlLib.Core.Version;
 
 namespace BFML.Core;
@@ -17,6 +16,6 @@ public sealed class Vanilla
 
     public bool IsInstalled()
     {
-        throw new NotImplementedException();
+        return _path.Versions.Contains(Version.Id);
     }
 }

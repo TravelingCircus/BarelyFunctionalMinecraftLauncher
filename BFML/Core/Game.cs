@@ -22,33 +22,21 @@ public sealed class Game
     private readonly MinecraftPath _minecraftPath;
     private readonly LaunchConfiguration _launchConfiguration;
 
-    private Game(FileClient fileClient, MinecraftPath minecraftPath, Vanilla vanilla, Forge forge, Mods mods)
+    public Game(FileClient fileClient, LaunchConfiguration launchConfiguration)
     {
+        _launchConfiguration = launchConfiguration;
         _fileClient = fileClient;
-        _minecraftPath = minecraftPath;
-        Vanilla = vanilla;
-        Forge = forge;
-        Mods = mods;
+        _minecraftPath = new MinecraftPath();
+        Vanilla = new Vanilla(new MVersion(launchConfiguration.VanillaVersion), _minecraftPath);
+        Forge = new Forge(new MVersion(launchConfiguration.ForgeVersion), _minecraftPath);
+        Mods = new Mods(_minecraftPath);
         _launcher = new CMLauncher(_minecraftPath);
-    }
-
-    public static Task<Game> SetUp(FileClient fileClient, LaunchConfiguration configuration)
-    {
-        MinecraftPath path = new MinecraftPath();
-        MVersion vanillaVersion = new MVersion(configuration.VanillaVersion);
-        MVersion forgeVersion = new MVersion(configuration.ForgeVersion);
-        forgeVersion.InheritFrom(vanillaVersion);
-        
-        return Task.FromResult(new Game(fileClient, path,
-            new Vanilla(vanillaVersion, path),
-            new Forge(forgeVersion, path),
-            new Mods(path)));
     }
 
     public void Launch(int ram, bool fullScreen, string nickname)
     {
         System.Net.ServicePointManager.DefaultConnectionLimit = 256;
-        Process process = _launcher.CreateProcess(Forge.Version, new MLaunchOption
+        Process process = _launcher.CreateProcess(Vanilla.Version, new MLaunchOption
         {
             MaximumRamMb = ram,
             Session = MSession.GetOfflineSession(nickname),
