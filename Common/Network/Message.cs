@@ -6,13 +6,13 @@ public abstract class Message
 {
     public abstract MessageHeader GetHeader();
 
-    public Task WriteDataTo(Stream targetStream)
+    public virtual Task WriteDataTo(Stream targetStream)
     {
         using Stream source = GetData();
         source.Flush();
         source.Position = 0;
         byte[] buffer = new byte[source.Length];
-        source.Read(buffer, 0, buffer.Length);
+        _ = source.Read(buffer, 0, buffer.Length);
         return targetStream.WriteAsync(buffer, 0, buffer.Length);
     }
 

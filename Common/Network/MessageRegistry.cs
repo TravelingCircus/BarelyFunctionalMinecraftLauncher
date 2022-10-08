@@ -15,13 +15,14 @@ public static class MessageRegistry
         {2, typeof(RegistrationResponse)},
         {3, typeof(LoginRequest)},
         {4, typeof(LoginResponse)},
-        {5, typeof(ForgeDownloadRequest)},
-        {6, typeof(LaunchConfigurationRequest)},
-        {7, typeof(LaunchConfigurationResponse)},
-        {8, typeof(ConfigVersionRequest)},
-        {9, typeof(ConfigVersionResponse)},
-        {10, typeof(SkinChangeRequest)},
-        {11, typeof(SkinChangeResponse)}
+        {5, typeof(LaunchConfigurationRequest)},
+        {6, typeof(LaunchConfigurationResponse)},
+        {7, typeof(ConfigVersionRequest)},
+        {8, typeof(ConfigVersionResponse)},
+        {9, typeof(SkinChangeRequest)},
+        {10, typeof(SkinChangeResponse)},
+        {11, typeof(ForgeDownloadRequest)},
+        {12, typeof(ForgeDownloadResponse)}
     };
 
     public static Message GetMessageFor(MessageHeader header)

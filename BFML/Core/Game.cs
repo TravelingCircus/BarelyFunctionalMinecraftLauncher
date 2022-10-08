@@ -7,6 +7,7 @@ using CmlLib.Core.Auth;
 using CmlLib.Core.Version;
 using CommonData;
 using CommonData.Models;
+using CommonData.Network.Messages;
 using TCPFileClient;
 using TCPFileClient.Utils;
 
@@ -103,8 +104,11 @@ public sealed class Game
 
     private async Task InstallForge()
     {
-        string forgeFilesZip = await _fileClient.DownloadForgeFiles();
-        await Forge.Install(forgeFilesZip).ConfigureAwait(false);
+        using (TempDirectory tempDirectory = new TempDirectory())
+        {
+            ForgeDownloadResponse response = await _fileClient.DownloadForgeFiles(tempDirectory.Info.FullName);
+            await Forge.Install(response.TempForgePath);
+        }
     }
     
     private async Task InstallMods()

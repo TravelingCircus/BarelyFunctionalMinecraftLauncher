@@ -1,11 +1,11 @@
 ﻿namespace TCPFileServer.DataAccess;
 
-public sealed class BorrowableReadonlyStream : Stream
+public sealed class BorrowableFileStream : Stream
 {
     private DataHandler _dataHandler;
     private FileStream _stream;
 
-    public BorrowableReadonlyStream(FileStream stream, DataHandler dataHandler)
+    public BorrowableFileStream(FileStream stream, DataHandler dataHandler)
     {
         _stream = stream;
         _dataHandler = dataHandler;

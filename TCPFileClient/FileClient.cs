@@ -1,7 +1,9 @@
 ﻿using System.Collections.Concurrent;
+using System.IO.Compression;
 using System.Net.Sockets;
 using CommonData.Models;
 using CommonData.Network;
+using CommonData.Network.Messages;
 using CommonData.Network.Messages.LaunchConfiguration;
 using CommonData.Network.Messages.Login;
 using CommonData.Network.Messages.Registration;
@@ -27,12 +29,7 @@ public sealed class FileClient
     }
 
     #region Interface
-
-    public Task<string> DownloadForgeFiles()
-    {
-        throw new NotImplementedException();
-    }
-
+    
     public async Task<LaunchConfiguration> DownloadLaunchConfiguration()
     {
         Message response = await GetResponseFor(new LaunchConfigurationRequest());
@@ -80,6 +77,20 @@ public sealed class FileClient
         
         Message response = await GetResponseFor(new SkinChangeRequest(nickname, bytes, bytesLength));
         return (SkinChangeResponse)response;
+    }
+    
+    public async Task<ForgeDownloadResponse> DownloadForgeFiles(string tempDirectoryPath)
+    {
+        string tempForgePath = tempDirectoryPath + @"\forge.zip";
+        ForgeDownloadResponse response = (ForgeDownloadResponse)await GetResponseFor(new ForgeDownloadRequest());
+        response.TempForgePath = tempForgePath;
+
+        await using FileStream fileStream = new FileStream(response.TempForgePath, FileMode.OpenOrCreate);
+        await fileStream.WriteAsync(response.ForgeBytes, 0, response.ForgeBytesLength);
+        await fileStream.FlushAsync();
+        response.ForgeBytes = null!;
+        
+        return response;
     }
 
     #endregion

@@ -1,6 +1,7 @@
 ﻿using System.Net;
 using System.Net.Sockets;
 using CommonData.Network;
+using CommonData.Network.Messages;
 using CommonData.Network.Messages.LaunchConfiguration;
 using CommonData.Network.Messages.Login;
 using CommonData.Network.Messages.Registration;
@@ -35,6 +36,7 @@ public class Server
         HandlerPicker.RegisterHandler(nameof(LaunchConfigurationRequest), new LaunchConfigurationHandler(repository));
         HandlerPicker.RegisterHandler(nameof(ConfigVersionRequest), new ConfigVersionHandler(repository));
         HandlerPicker.RegisterHandler(nameof(SkinChangeRequest), new SkinChangeHandler(repository));
+        HandlerPicker.RegisterHandler(nameof(ForgeDownloadRequest), new ForgeDownloadHandler(repository));
         //TODO properly register handlers
         
         _tcpListener.Start();

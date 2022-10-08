@@ -145,13 +145,13 @@ public sealed class Repository
 
     #region LargeDataInterface
 
-    public async Task<BorrowableReadonlyStream> GetForgeArchiveStream()
+    public async Task<BorrowableFileStream> GetForgeArchiveStream()
     {
         LargeDataHandler dataHandler = await _largeDataHandlerQueue.GetDataHandler();
         return dataHandler.GetForgeArchiveStream();
     }
     
-    public async Task<BorrowableReadonlyStream> GetModsArchiveStream()
+    public async Task<BorrowableFileStream> GetModsArchiveStream()
     {
         LargeDataHandler dataHandler = await _largeDataHandlerQueue.GetDataHandler();
         return dataHandler.GetModsArchiveStream();

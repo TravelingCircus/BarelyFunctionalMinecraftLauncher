@@ -14,15 +14,17 @@ public sealed class LargeDataHandler: DataHandler
         _modsArchivePath = repositoryPath + @"Mods\";
     }
     
-    public BorrowableReadonlyStream GetForgeArchiveStream()
+    public BorrowableFileStream GetForgeArchiveStream()
     {
-        FileStream underlyingStream = File.OpenRead(_forgeArchivePath);
-        return new BorrowableReadonlyStream(underlyingStream, this);
+        DirectoryInfo directoryInfo = new DirectoryInfo(_forgeArchivePath);
+        FileInfo[] files = directoryInfo.GetFiles();
+        FileStream underlyingStream = File.OpenRead(files[0].FullName);
+        return new BorrowableFileStream(underlyingStream, this);
     }
 
-    public BorrowableReadonlyStream GetModsArchiveStream()
+    public BorrowableFileStream GetModsArchiveStream()
     {
         FileStream underlyingStream = File.OpenRead(_modsArchivePath);
-        return new BorrowableReadonlyStream(underlyingStream, this);
+        return new BorrowableFileStream(underlyingStream, this);
     }
 }
