@@ -62,6 +62,11 @@ public sealed class FileClient
 
         return response;
     }
+
+    public async Task DownloadMods(string directory)
+    {
+        throw new NotImplementedException();
+    }
     
     public async Task<SkinChangeResponse> SendSkinChangeRequest(string nickname, string filePath)
     {

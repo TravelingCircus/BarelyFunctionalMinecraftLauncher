@@ -16,4 +16,9 @@ public class Mods
     {
         throw new NotImplementedException();
     }
+
+    public void InstallFromFolder(string sourcePath)
+    {
+        
+    }
 }

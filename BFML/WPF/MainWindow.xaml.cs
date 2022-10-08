@@ -19,8 +19,9 @@ public partial class MainWindow : Window
     private readonly ConfigurationVersion _configVersion;
     private readonly LaunchConfiguration _launchConfig;
     private SkinPreviewRenderer _skinPreviewRenderer;
+    private Game _game;
 
-    public MainWindow(FileClient fileClient, User user, LocalPrefs localPrefs, 
+    public MainWindow(FileClient fileClient, User user, LocalPrefs localPrefs,
        LaunchConfiguration launchConfig, ConfigurationVersion configVersion)
     {
         InitializeComponent();
@@ -35,27 +36,25 @@ public partial class MainWindow : Window
         Loaded += OnWindowLoaded;
     }
 
-    private void OnWindowLoaded(object sender, RoutedEventArgs args)
+    private async void OnWindowLoaded(object sender, RoutedEventArgs args)
     {
         Loaded -= OnWindowLoaded;
         CheckIfUserPaid();
         ApplyLocalPrefs();
         _skinPreviewRenderer.ChangeSkin(_user.SkinPath);
-        if(_user.GryvnyasPaid < _launchConfig.RequiredGriwnas)DisablePlayButton();
+        _game = await Game.SetUp(_fileClient, _launchConfig);
     }
 
-    private void OnPlayButton(object sender, RoutedEventArgs e)
+    private async void OnPlayButton(object sender, RoutedEventArgs e)
     {
-        throw new NotImplementedException();
+        if(_game is null) return;
+        if (!_game.IsReadyToLaunch())
+        {
+            await _game.CleanInstall();
+        }
+        _game.Launch((int)RamSlider.Value, false, _user.Nickname);
     }
 
-    private void DisablePlayButton()
-    {
-        PlayButton.IsEnabled = false;
-        PlayButton.Content = "Not Paid";
-        PlayButton.Opacity = 0.5f;
-    }
-    
     #region PlayerModelRendering
 
     private void SetUpSkinRenderer()
@@ -143,8 +142,15 @@ public partial class MainWindow : Window
     {
         if (_user.GryvnyasPaid < _launchConfig.RequiredGriwnas)
         {
-            //DisablePlayButton();
+            DisablePlayButton();
         }
+    }
+    
+    private void DisablePlayButton()
+    {
+        PlayButton.IsEnabled = false;
+        PlayButton.Content = "Not Paid";
+        PlayButton.Opacity = 0.5f;
     }
     
     private void ExitAccount(object sender, RoutedEventArgs e)

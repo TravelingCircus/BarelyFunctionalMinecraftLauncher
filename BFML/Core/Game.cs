@@ -8,6 +8,7 @@ using CmlLib.Core.Version;
 using CommonData;
 using CommonData.Models;
 using TCPFileClient;
+using TCPFileClient.Utils;
 
 namespace BFML.Core;
 
@@ -19,6 +20,7 @@ public sealed class Game
     private readonly FileClient _fileClient;
     private readonly CMLauncher _launcher;
     private readonly MinecraftPath _minecraftPath;
+    private readonly LaunchConfiguration _launchConfiguration;
 
     private Game(FileClient fileClient, MinecraftPath minecraftPath, Vanilla vanilla, Forge forge, Mods mods)
     {
@@ -30,33 +32,32 @@ public sealed class Game
         _launcher = new CMLauncher(_minecraftPath);
     }
 
-    public static async Task<Game> SetUp(FileClient fileClient)
+    public static Task<Game> SetUp(FileClient fileClient, LaunchConfiguration configuration)
     {
-        LaunchConfiguration configuration = await fileClient.DownloadLaunchConfiguration();
-
         MinecraftPath path = new MinecraftPath();
         MVersion vanillaVersion = new MVersion(configuration.VanillaVersion);
-        MVersion forgeVersion = new MVersion(configuration.VanillaVersion+"-forge-"+configuration.ForgeVersion);
+        MVersion forgeVersion = new MVersion(configuration.ForgeVersion);
         forgeVersion.InheritFrom(vanillaVersion);
         
-        return new Game(fileClient, path,
+        return Task.FromResult(new Game(fileClient, path,
             new Vanilla(vanillaVersion, path),
             new Forge(forgeVersion, path),
-            new Mods(path));
+            new Mods(path)));
     }
 
-    public void Launch()
+    public void Launch(int ram, bool fullScreen, string nickname)
     {
         System.Net.ServicePointManager.DefaultConnectionLimit = 256;
         Process process = _launcher.CreateProcess(Forge.Version, new MLaunchOption
         {
-            MaximumRamMb = 8192, //TODO Get values from somewhere other than my own ass
-            Session = MSession.GetOfflineSession("BFML_TEST")
+            MaximumRamMb = ram,
+            Session = MSession.GetOfflineSession(nickname),
+            FullScreen = fullScreen
         },false);
         process.Start();
     }
     
-    public async Task Install()
+    public async Task CleanInstall()
     {
         DeleteAllFiles();
         await InstallMinecraft().ConfigureAwait(false);
@@ -69,16 +70,26 @@ public sealed class Game
 
     public bool IsReadyToLaunch()
     {
-        throw new NotImplementedException();
-        return Forge.IsInstalled();
+        return
+            Vanilla.IsInstalled()
+            && Forge.IsInstalled() 
+            && Mods.ChecksumMatches(_launchConfiguration.ModsChecksum);
     }
 
     public void DeleteAllFiles()
     {
         string minecraftDirectory = _minecraftPath.BasePath;
         if (!Directory.Exists(minecraftDirectory)) return;
-        
-        Directory.Delete(minecraftDirectory);
+        DirectoryInfo directoryInfo = new DirectoryInfo(minecraftDirectory);
+        foreach (FileInfo file in directoryInfo.GetFiles())
+        {
+            file.Delete();
+        }
+        foreach (DirectoryInfo directory in directoryInfo.GetDirectories())
+        {
+            if (directory.Name != "BFML") directory.Delete();
+        }
+
     }
 
     private Task InstallMinecraft()
@@ -92,8 +103,12 @@ public sealed class Game
         await Forge.Install(forgeFilesZip).ConfigureAwait(false);
     }
     
-    private Task InstallMods()
+    private async Task InstallMods()
     {
-        throw new NotImplementedException();
+        using (TempDirectory tempDirectory = new TempDirectory())
+        {
+            await _fileClient.DownloadMods(tempDirectory.Info.FullName);
+            Mods.InstallFromFolder(tempDirectory.Info.FullName);
+        }
     }
 }
