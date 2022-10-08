@@ -58,23 +58,30 @@ public sealed class Game
         process.Start();
     }
     
-    public async Task CleanInstall()
+    public async Task CleanInstall(IProgress<double> progress)
     {
         using (TempDirectory tempDirectory = new TempDirectory())
         {
-            //DirectoryInfo bfmlDirectory = new DirectoryInfo(_minecraftPath.BasePath + @"\BFML");
-            //bfmlDirectory.MoveTo(tempDirectory.Info.FullName + @"\" + bfmlDirectory.Name);
-            
-            DeleteAllFiles();
-            await _launcher.CheckAndDownloadAsync(Forge.Version);
-            Task[] tasks =
+            DirectoryInfo bfmlDirectory = new DirectoryInfo(_minecraftPath.BasePath + @"\BFML");
+            bfmlDirectory.MoveTo(tempDirectory.Info.FullName + @"\" + bfmlDirectory.Name);
+
+            try
             {
-                InstallForge(),
-                InstallMods()
-            };
-            await Task.WhenAll(tasks);
+                DeleteAllFiles();
+                await _launcher.CheckAndDownloadAsync(Forge.Version);
+                Task[] tasks =
+                {
+                    InstallForge(),
+                    InstallMods()
+                };
+                await Task.WhenAll(tasks);
+            }
+            finally
+            {
+                
+            }
             
-            //bfmlDirectory.MoveTo(_minecraftPath.BasePath + @"\BFML");
+            bfmlDirectory.MoveTo(_minecraftPath.BasePath + @"\BFML");
         }
     }
 

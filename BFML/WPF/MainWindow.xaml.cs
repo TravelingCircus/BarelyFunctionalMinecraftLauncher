@@ -52,16 +52,6 @@ public partial class MainWindow : Window
         if(_game is null) return;
         PlayButton.IsEnabled = false;
         
-        // var path = new MinecraftPath();
-        // var launcher = new CMLauncher(path);
-        // var process = await launcher.CreateProcessAsync("1.16.5", new MLaunchOption
-        // {
-        //     MaximumRamMb = 2048,
-        //     Session = MSession.GetOfflineSession("hello123"),
-        // });
-        //
-        // process.Start();
-        
         if (!_game.IsReadyToLaunch()) await _game.CleanInstall();
         _game.Launch((int)RamSlider.Value, false, _user.Nickname);
     }
