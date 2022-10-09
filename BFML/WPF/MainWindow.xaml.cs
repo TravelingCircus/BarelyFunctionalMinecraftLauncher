@@ -49,7 +49,7 @@ public partial class MainWindow : Window
 
     private async void OnPlayButton(object sender, RoutedEventArgs e)
     {
-        _ = await _fileClient.DownloadForgeFiles(@"D:\Home\Desktope\TestForgeDownload");
+        _ = await _fileClient.DownloadForgeFiles(@"C:\Users\maksy\Desktope\TestTarget");
         /*throw new NotImplementedException();
         if(_game is null) return;
         PlayButton.IsEnabled = false;

@@ -79,7 +79,7 @@ public sealed class Game
             }
             finally
             {
-                
+                throw new NotImplementedException();
             }
             
             bfmlDirectory.MoveTo(_minecraftPath.BasePath + @"\BFML");
