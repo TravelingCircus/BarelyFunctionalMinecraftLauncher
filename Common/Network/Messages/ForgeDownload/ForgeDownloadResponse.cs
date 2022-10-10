@@ -1,6 +1,6 @@
 ﻿namespace CommonData.Network.Messages;
 
-public class ForgeDownloadResponse: Message
+public class ForgeDownloadResponse : Message
 {
     public string TempForgePath;
     public int ForgeBytesLength;
