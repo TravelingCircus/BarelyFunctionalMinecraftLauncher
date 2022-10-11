@@ -32,6 +32,7 @@ public class ForgeDownloadResponse : Message
     
     public override async Task WriteDataTo(Stream targetStream)
     {
+        WriteToStream(targetStream, ForgeBytesLength);
         byte[] buffer = new byte[67108864];
         int lastRead = 0;
         WriteToStream(targetStream, ForgeBytesLength);
