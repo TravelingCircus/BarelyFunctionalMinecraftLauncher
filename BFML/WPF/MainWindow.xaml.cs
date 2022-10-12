@@ -49,14 +49,11 @@ public partial class MainWindow : Window
 
     private async void OnPlayButton(object sender, RoutedEventArgs e)
     {
-        _ = await _fileClient.DownloadForgeFiles(@"C:\Users\maksy\Desktope\TestTarget");
-        /*throw new NotImplementedException();
         if(_game is null) return;
         PlayButton.IsEnabled = false;
         
         if (!_game.IsReadyToLaunch()) await _game.CleanInstall(null);
-        _game.Launch((int)RamSlider.Value, false, _user.Nickname);*/
-
+        _game.Launch((int)RamSlider.Value, false, _user.Nickname);
     }
 
     #region PlayerModelRendering

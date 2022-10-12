@@ -23,7 +23,8 @@ public sealed class Game
     private readonly MinecraftPath _minecraftPath;
     private readonly LaunchConfiguration _launchConfiguration;
 
-    private Game(FileClient fileClient, LaunchConfiguration launchConfiguration, CMLauncher launcher, Vanilla vanilla, Forge forge, MinecraftPath path)
+    private Game(FileClient fileClient, LaunchConfiguration launchConfiguration, CMLauncher launcher, Vanilla vanilla,
+        Forge forge, MinecraftPath path)
     {
         _minecraftPath = path;
         _launchConfiguration = launchConfiguration;
@@ -43,7 +44,7 @@ public sealed class Game
         forgeVersion.InheritFrom(vanillaVersion);
         Vanilla vanilla = new Vanilla(vanillaVersion, minecraftPath);
         Forge forge = new Forge(forgeVersion, minecraftPath);
-        
+
         return new Game(fileClient, launchConfiguration, launcher, vanilla, forge, minecraftPath);
     }
 
@@ -55,42 +56,27 @@ public sealed class Game
             MaximumRamMb = ram,
             Session = MSession.GetOfflineSession(nickname),
             FullScreen = fullScreen
-        },false);
+        }, false);
         process.Start();
     }
-    
+
     public async Task CleanInstall(IProgress<double> progress)
     {
-        using (TempDirectory tempDirectory = new TempDirectory())
+        DeleteAllFiles();
+        await _launcher.CheckAndDownloadAsync(Forge.Version);
+        Task[] tasks =
         {
-            DirectoryInfo bfmlDirectory = new DirectoryInfo(_minecraftPath.BasePath + @"\BFML");
-            bfmlDirectory.MoveTo(tempDirectory.Info.FullName + @"\" + bfmlDirectory.Name);
-
-            try
-            {
-                DeleteAllFiles();
-                await _launcher.CheckAndDownloadAsync(Forge.Version);
-                Task[] tasks =
-                {
-                    InstallForge(),
-                    InstallMods()
-                };
-                await Task.WhenAll(tasks);
-            }
-            finally
-            {
-                throw new NotImplementedException();
-            }
-            
-            bfmlDirectory.MoveTo(_minecraftPath.BasePath + @"\BFML");
-        }
+            InstallForge(),
+            InstallMods()
+        };
+        await Task.WhenAll(tasks);
     }
 
     public bool IsReadyToLaunch()
     {
         return
             Vanilla.IsInstalled()
-            && Forge.IsInstalled() 
+            && Forge.IsInstalled()
             && Mods.ChecksumMatches(_launchConfiguration.ModsChecksum);
     }
 
@@ -99,7 +85,15 @@ public sealed class Game
         string minecraftDirectory = _minecraftPath.BasePath;
         if (!Directory.Exists(minecraftDirectory)) return;
         DirectoryInfo directoryInfo = new DirectoryInfo(minecraftDirectory);
-        directoryInfo.Delete(true);
+        foreach (FileInfo file in directoryInfo.GetFiles())
+        {
+            file.Delete();
+        }
+
+        foreach (DirectoryInfo directory in directoryInfo.GetDirectories())
+        {
+            if (directory.Name != "BFML") directory.Delete(true);
+        }
     }
 
     private async Task InstallForge()
@@ -110,7 +104,7 @@ public sealed class Game
             await Forge.Install(response.TempForgePath);
         }
     }
-    
+
     private async Task InstallMods()
     {
         using (TempDirectory tempDirectory = new TempDirectory())
