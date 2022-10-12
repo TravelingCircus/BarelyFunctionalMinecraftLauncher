@@ -7,6 +7,7 @@ using System.Windows.Input;
 using BFML.Core;
 using CmlLib.Core;
 using CmlLib.Core.Auth;
+using Common.Misc;
 using Common.Models;
 using Common.Network.Messages.Skin;
 using TCPFileClient;
@@ -51,8 +52,14 @@ public partial class MainWindow : Window
     {
         if(_game is null) return;
         PlayButton.IsEnabled = false;
-        
-        if (!_game.IsReadyToLaunch()) await _game.CleanInstall(null);
+
+        if (!_game.IsReadyToLaunch())
+        {
+            CompositeProgress progress = new CompositeProgress();
+            //TODO show loading window
+            await _game.CleanInstall(progress);
+            //TODO remove loading window
+        }
         _game.Launch((int)RamSlider.Value, false, _user.Nickname);
     }
 

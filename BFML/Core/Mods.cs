@@ -17,7 +17,7 @@ public class Mods
         throw new NotImplementedException();
     }
 
-    public void InstallFromFolder(string sourcePath)
+    public void InstallFromArchive(string sourcePath)
     {
         
     }

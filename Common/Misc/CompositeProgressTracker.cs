@@ -1,4 +1,4 @@
-﻿namespace CommonData.Misc;
+﻿namespace Common.Misc;
 
 public class CompositeProgress
 {
@@ -20,14 +20,21 @@ public class CompositeProgress
     private float _current;
     private List<(ProgressTracker tracker, float share)> _trackers = new();
 
-    public void AddTracker(ProgressTracker tracker, float shareOfComposite)
+    public ProgressTracker AddTracker(float shareOfComposite)
     {
+        ProgressTracker tracker = new ProgressTracker();
         _trackers.Add((tracker, shareOfComposite));
         UpdateCurrent();
+        tracker.Changed += UpdateCurrent;
+        return tracker;
     }
 
     private void UpdateCurrent()
     {
-        
+        Current = 0;
+        foreach ((ProgressTracker tracker, float share) tuple in _trackers)
+        {
+            Current += tuple.tracker.Current * tuple.share;
+        }
     }
 }

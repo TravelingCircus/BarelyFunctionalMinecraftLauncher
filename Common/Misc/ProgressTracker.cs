@@ -1,8 +1,8 @@
-﻿namespace CommonData.Misc;
+﻿namespace Common.Misc;
 
 public class ProgressTracker : IProgress<float>
 {
-    public event Action<float> Changed;
+    public event Action Changed;
     public float Current
     {
         get => _current;
@@ -12,7 +12,7 @@ public class ProgressTracker : IProgress<float>
 
     public void Report(float value)
     {
-        Changed?.Invoke(Current);
+        Changed?.Invoke();
     }
 
     public void Add(float step)
