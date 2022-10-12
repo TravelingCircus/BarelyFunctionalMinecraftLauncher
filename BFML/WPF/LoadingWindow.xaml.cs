@@ -2,9 +2,9 @@
 
 namespace BFML.WPF
 {
-    public partial class Loading : Window
+    public partial class LoadingWindow : Window
     {
-        public Loading()
+        public LoadingWindow()
         {
             InitializeComponent();
         }
