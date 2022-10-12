@@ -1,4 +1,4 @@
-﻿namespace CommonData.Network.Messages;
+﻿namespace Common.Network.Messages.ForgeDownload;
 
 public sealed class ForgeDownloadRequest : Message
 {

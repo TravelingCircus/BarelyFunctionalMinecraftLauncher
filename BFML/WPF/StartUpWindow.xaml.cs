@@ -4,8 +4,8 @@ using System.Windows;
 using BFML.Core;
 using BFML.WPF;
 using CmlLib.Core;
-using CommonData.Models;
-using CommonData.Network.Messages.Login;
+using Common.Models;
+using Common.Network.Messages.Login;
 using TCPFileClient;
 
 namespace BFML;

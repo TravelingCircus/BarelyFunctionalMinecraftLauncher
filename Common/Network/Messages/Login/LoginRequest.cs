@@ -1,6 +1,6 @@
 ﻿using System.Text;
 
-namespace CommonData.Network.Messages.Login;
+namespace Common.Network.Messages.Login;
 
 public class LoginRequest: Message
 {

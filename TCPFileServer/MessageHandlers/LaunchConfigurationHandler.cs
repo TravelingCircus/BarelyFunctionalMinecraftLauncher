@@ -1,17 +1,16 @@
-﻿using CommonData.Models;
+﻿using Common.Models;
+using Common.Network;
+using Common.Network.Messages.LaunchConfiguration;
 using CommonData.Network;
-using CommonData.Network.Messages.LaunchConfiguration;
 using TCPFileServer.DataAccess;
 
 namespace TCPFileServer.MessageHandlers;
 
 public class LaunchConfigurationHandler: MessageHandler
 {
-    private Repository _repository;
-
-    public LaunchConfigurationHandler(Repository repository)
+    public LaunchConfigurationHandler(Repository repository): base(repository) 
     {
-        _repository = repository;
+        
     }
 
     public override Task Handle(Stream dataStream)
@@ -22,7 +21,7 @@ public class LaunchConfigurationHandler: MessageHandler
     public override async Task<Message> GetResponse(Stream dataStream)
     {
         Console.WriteLine($"HANDLING LAUNCH CONFIGURATION REQUEST thread_{Thread.CurrentThread.ManagedThreadId}");
-        LaunchConfiguration launchConfiguration = await _repository.GetLaunchConfiguration();
+        LaunchConfiguration launchConfiguration = await Repository.GetLaunchConfiguration();
         return new LaunchConfigurationResponse(launchConfiguration);
     }
 }

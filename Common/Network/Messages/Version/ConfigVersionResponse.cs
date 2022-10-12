@@ -1,6 +1,6 @@
-﻿using CommonData.Models;
+﻿using Common.Models;
 
-namespace CommonData.Network.Messages.Version;
+namespace Common.Network.Messages.Version;
 
 public class ConfigVersionResponse : Message
 {

@@ -1,16 +1,15 @@
-﻿using CommonData.Network;
-using CommonData.Network.Messages.Skin;
+﻿using Common.Network;
+using Common.Network.Messages.Skin;
+using CommonData.Network;
 using TCPFileServer.DataAccess;
 
 namespace TCPFileServer.MessageHandlers;
 
 public class SkinChangeHandler: MessageHandler
 {
-    private Repository _repository;
-
-    public SkinChangeHandler(Repository repository)
+    public SkinChangeHandler(Repository repository) : base(repository) 
     {
-        _repository = repository;
+        
     }
     
     public override Task Handle(Stream dataStream)
@@ -23,7 +22,7 @@ public class SkinChangeHandler: MessageHandler
         Console.WriteLine($"HANDLING SKIN CHANGE REQUEST thread_{Thread.CurrentThread.ManagedThreadId}");
         SkinChangeRequest request = new SkinChangeRequest();
         request.ApplyData(dataStream);
-        bool success = await _repository.UpdateUserSkin(request.Nickname, request.SkinData);
+        bool success = await Repository.UpdateUserSkin(request.Nickname, request.SkinData);
         Console.WriteLine($"SENT RESPONSE:{success} thread_{Thread.CurrentThread.ManagedThreadId}");
         return new SkinChangeResponse(success);
     }

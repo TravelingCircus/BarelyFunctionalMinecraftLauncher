@@ -1,4 +1,4 @@
-﻿using CommonData.Models;
+﻿using Common.Models;
 using TCPFileServer.DataAccess;
 
 namespace XmlFilesGenerator

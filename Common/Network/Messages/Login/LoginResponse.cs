@@ -1,6 +1,6 @@
-﻿using CommonData.Models;
+﻿using Common.Models;
 
-namespace CommonData.Network.Messages.Login;
+namespace Common.Network.Messages.Login;
 
 public class LoginResponse : Message
 {

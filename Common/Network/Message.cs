@@ -1,6 +1,6 @@
 ﻿using System.Text;
 
-namespace CommonData.Network;
+namespace Common.Network;
 
 public abstract class Message
 {

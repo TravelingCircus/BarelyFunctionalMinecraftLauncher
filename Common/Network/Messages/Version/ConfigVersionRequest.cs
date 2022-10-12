@@ -1,4 +1,4 @@
-﻿namespace CommonData.Network.Messages.Version;
+﻿namespace Common.Network.Messages.Version;
 
 public class ConfigVersionRequest : Message
 {

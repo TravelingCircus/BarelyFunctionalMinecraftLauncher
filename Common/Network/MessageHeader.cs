@@ -1,4 +1,4 @@
-﻿namespace CommonData.Network;
+﻿namespace Common.Network;
 
 public sealed class MessageHeader
 {

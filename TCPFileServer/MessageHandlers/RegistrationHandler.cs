@@ -1,17 +1,16 @@
-﻿using CommonData.Models;
+﻿using Common.Models;
+using Common.Network;
+using Common.Network.Messages.Registration;
 using CommonData.Network;
-using CommonData.Network.Messages.Registration;
 using TCPFileServer.DataAccess;
 
 namespace TCPFileServer.MessageHandlers;
 
 public sealed class RegistrationHandler : MessageHandler
 {
-    private Repository _repository;
-
-    public RegistrationHandler(Repository repository)
+    public RegistrationHandler(Repository repository): base(repository) 
     {
-        _repository = repository;
+        
     }
 
     public override Task Handle(Stream dataStream)
@@ -24,7 +23,7 @@ public sealed class RegistrationHandler : MessageHandler
         Console.WriteLine($"HANDLING REGISTRATION REQUEST thread_{Thread.CurrentThread.ManagedThreadId}");
         RegistrationRequest request = new RegistrationRequest();
         request.ApplyData(dataStream);
-        bool success = await _repository.TryRegisterUser(new User(request.NickName, request.PasswordHash));
+        bool success = await Repository.TryRegisterUser(new User(request.NickName, request.PasswordHash));
         Console.WriteLine($"SENT RESPONSE:{success} thread_{Thread.CurrentThread.ManagedThreadId}");
         return new RegistrationResponse(success);
     }
