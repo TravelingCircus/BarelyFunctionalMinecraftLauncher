@@ -1,17 +1,15 @@
-﻿using CommonData.Models;
-using CommonData.Network;
-using CommonData.Network.Messages.Version;
+﻿using Common.Models;
+using Common.Network;
+using Common.Network.Messages.Version;
 using TCPFileServer.DataAccess;
 
 namespace TCPFileServer.MessageHandlers;
 
 public class ConfigVersionHandler : MessageHandler
 {
-    private Repository _repository;
-
-    public ConfigVersionHandler(Repository repository)
+    public ConfigVersionHandler(Repository repository): base(repository)
     {
-        _repository = repository;
+        
     }
 
     public override Task Handle(Stream dataStream)
@@ -22,7 +20,7 @@ public class ConfigVersionHandler : MessageHandler
     public override async Task<Message> GetResponse(Stream dataStream)
     {
         Console.WriteLine($"HANDLING CONFIG VERSION REQUEST thread_{Thread.CurrentThread.ManagedThreadId}");
-        ConfigurationVersion configVersion = await _repository.GetConfigurationVersion();
+        ConfigurationVersion configVersion = await Repository.GetConfigurationVersion();
         return new ConfigVersionResponse(configVersion);
     }
 }

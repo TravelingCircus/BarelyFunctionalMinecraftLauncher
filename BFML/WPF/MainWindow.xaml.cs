@@ -7,8 +7,9 @@ using System.Windows.Input;
 using BFML.Core;
 using CmlLib.Core;
 using CmlLib.Core.Auth;
-using CommonData.Models;
-using CommonData.Network.Messages.Skin;
+using Common.Misc;
+using Common.Models;
+using Common.Network.Messages.Skin;
 using TCPFileClient;
 
 namespace BFML.WPF;
@@ -49,14 +50,17 @@ public partial class MainWindow : Window
 
     private async void OnPlayButton(object sender, RoutedEventArgs e)
     {
-        _ = await _fileClient.DownloadForgeFiles(@"C:\Users\maksy\Desktope\TestTarget");
-        /*throw new NotImplementedException();
         if(_game is null) return;
         PlayButton.IsEnabled = false;
-        
-        if (!_game.IsReadyToLaunch()) await _game.CleanInstall(null);
-        _game.Launch((int)RamSlider.Value, false, _user.Nickname);*/
 
+        if (!_game.IsReadyToLaunch())
+        {
+            CompositeProgress progress = new CompositeProgress();
+            //TODO show loading window
+            await _game.CleanInstall(progress);
+            //TODO remove loading window
+        }
+        _game.Launch((int)RamSlider.Value, false, _user.Nickname);
     }
 
     #region PlayerModelRendering

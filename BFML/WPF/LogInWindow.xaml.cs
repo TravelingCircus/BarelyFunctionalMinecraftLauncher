@@ -3,9 +3,9 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
 using BFML.Core;
-using CommonData.Models;
-using CommonData.Network.Messages.Login;
-using CommonData.Network.Messages.Registration;
+using Common.Models;
+using Common.Network.Messages.Login;
+using Common.Network.Messages.Registration;
 using TCPFileClient;
 
 namespace BFML.WPF;

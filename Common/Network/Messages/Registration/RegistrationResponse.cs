@@ -1,4 +1,4 @@
-﻿namespace CommonData.Network.Messages.Registration;
+﻿namespace Common.Network.Messages.Registration;
 
 public class RegistrationResponse : Message
 {

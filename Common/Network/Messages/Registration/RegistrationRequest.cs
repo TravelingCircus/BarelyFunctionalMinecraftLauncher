@@ -1,6 +1,6 @@
 ﻿using System.Text;
 
-namespace CommonData.Network.Messages.Registration;
+namespace Common.Network.Messages.Registration;
 
 public class RegistrationRequest : Message
 {

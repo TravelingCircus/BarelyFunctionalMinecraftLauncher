@@ -1,4 +1,4 @@
-﻿namespace CommonData;
+﻿namespace Common;
 
 public static class DataHash
 {

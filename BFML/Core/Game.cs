@@ -1,13 +1,12 @@
-﻿using System;
-using System.Diagnostics;
+﻿using System.Diagnostics;
 using System.IO;
 using System.Threading.Tasks;
 using CmlLib.Core;
 using CmlLib.Core.Auth;
 using CmlLib.Core.Version;
-using CommonData;
-using CommonData.Models;
-using CommonData.Network.Messages;
+using Common.Misc;
+using Common.Models;
+using Common.Network.Messages.ForgeDownload;
 using TCPFileClient;
 using TCPFileClient.Utils;
 
@@ -23,7 +22,8 @@ public sealed class Game
     private readonly MinecraftPath _minecraftPath;
     private readonly LaunchConfiguration _launchConfiguration;
 
-    private Game(FileClient fileClient, LaunchConfiguration launchConfiguration, CMLauncher launcher, Vanilla vanilla, Forge forge, MinecraftPath path)
+    private Game(FileClient fileClient, LaunchConfiguration launchConfiguration, CMLauncher launcher, Vanilla vanilla,
+        Forge forge, MinecraftPath path)
     {
         _minecraftPath = path;
         _launchConfiguration = launchConfiguration;
@@ -43,7 +43,7 @@ public sealed class Game
         forgeVersion.InheritFrom(vanillaVersion);
         Vanilla vanilla = new Vanilla(vanillaVersion, minecraftPath);
         Forge forge = new Forge(forgeVersion, minecraftPath);
-        
+
         return new Game(fileClient, launchConfiguration, launcher, vanilla, forge, minecraftPath);
     }
 
@@ -55,68 +55,74 @@ public sealed class Game
             MaximumRamMb = ram,
             Session = MSession.GetOfflineSession(nickname),
             FullScreen = fullScreen
-        },false);
+        }, false);
         process.Start();
     }
-    
-    public async Task CleanInstall(IProgress<double> progress)
-    {
-        using (TempDirectory tempDirectory = new TempDirectory())
-        {
-            DirectoryInfo bfmlDirectory = new DirectoryInfo(_minecraftPath.BasePath + @"\BFML");
-            bfmlDirectory.MoveTo(tempDirectory.Info.FullName + @"\" + bfmlDirectory.Name);
 
-            try
-            {
-                DeleteAllFiles();
-                await _launcher.CheckAndDownloadAsync(Forge.Version);
-                Task[] tasks =
-                {
-                    InstallForge(),
-                    InstallMods()
-                };
-                await Task.WhenAll(tasks);
-            }
-            finally
-            {
-                throw new NotImplementedException();
-            }
-            
-            bfmlDirectory.MoveTo(_minecraftPath.BasePath + @"\BFML");
-        }
+    public async Task CleanInstall(CompositeProgress progress)
+    {
+        DeleteAllFiles(progress.AddTracker(0.1f));
+        await InstallVanilla(progress.AddTracker(0.5f));
+        Task[] tasks =
+        {
+            InstallForge(progress.AddTracker(0.1f)),
+            InstallMods(progress.AddTracker(0.3f))
+        };
+        await Task.WhenAll(tasks);
     }
+
+
 
     public bool IsReadyToLaunch()
     {
         return
             Vanilla.IsInstalled()
-            && Forge.IsInstalled() 
+            && Forge.IsInstalled()
             && Mods.ChecksumMatches(_launchConfiguration.ModsChecksum);
     }
 
-    public void DeleteAllFiles()
+    public void DeleteAllFiles(ProgressTracker progress)
     {
         string minecraftDirectory = _minecraftPath.BasePath;
         if (!Directory.Exists(minecraftDirectory)) return;
         DirectoryInfo directoryInfo = new DirectoryInfo(minecraftDirectory);
-        directoryInfo.Delete(true);
+        foreach (FileInfo file in directoryInfo.GetFiles())
+        {
+            file.Delete();
+        }
+        progress.Add(0.5f);
+        foreach (DirectoryInfo directory in directoryInfo.GetDirectories())
+        {
+            if (directory.Name != "BFML") directory.Delete(true);
+        }
+        progress.Add(0.5f);
     }
 
-    private async Task InstallForge()
+    private async Task InstallVanilla(ProgressTracker progressTracker)
+    {
+        await _launcher.CheckAndDownloadAsync(Forge.Version);
+        progressTracker.Add(1f);
+    }
+    
+    private async Task InstallForge(ProgressTracker progressTracker)
     {
         using (TempDirectory tempDirectory = new TempDirectory())
         {
             ForgeDownloadResponse response = await _fileClient.DownloadForgeFiles(tempDirectory.Info.FullName);
+            progressTracker.Add(0.8f);
             await Forge.Install(response.TempForgePath);
+            progressTracker.Add(0.2f);
         }
     }
-    
-    private async Task InstallMods()
+
+    private async Task InstallMods(ProgressTracker progressTracker)
     {
         using (TempDirectory tempDirectory = new TempDirectory())
         {
             await _fileClient.DownloadMods(tempDirectory.Info.FullName);
-            Mods.InstallFromFolder(tempDirectory.Info.FullName);
+            progressTracker.Add(0.8f);
+            Mods.InstallFromArchive(tempDirectory.Info.FullName);
+            progressTracker.Add(0.2f);
         }
     }
 }

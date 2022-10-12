@@ -1,11 +1,11 @@
-﻿using CommonData.Network.Messages;
-using CommonData.Network.Messages.LaunchConfiguration;
-using CommonData.Network.Messages.Login;
-using CommonData.Network.Messages.Registration;
-using CommonData.Network.Messages.Skin;
-using CommonData.Network.Messages.Version;
+﻿using Common.Network.Messages.ForgeDownload;
+using Common.Network.Messages.LaunchConfiguration;
+using Common.Network.Messages.Login;
+using Common.Network.Messages.Registration;
+using Common.Network.Messages.Skin;
+using Common.Network.Messages.Version;
 
-namespace CommonData.Network;
+namespace Common.Network;
 
 public static class MessageRegistry
 {

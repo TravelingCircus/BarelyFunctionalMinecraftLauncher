@@ -1,4 +1,4 @@
-﻿namespace CommonData.Network.Messages.LaunchConfiguration;
+﻿namespace Common.Network.Messages.LaunchConfiguration;
 
 public class LaunchConfigurationRequest: Message
 {

@@ -1,14 +1,13 @@
 ﻿using System.Collections.Concurrent;
-using System.IO.Compression;
 using System.Net.Sockets;
-using CommonData.Models;
-using CommonData.Network;
-using CommonData.Network.Messages;
-using CommonData.Network.Messages.LaunchConfiguration;
-using CommonData.Network.Messages.Login;
-using CommonData.Network.Messages.Registration;
-using CommonData.Network.Messages.Skin;
-using CommonData.Network.Messages.Version;
+using Common.Models;
+using Common.Network;
+using Common.Network.Messages.ForgeDownload;
+using Common.Network.Messages.LaunchConfiguration;
+using Common.Network.Messages.Login;
+using Common.Network.Messages.Registration;
+using Common.Network.Messages.Skin;
+using Common.Network.Messages.Version;
 
 namespace TCPFileClient;
 
@@ -81,12 +80,12 @@ public sealed class FileClient
     
     public async Task<ForgeDownloadResponse> DownloadForgeFiles(string tempDirectoryPath)
     {
-        string tempForgePath = tempDirectoryPath + @"\ExtractedForgeFiles1.16.5.zip";
+        string tempForgePath = tempDirectoryPath + @"\Forge.zip";
         ForgeDownloadResponse response = (ForgeDownloadResponse)await GetResponseFor(new ForgeDownloadRequest());
         response.TempForgePath = tempForgePath;
 
         await using FileStream fileStream = new FileStream(response.TempForgePath, FileMode.OpenOrCreate);
-        await fileStream.WriteAsync(response.ForgeBytes, 0, response.ForgeBytesLength);
+        await fileStream.WriteAsync(response.ForgeBytes, 0, response.GetDataLength());
         await fileStream.FlushAsync();
         response.ForgeBytes = null!;
         

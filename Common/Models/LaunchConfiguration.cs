@@ -1,4 +1,4 @@
-﻿namespace CommonData.Models;
+﻿namespace Common.Models;
 
 [Serializable]
 public sealed class LaunchConfiguration

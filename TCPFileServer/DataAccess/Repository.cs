@@ -1,4 +1,4 @@
-﻿using CommonData.Models;
+﻿using Common.Models;
 
 namespace TCPFileServer.DataAccess;
 

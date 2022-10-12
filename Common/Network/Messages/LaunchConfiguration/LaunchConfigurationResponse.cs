@@ -1,14 +1,14 @@
-﻿namespace CommonData.Network.Messages.LaunchConfiguration;
+﻿namespace Common.Network.Messages.LaunchConfiguration;
 
 public class LaunchConfigurationResponse: Message
 {
-    public Models.LaunchConfiguration LaunchConfiguration;
+    public Common.Models.LaunchConfiguration LaunchConfiguration;
 
     public LaunchConfigurationResponse()
     {
     }
 
-    public LaunchConfigurationResponse(Models.LaunchConfiguration launchConfiguration)
+    public LaunchConfigurationResponse(Common.Models.LaunchConfiguration launchConfiguration)
     {
         LaunchConfiguration = launchConfiguration;
     }
@@ -23,7 +23,7 @@ public class LaunchConfigurationResponse: Message
 
     public override void ApplyData(Stream stream)
     {
-        LaunchConfiguration = new Models.LaunchConfiguration(
+        LaunchConfiguration = new Common.Models.LaunchConfiguration(
             StringReadStream(stream),
             StringReadStream(stream),
             StringReadStream(stream),

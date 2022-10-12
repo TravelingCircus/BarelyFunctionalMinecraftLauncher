@@ -1,6 +1,6 @@
 ﻿using System.Net.Sockets;
 
-namespace CommonData.Network;
+namespace Common.Network;
 
 public class NetworkChannel
 {

@@ -1,5 +1,5 @@
 ﻿using System.Xml.Serialization;
-using CommonData.Models;
+using Common.Models;
 
 namespace TCPFileServer.DataAccess;
 
