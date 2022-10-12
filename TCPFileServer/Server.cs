@@ -1,12 +1,13 @@
 ﻿using System.Net;
 using System.Net.Sockets;
+using Common.Network;
+using Common.Network.Messages.ForgeDownload;
+using Common.Network.Messages.LaunchConfiguration;
+using Common.Network.Messages.Login;
+using Common.Network.Messages.Registration;
+using Common.Network.Messages.Skin;
+using Common.Network.Messages.Version;
 using CommonData.Network;
-using CommonData.Network.Messages;
-using CommonData.Network.Messages.LaunchConfiguration;
-using CommonData.Network.Messages.Login;
-using CommonData.Network.Messages.Registration;
-using CommonData.Network.Messages.Skin;
-using CommonData.Network.Messages.Version;
 using TCPFileServer.DataAccess;
 using TCPFileServer.MessageHandlers;
 
