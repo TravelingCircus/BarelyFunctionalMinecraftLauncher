@@ -7,7 +7,6 @@ using Common.Network.Messages.Login;
 using Common.Network.Messages.Registration;
 using Common.Network.Messages.Skin;
 using Common.Network.Messages.Version;
-using CommonData.Network;
 using TCPFileServer.DataAccess;
 using TCPFileServer.MessageHandlers;
 

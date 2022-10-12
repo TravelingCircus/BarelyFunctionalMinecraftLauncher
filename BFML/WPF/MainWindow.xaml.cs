@@ -7,8 +7,8 @@ using System.Windows.Input;
 using BFML.Core;
 using CmlLib.Core;
 using CmlLib.Core.Auth;
-using CommonData.Models;
-using CommonData.Network.Messages.Skin;
+using Common.Models;
+using Common.Network.Messages.Skin;
 using TCPFileClient;
 
 namespace BFML.WPF;

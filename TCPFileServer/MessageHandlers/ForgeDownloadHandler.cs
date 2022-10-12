@@ -1,7 +1,5 @@
 ﻿using Common.Network;
 using Common.Network.Messages.ForgeDownload;
-using CommonData.Network;
-using CommonData.Network.Messages;
 using TCPFileServer.DataAccess;
 
 namespace TCPFileServer.MessageHandlers;

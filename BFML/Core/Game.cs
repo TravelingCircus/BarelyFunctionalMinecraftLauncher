@@ -5,9 +5,8 @@ using System.Threading.Tasks;
 using CmlLib.Core;
 using CmlLib.Core.Auth;
 using CmlLib.Core.Version;
-using CommonData;
-using CommonData.Models;
-using CommonData.Network.Messages;
+using Common.Models;
+using Common.Network.Messages.ForgeDownload;
 using TCPFileClient;
 using TCPFileClient.Utils;
 

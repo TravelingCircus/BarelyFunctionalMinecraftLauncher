@@ -1,7 +1,7 @@
 ﻿using Common.Network;
 using TCPFileServer.MessageHandlers;
 
-namespace CommonData.Network;
+namespace TCPFileServer;
 
 public static class HandlerPicker
 {
