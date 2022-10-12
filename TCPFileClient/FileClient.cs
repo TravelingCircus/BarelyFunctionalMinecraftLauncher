@@ -81,7 +81,7 @@ public sealed class FileClient
     
     public async Task<ForgeDownloadResponse> DownloadForgeFiles(string tempDirectoryPath)
     {
-        string tempForgePath = tempDirectoryPath + @"\forge.zip";
+        string tempForgePath = tempDirectoryPath + @"\ExtractedForgeFiles1.16.5.zip";
         ForgeDownloadResponse response = (ForgeDownloadResponse)await GetResponseFor(new ForgeDownloadRequest());
         response.TempForgePath = tempForgePath;
 

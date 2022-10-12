@@ -36,12 +36,12 @@ public class ForgeDownloadResponse : Message
         byte[] buffer = new byte[67108864];
         int lastRead = 0;
         WriteToStream(targetStream, ForgeBytesLength);
-        while (lastRead < buffer.Length)
+        do
         {
             lastRead = await _stream.ReadAsync(buffer, 0, buffer.Length);
             await targetStream.WriteAsync(buffer, 0, lastRead);
-        }
-        await targetStream.WriteAsync(buffer, 0, lastRead);
+        } while (lastRead >= buffer.Length);
+        await _stream.FlushAsync();
         _stream.Close();
     }
 

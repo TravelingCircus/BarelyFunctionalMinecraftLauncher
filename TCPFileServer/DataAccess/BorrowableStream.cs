@@ -11,7 +11,11 @@ public sealed class BorrowableFileStream : Stream
         _dataHandler = dataHandler;
     }
 
-
+    public string GetFileName()
+    {
+        return _stream.Name;
+    }
+    
     public override int Read(byte[] buffer, int offset, int count)
     {
         return _stream.Read(buffer, offset, count);
