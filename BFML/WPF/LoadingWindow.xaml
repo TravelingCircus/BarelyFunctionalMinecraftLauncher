@@ -33,6 +33,7 @@
                     StrokeThickness="10" />
                 
                 <xrpb:RadialProgressBar 
+                    x:Name="ProgressBar"
                     Value="69"
                     Width="228" 
                     Height="228"

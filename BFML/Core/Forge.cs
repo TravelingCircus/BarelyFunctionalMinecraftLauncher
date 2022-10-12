@@ -1,7 +1,9 @@
 ﻿using System;
+using System.IO;
 using System.Threading.Tasks;
 using CmlLib.Core;
 using CmlLib.Core.Version;
+using Common.Models;
 using TCPFileClient;
 
 namespace BFML.Core;
@@ -17,12 +19,13 @@ public sealed class Forge
         _minecraftPath = minecraftPath;
     }
 
-    public bool IsInstalled()
+    public bool IsInstalled(LaunchConfiguration launchConfiguration)
     {
-        throw new NotImplementedException();
+        string forgeVersionPath = _minecraftPath.Versions + $@"\{launchConfiguration.ForgeVersion}";
+        return new DirectoryInfo(forgeVersionPath).Exists;
     }
 
-    public Task Install(string archivePath)
+    public Task Install(string archivePath, LaunchConfiguration launchConfiguration)
     {
         throw new NotImplementedException();
         return Task.CompletedTask;

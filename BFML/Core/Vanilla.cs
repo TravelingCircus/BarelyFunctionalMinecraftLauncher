@@ -1,4 +1,5 @@
-﻿using CmlLib.Core;
+﻿using System.IO;
+using CmlLib.Core;
 using CmlLib.Core.Version;
 
 namespace BFML.Core;
@@ -16,6 +17,7 @@ public sealed class Vanilla
 
     public bool IsInstalled()
     {
-        return _path.Versions.Contains(Version.Id);
+        string vanillaVersionDirectory = _path.Versions + $@"\{Version.Id}";
+        return new DirectoryInfo(vanillaVersionDirectory).Exists;
     }
 }

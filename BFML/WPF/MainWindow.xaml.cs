@@ -1,12 +1,9 @@
 ﻿using System;
-using System.IO;
 using System.Windows;
 using BFML._3D;
 using OpenTK.Wpf;
 using System.Windows.Input;
 using BFML.Core;
-using CmlLib.Core;
-using CmlLib.Core.Auth;
 using Common.Misc;
 using Common.Models;
 using Common.Network.Messages.Skin;
@@ -23,6 +20,7 @@ public partial class MainWindow : Window
     private readonly LaunchConfiguration _launchConfig;
     private SkinPreviewRenderer _skinPreviewRenderer;
     private Game _game;
+    private LoadingWindow _loadingWindow;
 
     public MainWindow(FileClient fileClient, User user, LocalPrefs localPrefs,
        LaunchConfiguration launchConfig, ConfigurationVersion configVersion)
@@ -34,6 +32,7 @@ public partial class MainWindow : Window
         //TODO should correspond to skin.png in .minecraft/BFML/skin.png
         _launchConfig = launchConfig;
         _configVersion = configVersion;
+        _loadingWindow = new LoadingWindow();
 
         SetUpSkinRenderer();
         Loaded += OnWindowLoaded;
@@ -56,9 +55,9 @@ public partial class MainWindow : Window
         if (!_game.IsReadyToLaunch())
         {
             CompositeProgress progress = new CompositeProgress();
-            //TODO show loading window
+            _loadingWindow.Show();
             await _game.CleanInstall(progress);
-            //TODO remove loading window
+            _loadingWindow.Hide();
         }
         _game.Launch((int)RamSlider.Value, false, _user.Nickname);
     }
@@ -111,6 +110,11 @@ public partial class MainWindow : Window
                 Application.Current.MainWindow!.Top = 3;
             }
             DragMove();
+            if (_loadingWindow.IsActive)
+            {
+                _loadingWindow.Top = Top - 200;
+                _loadingWindow.Left = Left + 200;
+            }
         }
     }
 

@@ -8,5 +8,10 @@ namespace BFML.WPF
         {
             InitializeComponent();
         }
+
+        public void SetProgress(float value)
+        {
+            ProgressBar.Value = value * 100;
+        }
     }
 }

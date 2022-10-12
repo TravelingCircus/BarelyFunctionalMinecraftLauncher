@@ -77,7 +77,7 @@ public sealed class Game
     {
         return
             Vanilla.IsInstalled()
-            && Forge.IsInstalled()
+            && Forge.IsInstalled(_launchConfiguration)
             && Mods.ChecksumMatches(_launchConfiguration.ModsChecksum);
     }
 
@@ -110,7 +110,7 @@ public sealed class Game
         {
             ForgeDownloadResponse response = await _fileClient.DownloadForgeFiles(tempDirectory.Info.FullName);
             progressTracker.Add(0.8f);
-            await Forge.Install(response.TempForgePath);
+            await Forge.Install(response.TempForgePath, _launchConfiguration);
             progressTracker.Add(0.2f);
         }
     }
