@@ -87,6 +87,7 @@ public sealed class FileClient
         await using FileStream fileStream = new FileStream(response.TempForgePath, FileMode.OpenOrCreate);
         await fileStream.WriteAsync(response.ForgeBytes, 0, response.GetDataLength());
         await fileStream.FlushAsync();
+        fileStream.Close();
         response.ForgeBytes = null!;
         
         return response;

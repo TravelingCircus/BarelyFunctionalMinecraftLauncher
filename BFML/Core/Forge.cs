@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.IO.Compression;
 using System.Threading.Tasks;
 using CmlLib.Core;
 using CmlLib.Core.Version;
@@ -27,7 +28,8 @@ public sealed class Forge
 
     public Task Install(string archivePath, LaunchConfiguration launchConfiguration)
     {
-        throw new NotImplementedException();
+        
+        ZipFile.ExtractToDirectory(archivePath, _minecraftPath.BasePath+"\\coc", true);
         return Task.CompletedTask;
     }
 }

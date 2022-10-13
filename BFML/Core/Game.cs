@@ -55,7 +55,7 @@ public sealed class Game
             MaximumRamMb = ram,
             Session = MSession.GetOfflineSession(nickname),
             FullScreen = fullScreen
-        }, false);
+        }, true);
         process.Start();
     }
 
@@ -106,6 +106,7 @@ public sealed class Game
     
     private async Task InstallForge(ProgressTracker progressTracker)
     {
+        return;
         using (TempDirectory tempDirectory = new TempDirectory())
         {
             ForgeDownloadResponse response = await _fileClient.DownloadForgeFiles(tempDirectory.Info.FullName);
@@ -117,6 +118,7 @@ public sealed class Game
 
     private async Task InstallMods(ProgressTracker progressTracker)
     {
+        return;
         using (TempDirectory tempDirectory = new TempDirectory())
         {
             await _fileClient.DownloadMods(tempDirectory.Info.FullName);

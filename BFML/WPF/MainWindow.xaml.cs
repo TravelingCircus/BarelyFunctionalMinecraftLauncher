@@ -110,11 +110,8 @@ public partial class MainWindow : Window
                 Application.Current.MainWindow!.Top = 3;
             }
             DragMove();
-            if (_loadingWindow.IsActive)
-            {
-                _loadingWindow.Top = Top - 200;
-                _loadingWindow.Left = Left + 200;
-            }
+            _loadingWindow.Top = Top - 200;
+            _loadingWindow.Left = Left + 200;
         }
     }
 
