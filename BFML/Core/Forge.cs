@@ -28,7 +28,7 @@ public sealed class Forge
 
     public Task Install(string archivePath, LaunchConfiguration launchConfiguration)
     {
-        
+        //TODO WinDiff the zips
         ZipFile.ExtractToDirectory(archivePath, _minecraftPath.BasePath+"\\coc", true);
         return Task.CompletedTask;
     }
