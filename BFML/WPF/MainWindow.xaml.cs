@@ -6,7 +6,7 @@ using System.Windows.Input;
 using BFML.Core;
 using Common.Misc;
 using Common.Models;
-using Common.Network.Messages.Skin;
+using Common.Network.Messages.ChangeSkin;
 using TCPFileClient;
 
 namespace BFML.WPF;

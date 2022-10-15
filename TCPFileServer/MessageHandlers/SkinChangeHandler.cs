@@ -1,5 +1,5 @@
 ﻿using Common.Network;
-using Common.Network.Messages.Skin;
+using Common.Network.Messages.ChangeSkin;
 using TCPFileServer.DataAccess;
 
 namespace TCPFileServer.MessageHandlers;

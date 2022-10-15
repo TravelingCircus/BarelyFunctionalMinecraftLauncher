@@ -1,4 +1,4 @@
-﻿namespace Common.Network.Messages.Skin;
+﻿namespace Common.Network.Messages.ChangeSkin;
 
 public class SkinChangeResponse: Message
 {
