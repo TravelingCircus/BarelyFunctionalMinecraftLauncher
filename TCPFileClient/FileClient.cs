@@ -89,16 +89,18 @@ public sealed class FileClient
         return response;
     }
     
-    public async Task DownloadMods(string directory)
+    public async Task<ModsDownloadResponse> DownloadMods(string directory)
     {
-        string modsPath = directory + @"\mods.zip";
         ModsDownloadResponse response = (ModsDownloadResponse)await GetResponseFor(new ModsDownloadRequest());
+        response.ModsZipPath = directory + @"\mods.zip";
 
-        await using FileStream fileStream = new FileStream(modsPath, FileMode.OpenOrCreate);
+        await using FileStream fileStream = new FileStream(response.ModsZipPath, FileMode.OpenOrCreate);
         await fileStream.WriteAsync(response.ModsBytes, 0, response.GetDataLength());
         await fileStream.FlushAsync();
         fileStream.Close();
         response.ModsBytes = null!;
+
+        return response;
     }
 
     #endregion

@@ -2,6 +2,7 @@
 
 public sealed class ModsDownloadResponse: ZipFileMessage
 {
+    public string ModsZipPath;
     public byte[] ModsBytes;
     private int _modsBytesLength;
     private readonly Stream _stream;

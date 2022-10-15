@@ -1,5 +1,8 @@
 ﻿using System;
+using System.IO.Compression;
+using System.Threading.Tasks;
 using CmlLib.Core;
+using TCPFileClient.Utils;
 
 namespace BFML.Core;
 
@@ -18,8 +21,13 @@ public class Mods
         throw new NotImplementedException();
     }
 
-    public void InstallFromArchive(string sourcePath)
+    public Task InstallFromArchive(string archivePath)
     {
-        
+        using TempDirectory tempDirectory = new TempDirectory();
+        using (ZipArchive archive = ZipFile.OpenRead(archivePath))
+        {
+            archive.ExtractToDirectory(_minecraftPath.BasePath + @"\mods");
+        }
+        return Task.CompletedTask;
     }
 }

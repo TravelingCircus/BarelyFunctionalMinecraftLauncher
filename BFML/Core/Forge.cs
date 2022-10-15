@@ -32,8 +32,7 @@ public sealed class Forge
         {
             archive.ExtractToDirectory(tempDirectory.Info.FullName);
         }
-
-
+        
         InstallVersion(new DirectoryInfo(tempDirectory.Info.FullName + $"\\{launchConfiguration.ForgeVersion}"));
         InstallLibraries(new DirectoryInfo(tempDirectory.Info.FullName + "\\libraries"));
         

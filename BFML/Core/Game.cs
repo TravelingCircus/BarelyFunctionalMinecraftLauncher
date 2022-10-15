@@ -8,6 +8,7 @@ using CmlLib.Core.VersionLoader;
 using Common.Misc;
 using Common.Models;
 using Common.Network.Messages.ForgeDownload;
+using Common.Network.Messages.ModsDownload;
 using TCPFileClient;
 using TCPFileClient.Utils;
 
@@ -118,12 +119,13 @@ public sealed class Game
 
     private async Task InstallMods(ProgressTracker progressTracker)
     {
-        return;
+        if (!Directory.Exists(_minecraftPath.BasePath + @"\mods"))
+            Directory.CreateDirectory(_minecraftPath.BasePath + @"\mods");
         using (TempDirectory tempDirectory = new TempDirectory())
         {
-            await _fileClient.DownloadMods(tempDirectory.Info.FullName);
+            ModsDownloadResponse response = await _fileClient.DownloadMods(tempDirectory.Info.FullName);
             progressTracker.Add(0.8f);
-            Mods.InstallFromArchive(tempDirectory.Info.FullName);
+            await Mods.InstallFromArchive(response.ModsZipPath);
             progressTracker.Add(0.2f);
         }
     }
