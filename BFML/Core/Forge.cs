@@ -1,11 +1,10 @@
-﻿using System;
-using System.IO;
+﻿using System.IO;
 using System.IO.Compression;
 using System.Threading.Tasks;
 using CmlLib.Core;
 using CmlLib.Core.Version;
 using Common.Models;
-using TCPFileClient;
+using TCPFileClient.Utils;
 
 namespace BFML.Core;
 
@@ -28,8 +27,26 @@ public sealed class Forge
 
     public Task Install(string archivePath, LaunchConfiguration launchConfiguration)
     {
-        //TODO WinDiff the zips
-        ZipFile.ExtractToDirectory(archivePath, _minecraftPath.BasePath+"\\coc", true);
+        using TempDirectory tempDirectory = new TempDirectory();
+        ZipArchive archive = ZipFile.OpenRead(archivePath);
+        archive.ExtractToDirectory(tempDirectory.Info.FullName);
+
+        InstallVersion(new DirectoryInfo(tempDirectory.Info.FullName + $"\\{launchConfiguration.ForgeVersion}"));
+        InstallLibraries(new DirectoryInfo(tempDirectory.Info.FullName + "\\libraries"));
+        
         return Task.CompletedTask;
+    }
+
+    private void InstallVersion(DirectoryInfo source)
+    {
+        if (!source.Exists) throw new DirectoryNotFoundException($"Target forge version isn't present in archive. Target: {source.Name}");
+
+        if (!new DirectoryInfo(_minecraftPath.Versions).Exists) Directory.CreateDirectory(_minecraftPath.Versions);
+        
+    }
+    
+    private void InstallLibraries(DirectoryInfo source)
+    {
+        
     }
 }

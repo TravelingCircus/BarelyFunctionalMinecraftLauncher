@@ -2,20 +2,25 @@
 
 public static class DirectoryExtensions
 {
-    public static DirectoryInfo CopyTo(this DirectoryInfo sourceDir, string destinationPath, bool overwrite = false)
+    public static void MergeTo(this DirectoryInfo source, DirectoryInfo target)
     {
-        string sourcePath = sourceDir.FullName;
+        if (!target.Exists) throw new IOException($"Target directory doesn't exist. {target}");
 
-        DirectoryInfo destination = new DirectoryInfo(destinationPath);
+        foreach (FileInfo file in source.GetFiles())
+        {
+            file.MoveTo(target.FullName + $"\\{file.Name}", true);
+        }
 
-        destination.Create();
-
-        foreach (string sourceSubDirPath in Directory.EnumerateDirectories(sourcePath, "*", SearchOption.AllDirectories))
-            Directory.CreateDirectory(sourceSubDirPath.Replace(sourcePath, destinationPath));
-
-        foreach (string file in Directory.EnumerateFiles(sourcePath, "*", SearchOption.AllDirectories))
-            File.Copy(file, file.Replace(sourcePath, destinationPath), overwrite);
-
-        return destination;
+        foreach (DirectoryInfo directory in source.GetDirectories())
+        {
+            string destination = target.FullName + $"\\{directory.Name}";
+            DirectoryInfo collision = new DirectoryInfo(destination);
+            if (collision.Exists)
+            {
+                directory.MergeTo(collision);
+                continue;
+            }
+            directory.MoveTo(destination);
+        }
     }
 }
