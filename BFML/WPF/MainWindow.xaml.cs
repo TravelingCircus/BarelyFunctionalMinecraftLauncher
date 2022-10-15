@@ -1,10 +1,12 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Windows;
 using System.Windows.Controls;
 using BFML._3D;
 using OpenTK.Wpf;
 using System.Windows.Input;
 using BFML.Core;
+using CmlLib.Core;
 using Common.Misc;
 using Common.Models;
 using Common.Network.Messages.ChangeSkin;
@@ -31,7 +33,6 @@ public partial class MainWindow : Window
         _fileClient = fileClient;
         _user = user;
         _localPrefs = localPrefs;
-        //TODO should correspond to skin.png in .minecraft/BFML/skin.png
         _launchConfig = launchConfig;
         _configVersion = configVersion;
         _loadingScreen = new LoadingScreen(Loading, ProgressBar, ProgressText);
@@ -60,6 +61,7 @@ public partial class MainWindow : Window
             await _game.CleanInstall(progress);
             _loadingScreen.Hide();
         }
+        ApplyLocalPrefs();
         await _game.Launch((int)RamSlider.Value, false, _user.Nickname);
     }
 
@@ -195,7 +197,7 @@ public partial class MainWindow : Window
         }
     }
     
-    private void DisablePlayButton()
+    private void DisablePlayButton()    
     {
         PlayButton.IsEnabled = false;
         PlayButton.Content = "Not Paid";
@@ -208,5 +210,17 @@ public partial class MainWindow : Window
         LogInWindow logInWindow = new LogInWindow(_fileClient, _launchConfig, _configVersion);
         logInWindow.Show();
         Close();
+    }
+
+    private async void OnReloadFiles(object sender, RoutedEventArgs e)
+    {
+        CompositeProgress progress = _loadingScreen.Show();
+        await _game.CleanInstall(progress);
+        _loadingScreen.Hide();
+    }
+
+    private void OnOpenFolderButton(object sender, RoutedEventArgs e)
+    {
+        Process.Start(new ProcessStartInfo(new MinecraftPath().BasePath) { UseShellExecute = true });
     }
 }

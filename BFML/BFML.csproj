@@ -54,9 +54,6 @@
       <Resource Include="WPF\Images\RecycleIcon.png">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </Resource>
-      <Resource Include="WPF\Images\WrenchIcon.png">
-        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      </Resource>
     </ItemGroup>
 
 </Project>

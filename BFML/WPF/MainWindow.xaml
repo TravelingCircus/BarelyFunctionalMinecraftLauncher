@@ -358,7 +358,8 @@
                     Margin="20,501,207,163"
                     Background="#595959"
                     Cursor="Hand"
-                    Style="{DynamicResource DefaultButton}">
+                    Style="{DynamicResource DefaultButton}"
+                    Click="OnOpenFolderButton">
 
                     <StackPanel
                         Width="170"
@@ -370,12 +371,12 @@
                             FontFamily="Minecraft"
                             FontSize="18"
                             Foreground="#dcdcdc"
-                            Text="Check Files" />
+                            Text="Open Folder" />
                         <Image
                             Width="26"
                             Height="26"
-                            Margin="10,1,0,0"
-                            Source="/WPF/Images/WrenchIcon.png"
+                            Margin="0,1,0,0"
+                            Source="/WPF/Images/FolderIcon.png"
                             Stretch="Fill" />
 
                     </StackPanel>
@@ -388,7 +389,8 @@
                     Margin="207,501,20,163"
                     Background="#595959"
                     Cursor="Hand"
-                    Style="{DynamicResource DefaultButton}">
+                    Style="{DynamicResource DefaultButton}"
+                    Click="OnReloadFiles">
 
                     <StackPanel
                         Width="170"
