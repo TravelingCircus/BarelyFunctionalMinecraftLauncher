@@ -2,12 +2,12 @@
 using System.Net.Sockets;
 using Common.Models;
 using Common.Network;
+using Common.Network.Messages.ChangeSkin;
 using Common.Network.Messages.ForgeDownload;
 using Common.Network.Messages.LaunchConfiguration;
 using Common.Network.Messages.Login;
 using Common.Network.Messages.ModsDownload;
 using Common.Network.Messages.Registration;
-using Common.Network.Messages.Skin;
 using Common.Network.Messages.Version;
 
 namespace TCPFileClient;
