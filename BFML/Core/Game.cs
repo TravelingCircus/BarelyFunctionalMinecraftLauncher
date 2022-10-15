@@ -72,6 +72,7 @@ public sealed class Game
             InstallMods(progress.AddTracker(0.3f))
         };
         await Task.WhenAll(tasks);
+        await _launcher.GetAllVersionsAsync();
     }
 
 
