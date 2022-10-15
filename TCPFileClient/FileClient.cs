@@ -5,6 +5,7 @@ using Common.Network;
 using Common.Network.Messages.ForgeDownload;
 using Common.Network.Messages.LaunchConfiguration;
 using Common.Network.Messages.Login;
+using Common.Network.Messages.ModsDownload;
 using Common.Network.Messages.Registration;
 using Common.Network.Messages.Skin;
 using Common.Network.Messages.Version;
@@ -13,10 +14,10 @@ namespace TCPFileClient;
 
 public sealed class FileClient
 {
-    private string _minecraftPath;
     private TcpClient _client;
     private NetworkStream _networkStream;
     private NetworkChannel _networkChannel;
+    private readonly string _minecraftPath;
     private readonly ConcurrentQueue<Query> _requests;
     private readonly CancellationTokenSource _cancellationTokenSource;
 
@@ -59,11 +60,6 @@ public sealed class FileClient
         return response;
     }
 
-    public async Task DownloadMods(string directory)
-    {
-        throw new NotImplementedException();
-    }
-    
     public async Task<SkinChangeResponse> SendSkinChangeRequest(string nickname, string filePath)
     {
         DirectoryInfo directoryInfo = new DirectoryInfo(Path.GetDirectoryName(filePath)!);
@@ -91,6 +87,18 @@ public sealed class FileClient
         response.ForgeBytes = null!;
         
         return response;
+    }
+    
+    public async Task DownloadMods(string directory)
+    {
+        string modsPath = directory + @"\mods.zip";
+        ModsDownloadResponse response = (ModsDownloadResponse)await GetResponseFor(new ModsDownloadRequest());
+
+        await using FileStream fileStream = new FileStream(modsPath, FileMode.OpenOrCreate);
+        await fileStream.WriteAsync(response.ModsBytes, 0, response.GetDataLength());
+        await fileStream.FlushAsync();
+        fileStream.Close();
+        response.ModsBytes = null!;
     }
 
     #endregion

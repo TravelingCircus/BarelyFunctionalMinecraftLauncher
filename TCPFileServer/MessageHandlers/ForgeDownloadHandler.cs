@@ -4,7 +4,7 @@ using TCPFileServer.DataAccess;
 
 namespace TCPFileServer.MessageHandlers;
 
-public class ForgeDownloadHandler: MessageHandler
+public sealed class ForgeDownloadHandler: MessageHandler
 {
     public ForgeDownloadHandler(Repository repository) : base(repository) 
     {

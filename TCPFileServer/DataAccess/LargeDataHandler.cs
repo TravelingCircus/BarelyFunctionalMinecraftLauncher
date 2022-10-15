@@ -24,7 +24,9 @@ public sealed class LargeDataHandler: DataHandler
 
     public BorrowableFileStream GetModsArchiveStream()
     {
-        FileStream underlyingStream = File.OpenRead(_modsArchivePath);
+        DirectoryInfo directoryInfo = new DirectoryInfo(_modsArchivePath);
+        FileInfo[] files = directoryInfo.GetFiles();
+        FileStream underlyingStream = File.OpenRead(files[0].FullName);
         return new BorrowableFileStream(underlyingStream, this);
     }
 }

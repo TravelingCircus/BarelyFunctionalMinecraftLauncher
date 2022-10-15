@@ -4,6 +4,7 @@ using Common.Network;
 using Common.Network.Messages.ForgeDownload;
 using Common.Network.Messages.LaunchConfiguration;
 using Common.Network.Messages.Login;
+using Common.Network.Messages.ModsDownload;
 using Common.Network.Messages.Registration;
 using Common.Network.Messages.Skin;
 using Common.Network.Messages.Version;
@@ -12,7 +13,7 @@ using TCPFileServer.MessageHandlers;
 
 namespace TCPFileServer;
 
-public class Server
+public sealed class Server
 {
     public bool IsRunning { get; private set; }
     private readonly CancellationTokenSource _cancellationTokenSource;
@@ -37,6 +38,7 @@ public class Server
         HandlerPicker.RegisterHandler(nameof(ConfigVersionRequest), new ConfigVersionHandler(repository));
         HandlerPicker.RegisterHandler(nameof(SkinChangeRequest), new SkinChangeHandler(repository));
         HandlerPicker.RegisterHandler(nameof(ForgeDownloadRequest), new ForgeDownloadHandler(repository));
+        HandlerPicker.RegisterHandler(nameof(ModsDownloadRequest), new ModsDownloadHandler(repository));
         //TODO properly register handlers
         
         _tcpListener.Start();

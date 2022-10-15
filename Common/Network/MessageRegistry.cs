@@ -1,6 +1,7 @@
 ﻿using Common.Network.Messages.ForgeDownload;
 using Common.Network.Messages.LaunchConfiguration;
 using Common.Network.Messages.Login;
+using Common.Network.Messages.ModsDownload;
 using Common.Network.Messages.Registration;
 using Common.Network.Messages.Skin;
 using Common.Network.Messages.Version;
@@ -22,7 +23,9 @@ public static class MessageRegistry
         {9, typeof(SkinChangeRequest)},
         {10, typeof(SkinChangeResponse)},
         {11, typeof(ForgeDownloadRequest)},
-        {12, typeof(ForgeDownloadResponse)}
+        {12, typeof(ForgeDownloadResponse)},
+        {13, typeof(ModsDownloadRequest)},
+        {14, typeof(ModsDownloadResponse)}
     };
 
     public static Message GetMessageFor(MessageHeader header)
