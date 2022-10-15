@@ -4,6 +4,7 @@ using Common.Models;
 using Common.Network;
 using Common.Network.Messages.ChangeSkin;
 using Common.Network.Messages.ForgeDownload;
+using Common.Network.Messages.GetSkin;
 using Common.Network.Messages.LaunchConfiguration;
 using Common.Network.Messages.Login;
 using Common.Network.Messages.ModsDownload;
@@ -101,6 +102,11 @@ public sealed class FileClient
         response.ModsBytes = null!;
 
         return response;
+    }
+    
+    public async Task<GetSkinResponse> GetSkinFor(string nickname)
+    {
+        return (GetSkinResponse)await GetResponseFor(new GetSkinRequest(nickname));
     }
 
     #endregion
