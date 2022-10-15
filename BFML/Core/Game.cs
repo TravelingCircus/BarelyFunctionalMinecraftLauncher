@@ -52,6 +52,7 @@ public sealed class Game
     public async Task Launch(int ram, bool fullScreen, string nickname)
     {
         System.Net.ServicePointManager.DefaultConnectionLimit = 256;
+        await Task.Delay(100);
         Process process = await _launcher.CreateProcessAsync(Forge.Version.Id, new MLaunchOption
         {
             MaximumRamMb = ram,

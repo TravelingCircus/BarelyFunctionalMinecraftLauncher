@@ -19,7 +19,7 @@ public class CompositeProgress
         private set => _current = Math.Clamp(value, 0f, 1f);
     }
     private float _current;
-    private List<(ProgressTracker tracker, float share)> _trackers = new();
+    private List<(ProgressTracker tracker, float share) > _trackers = new();
 
     public ProgressTracker AddTracker(float shareOfComposite)
     {

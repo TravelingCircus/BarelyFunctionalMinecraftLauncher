@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Windows;
+using System.Windows.Controls;
 using BFML._3D;
 using OpenTK.Wpf;
 using System.Windows.Input;
@@ -8,6 +9,7 @@ using Common.Misc;
 using Common.Models;
 using Common.Network.Messages.Skin;
 using TCPFileClient;
+using XamlRadialProgressBar;
 
 namespace BFML.WPF;
 
@@ -19,8 +21,8 @@ public partial class MainWindow : Window
     private readonly ConfigurationVersion _configVersion;
     private readonly LaunchConfiguration _launchConfig;
     private SkinPreviewRenderer _skinPreviewRenderer;
+    private LoadingScreen _loadingScreen;
     private Game _game;
-    private LoadingWindow _loadingWindow;
 
     public MainWindow(FileClient fileClient, User user, LocalPrefs localPrefs,
        LaunchConfiguration launchConfig, ConfigurationVersion configVersion)
@@ -32,7 +34,7 @@ public partial class MainWindow : Window
         //TODO should correspond to skin.png in .minecraft/BFML/skin.png
         _launchConfig = launchConfig;
         _configVersion = configVersion;
-        _loadingWindow = new LoadingWindow();
+        _loadingScreen = new LoadingScreen(Loading, ProgressBar, ProgressText);
 
         SetUpSkinRenderer();
         Loaded += OnWindowLoaded;
@@ -54,11 +56,9 @@ public partial class MainWindow : Window
 
         if (!_game.IsReadyToLaunch())
         {
-            CompositeProgress progress = new CompositeProgress();
-            _loadingWindow.Show();
-            progress.Changed += _ => _loadingWindow.SetProgress(progress.Current);
+            CompositeProgress progress = _loadingScreen.Show();
             await _game.CleanInstall(progress);
-            _loadingWindow.Hide();
+            _loadingScreen.Hide();
         }
         await _game.Launch((int)RamSlider.Value, false, _user.Nickname);
     }
@@ -111,8 +111,6 @@ public partial class MainWindow : Window
                 Application.Current.MainWindow!.Top = 3;
             }
             DragMove();
-            _loadingWindow.Top = Top - 200;
-            _loadingWindow.Left = Left + 200;
         }
     }
 
@@ -141,6 +139,47 @@ public partial class MainWindow : Window
 
     #endregion
 
+    #region Loading
+
+    private sealed class LoadingScreen
+    {
+        private readonly Border _loading;
+        private readonly RadialProgressBar _progressBar;
+        private readonly TextBlock _progressText;
+        private CompositeProgress _progress;
+
+        public LoadingScreen(Border loading, RadialProgressBar progressBar, TextBlock progressText)
+        {
+            _loading = loading;
+            _progressBar = progressBar;
+            _progressText = progressText;
+        }
+
+        public CompositeProgress Show()
+        {
+            _loading.Visibility = Visibility.Visible;
+            _progressBar.Value = 0f;
+            _progressText.Text = "0";
+            _progress = new CompositeProgress();
+            _progress.Changed += OnProgressChange;
+            return _progress;
+        }
+
+        public void Hide()
+        {
+            _loading.Visibility = Visibility.Collapsed;
+            _progress.Changed -= OnProgressChange;
+        }
+
+        private void OnProgressChange(float progressValue)
+        {
+            _progressBar.Value = progressValue * 100f;
+            _progressText.Text = $"{(int)(progressValue * 100f)}";
+        }
+    }
+
+    #endregion
+    
     private void ApplyLocalPrefs()
     {
         RamSlider.Value = _localPrefs.DedicatedRAM;
