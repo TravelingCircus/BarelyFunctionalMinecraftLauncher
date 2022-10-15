@@ -102,8 +102,18 @@ public sealed class Game
 
     private async Task InstallVanilla(ProgressTracker progressTracker)
     {
-        await _launcher.CheckAndDownloadAsync(Vanilla.Version);
-        progressTracker.Add(1f);
+        Task download = _launcher.CheckAndDownloadAsync(Vanilla.Version);
+        DirectoryInfo minecraftDirectory = new DirectoryInfo(_minecraftPath.BasePath);
+        
+        while (!download.IsCompleted && !download.IsFaulted)
+        {
+            await Task.Delay(300);
+            float downloaded = minecraftDirectory.RoughSize();
+            float toDownload = 600 * 1024 * 1024f;
+            progressTracker.Report(downloaded / toDownload);
+        }
+        await download; 
+        progressTracker.Report(1f);
     }
     
     private async Task InstallForge(ProgressTracker progressTracker)

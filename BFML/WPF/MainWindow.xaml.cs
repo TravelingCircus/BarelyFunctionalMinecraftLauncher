@@ -56,6 +56,7 @@ public partial class MainWindow : Window
         {
             CompositeProgress progress = new CompositeProgress();
             _loadingWindow.Show();
+            progress.Changed += _ => _loadingWindow.SetProgress(progress.Current);
             await _game.CleanInstall(progress);
             _loadingWindow.Hide();
         }

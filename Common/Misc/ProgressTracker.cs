@@ -6,18 +6,18 @@ public class ProgressTracker : IProgress<float>
     public float Current
     {
         get => _current;
-        private set => Math.Clamp(value, 0f, 1f);
+        private set => _current = Math.Clamp(value, 0f, 1f);
     }
     private float _current;
 
     public void Report(float value)
     {
+        Current = value;
         Changed?.Invoke();
     }
 
     public void Add(float step)
     {
-        Current += step;
-        Report(Current);
+        Report(Current + step);
     }
 }

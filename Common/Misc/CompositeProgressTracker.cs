@@ -2,6 +2,7 @@
 
 public class CompositeProgress
 {
+    public event Action<float> Changed; 
     public float Covered
     {
         get => _current;
@@ -15,7 +16,7 @@ public class CompositeProgress
     public float Current
     {
         get => _current;
-        private set => Math.Clamp(value, 0f, 1f);
+        private set => _current = Math.Clamp(value, 0f, 1f);
     }
     private float _current;
     private List<(ProgressTracker tracker, float share)> _trackers = new();
@@ -36,5 +37,6 @@ public class CompositeProgress
         {
             Current += tuple.tracker.Current * tuple.share;
         }
+        Changed?.Invoke(Current);
     }
 }

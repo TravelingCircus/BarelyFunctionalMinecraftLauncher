@@ -17,7 +17,7 @@ public class Mods
 
     public bool ChecksumMatches(string checksum)
     {
-        return true;
+        return false;
         throw new NotImplementedException();
     }
 

@@ -23,4 +23,20 @@ public static class DirectoryExtensions
             directory.MoveTo(destination);
         }
     }
+
+    public static int RoughSize(this DirectoryInfo directory)
+    {
+        int size = 0;
+        FileInfo[] fis = directory.GetFiles();
+        foreach (FileInfo file in fis) 
+        {      
+            size += (int)file.Length;    
+        }
+        DirectoryInfo[] directories = directory.GetDirectories();
+        foreach (DirectoryInfo innerDirectory in directories) 
+        {
+            size += innerDirectory.RoughSize();   
+        }
+        return size;  
+    }
 }
