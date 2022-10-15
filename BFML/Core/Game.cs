@@ -4,7 +4,6 @@ using System.Threading.Tasks;
 using CmlLib.Core;
 using CmlLib.Core.Auth;
 using CmlLib.Core.Version;
-using CmlLib.Core.VersionLoader;
 using Common.Misc;
 using Common.Models;
 using Common.Network.Messages.ForgeDownload;
@@ -74,9 +73,7 @@ public sealed class Game
         await Task.WhenAll(tasks);
         await _launcher.GetAllVersionsAsync();
     }
-
-
-
+    
     public bool IsReadyToLaunch()
     {
         return

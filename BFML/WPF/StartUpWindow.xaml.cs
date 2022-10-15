@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Threading.Tasks;
 using System.Windows;
 using BFML.Core;
@@ -20,6 +21,8 @@ public partial class StartUpWindow : Window
 
     private async void OnWindowLoaded(object obj, RoutedEventArgs args)
     {
+        FontInstaller.InstallFont(new FileInfo(Environment.CurrentDirectory + "\\MinecraftFont.ttf"));
+        
         FileClient fileClient = ConnectToServer();
         LocalPrefs localPrefs = LocalPrefs.GetLocalPrefs();
         

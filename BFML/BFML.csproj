@@ -44,6 +44,7 @@
     </ItemGroup>
 
     <ItemGroup>
+      <Resource Include="bin\Debug\net6.0-windows\MinecraftFont.ttf" />
       <Resource Include="WPF\Fonts\MinecraftFont.ttf" />
       <Resource Include="WPF\Images\LogOutIcon.png">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
