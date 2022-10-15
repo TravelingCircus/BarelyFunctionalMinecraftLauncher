@@ -59,7 +59,7 @@ public partial class MainWindow : Window
             await _game.CleanInstall(progress);
             _loadingWindow.Hide();
         }
-        _game.Launch((int)RamSlider.Value, false, _user.Nickname);
+        await _game.Launch((int)RamSlider.Value, false, _user.Nickname);
     }
 
     #region PlayerModelRendering

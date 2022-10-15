@@ -4,7 +4,7 @@ public static class DirectoryExtensions
 {
     public static void MergeTo(this DirectoryInfo source, DirectoryInfo target)
     {
-        if (!target.Exists) throw new IOException($"Target directory doesn't exist. {target}");
+        if (!target.Exists) Directory.CreateDirectory(target.FullName);
 
         foreach (FileInfo file in source.GetFiles())
         {

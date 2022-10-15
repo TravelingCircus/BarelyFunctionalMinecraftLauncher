@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using CmlLib.Core;
 using CmlLib.Core.Auth;
 using CmlLib.Core.Version;
+using CmlLib.Core.VersionLoader;
 using Common.Misc;
 using Common.Models;
 using Common.Network.Messages.ForgeDownload;
@@ -47,10 +48,10 @@ public sealed class Game
         return new Game(fileClient, launchConfiguration, launcher, vanilla, forge, minecraftPath);
     }
 
-    public void Launch(int ram, bool fullScreen, string nickname)
+    public async Task Launch(int ram, bool fullScreen, string nickname)
     {
         System.Net.ServicePointManager.DefaultConnectionLimit = 256;
-        Process process = _launcher.CreateProcess(Vanilla.Version, new MLaunchOption
+        Process process = await _launcher.CreateProcessAsync(Forge.Version.Id, new MLaunchOption
         {
             MaximumRamMb = ram,
             Session = MSession.GetOfflineSession(nickname),
@@ -100,7 +101,7 @@ public sealed class Game
 
     private async Task InstallVanilla(ProgressTracker progressTracker)
     {
-        await _launcher.CheckAndDownloadAsync(Forge.Version);
+        await _launcher.CheckAndDownloadAsync(Vanilla.Version);
         progressTracker.Add(1f);
     }
     
