@@ -106,7 +106,6 @@ public sealed class Game
     
     private async Task InstallForge(ProgressTracker progressTracker)
     {
-        return;
         using (TempDirectory tempDirectory = new TempDirectory())
         {
             ForgeDownloadResponse response = await _fileClient.DownloadForgeFiles(tempDirectory.Info.FullName);

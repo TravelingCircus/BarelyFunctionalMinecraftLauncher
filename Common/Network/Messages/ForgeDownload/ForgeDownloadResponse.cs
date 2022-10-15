@@ -1,6 +1,6 @@
 ﻿namespace Common.Network.Messages.ForgeDownload;
 
-public class ForgeDownloadResponse : ZipFileMessage
+public sealed class ForgeDownloadResponse : ZipFileMessage
 {
     public string TempForgePath;
     public byte[] ForgeBytes;

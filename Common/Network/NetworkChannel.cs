@@ -2,9 +2,9 @@
 
 namespace Common.Network;
 
-public class NetworkChannel
+public sealed class NetworkChannel
 {
-    private NetworkStream _stream;
+    private readonly NetworkStream _stream;
     
     public NetworkChannel(NetworkStream stream)
     {

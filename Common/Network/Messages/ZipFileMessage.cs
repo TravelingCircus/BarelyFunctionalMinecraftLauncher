@@ -9,9 +9,8 @@ public abstract class ZipFileMessage: Message
         int dataLength = GetDataLength();
         Stream dataStream = GetDataStream();
         WriteToStream(targetStream, dataLength);
-        byte[] buffer = new byte[67108864];
-        int lastRead = 0;
-        WriteToStream(targetStream, dataLength);
+        byte[] buffer = new byte[16777216];
+        int lastRead;
         do 
         {
             lastRead = await dataStream.ReadAsync(buffer, 0, buffer.Length);
