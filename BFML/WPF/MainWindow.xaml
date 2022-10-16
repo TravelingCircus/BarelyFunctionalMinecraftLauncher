@@ -546,7 +546,7 @@
                         x:Name="ProgressText"
                         Width="76"
                         Height="70"
-                        Margin="6,0,0,60"
+                        Margin="6,0,0,85"
                         HorizontalAlignment="Center"
                         VerticalAlignment="Center"
                         FontFamily="Minecraft"
@@ -568,7 +568,7 @@
                     <TextBlock
                         Width="210"
                         Height="26"
-                        Margin="0,50,0,0"
+                        Margin="0,25,0,0"
                         HorizontalAlignment="Center"
                         FontFamily="Minecraft"
                         FontSize="18"
