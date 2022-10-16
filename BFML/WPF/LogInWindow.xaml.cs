@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Globalization;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
@@ -69,7 +70,9 @@ public partial class LogInWindow : Window
     private async void RegisterButtonOnClick(object sender, RoutedEventArgs e)
     {
         string nickname = InputNickname.Text;
+        ValidateString(nickname);
         string password = InputPassword.Text;
+        ValidateString(password);
 
         User newUser = new User(nickname, password);
         RegistrationResponse response = await _fileClient.SendRegistrationRequest(newUser);
@@ -85,7 +88,9 @@ public partial class LogInWindow : Window
     private async void LogInButtonOnClick(object sender, RoutedEventArgs e)
     {
         string nickname = InputNickname.Text;
+        ValidateString(nickname);
         string password = InputPassword.Text;
+        ValidateString(password);
 
         await TryLogIn(nickname, password);
     }
@@ -140,5 +145,35 @@ public partial class LogInWindow : Window
         {
             TextPassword.Visibility = Visibility.Visible;
         }
+    }
+
+    private void ValidateString(string text)
+    {
+        if (String.IsNullOrEmpty(text)) throw new NullReferenceException();
+        if (!IsLegalUnicode(text)) throw new Exception($"[{text}] isn't valid unicode");
+        if (text.Length < 4 || text.Length > 16) throw new Exception("Too long or too short");
+    }
+    
+    private bool IsLegalUnicode(string str)
+    {
+        for (int i = 0; i < str.Length; i++)
+        {
+            UnicodeCategory uc = char.GetUnicodeCategory(str, i);
+
+            if (uc == UnicodeCategory.Surrogate)
+            {
+                return false;
+            }
+            if (uc == UnicodeCategory.OtherNotAssigned)
+            {
+                return false;
+            }
+            if (char.IsHighSurrogate(str, i))
+            {
+                i++;
+            }
+        }
+
+        return true;
     }
 }

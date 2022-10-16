@@ -30,12 +30,17 @@ public sealed class LocalPrefs
 
     public static void SaveLocalPrefs(string nickname, string password)
     {
+        SaveLocalPrefs(new LocalPrefs(nickname, password));
+    }
+    
+    public static void SaveLocalPrefs(LocalPrefs prefs)
+    {
         if (!Directory.Exists(BFMLDirectoryPath)) Directory.CreateDirectory(BFMLDirectoryPath);
         if (File.Exists(PrefsPath)) File.Delete(PrefsPath);
         using (FileStream fileStream = new FileStream(PrefsPath, FileMode.OpenOrCreate))
         {
             XmlSerializer xml = new XmlSerializer(typeof(LocalPrefs));
-            xml.Serialize(fileStream, new LocalPrefs(nickname, password));
+            xml.Serialize(fileStream, prefs);
         }
     }
     

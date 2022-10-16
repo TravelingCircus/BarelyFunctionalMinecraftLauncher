@@ -331,6 +331,7 @@
                     Text="Fullscreen" />
 
                 <local:Toggle
+                    x:Name="FullScreen"
                     Grid.Column="1"
                     Margin="313,452,31,220"
                     Cursor="Hand"

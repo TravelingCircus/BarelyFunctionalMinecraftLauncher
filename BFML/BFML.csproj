@@ -55,6 +55,10 @@
       <Resource Include="WPF\Images\RecycleIcon.png">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </Resource>
+      <None Remove="WPF\Images\FolderIcon.png" />
+      <Resource Include="WPF\Images\FolderIcon.png">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </Resource>
     </ItemGroup>
 
 </Project>

@@ -62,10 +62,10 @@ public partial class MainWindow : Window
             await _game.CleanInstall(progress);
             _loadingScreen.Hide();
         }
-        ApplyLocalPrefs();
-        await _game.Launch((int)RamSlider.Value, false, _user.Nickname);
+        SaveLocalPrefs();
+        await _game.Launch((int)RamSlider.Value, FullScreen.IsChecked!.Value, _user.Nickname);
         
-        await Task.Delay(3000);
+        await Task.Delay(10000);
         _fileClient.Disconnect();
         Close();
     }
@@ -194,6 +194,13 @@ public partial class MainWindow : Window
         ChangeLog.Text = _configVersion.Changelog;
     }
 
+    private void SaveLocalPrefs()
+    {
+        _localPrefs.IsFullscreen = FullScreen.IsChecked!.Value;
+        _localPrefs.DedicatedRAM = (int)RamSlider.Value;
+        LocalPrefs.SaveLocalPrefs(_localPrefs);
+    }
+    
     private void CheckIfUserPaid()
     {
         if (_user.GryvnyasPaid < _launchConfig.RequiredGriwnas)
