@@ -51,7 +51,6 @@ public sealed class Game
     public async Task Launch(int ram, bool fullScreen, string nickname)
     {
         System.Net.ServicePointManager.DefaultConnectionLimit = 256;
-        await Task.Delay(100);
         Process process = await _launcher.CreateProcessAsync(Forge.Version.Id, new MLaunchOption
         {
             MaximumRamMb = ram,
@@ -79,7 +78,7 @@ public sealed class Game
         return
             Vanilla.IsInstalled()
             && Forge.IsInstalled(_launchConfiguration)
-            && Mods.ChecksumMatches(_launchConfiguration.ModsChecksum);
+            && Mods.ChecksumMatches(uint.Parse(_launchConfiguration.ModsChecksum));
     }
 
     public void DeleteAllFiles(ProgressTracker progress)

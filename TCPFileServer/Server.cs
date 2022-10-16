@@ -33,14 +33,8 @@ public sealed class Server
         Repository repository = new Repository(@"C:\Users\maksy\Desktope\TestRepo\", cancellationToken);
         //Repository repository = new Repository(@"D:\Home\Desktope\TestDownloads\", cancellationToken);
         repository.Initialize();
-        HandlerPicker.RegisterHandler(nameof(RegistrationRequest), new RegistrationHandler(repository));
-        HandlerPicker.RegisterHandler(nameof(LoginRequest), new LoginHandler(repository));
-        HandlerPicker.RegisterHandler(nameof(LaunchConfigurationRequest), new LaunchConfigurationHandler(repository));
-        HandlerPicker.RegisterHandler(nameof(ConfigVersionRequest), new ConfigVersionHandler(repository));
-        HandlerPicker.RegisterHandler(nameof(SkinChangeRequest), new SkinChangeHandler(repository));
-        HandlerPicker.RegisterHandler(nameof(ForgeDownloadRequest), new ForgeDownloadHandler(repository));
-        HandlerPicker.RegisterHandler(nameof(ModsDownloadRequest), new ModsDownloadHandler(repository));
-        HandlerPicker.RegisterHandler(nameof(GetSkinRequest), new GetSkinHandler(repository));
+        RegisterHandlers(repository);
+
         //TODO properly register handlers
         
         _tcpListener.Start();
@@ -84,6 +78,18 @@ public sealed class Server
         Console.WriteLine($"HANDLING CONNECTION thread_{Thread.CurrentThread.ManagedThreadId}");
     }
 
+    private void RegisterHandlers(Repository repository)
+    {
+        HandlerPicker.RegisterHandler(nameof(RegistrationRequest), new RegistrationHandler(repository));
+        HandlerPicker.RegisterHandler(nameof(LoginRequest), new LoginHandler(repository));
+        HandlerPicker.RegisterHandler(nameof(LaunchConfigurationRequest), new LaunchConfigurationHandler(repository));
+        HandlerPicker.RegisterHandler(nameof(ConfigVersionRequest), new ConfigVersionHandler(repository));
+        HandlerPicker.RegisterHandler(nameof(SkinChangeRequest), new SkinChangeHandler(repository));
+        HandlerPicker.RegisterHandler(nameof(ForgeDownloadRequest), new ForgeDownloadHandler(repository));
+        HandlerPicker.RegisterHandler(nameof(ModsDownloadRequest), new ModsDownloadHandler(repository));
+        HandlerPicker.RegisterHandler(nameof(GetSkinRequest), new GetSkinHandler(repository));
+    }
+    
     public void Terminate()
     {
         _cancellationTokenSource.Cancel();

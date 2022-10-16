@@ -1,4 +1,5 @@
-﻿using Common.Models;
+﻿using Common;
+using Common.Models;
 
 namespace TCPFileServer.DataAccess;
 
@@ -63,7 +64,7 @@ public sealed class SmallDataHandler: DataHandler
 
         return nicknames;
     }
-    
+
     public string SaveSkin(string nickname, byte[] data)
     {
         string skinPath = _skinsDirectory + nickname + ".png";
@@ -92,5 +93,14 @@ public sealed class SmallDataHandler: DataHandler
     {
         using FileStream fileStream = new FileStream(path, FileMode.Create);
         DataSerializer.UserToXml(newUser, fileStream);
+    }
+
+    public void WriteLaunchConfig(LaunchConfiguration config)
+    {
+        FileInfo file = new FileInfo(_repositoryPath + "LaunchConfiguration.xml");
+        if(file.Exists)file.Delete();
+        using FileStream stream = file.Create();
+        DataSerializer.LaunchConfigToXml(config, stream);
+        stream.Flush();
     }
 }

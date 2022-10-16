@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
-using System.IO;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using BFML._3D;
@@ -64,6 +64,10 @@ public partial class MainWindow : Window
         }
         ApplyLocalPrefs();
         await _game.Launch((int)RamSlider.Value, false, _user.Nickname);
+        
+        await Task.Delay(3000);
+        _fileClient.Disconnect();
+        Close();
     }
 
     #region PlayerModelRendering

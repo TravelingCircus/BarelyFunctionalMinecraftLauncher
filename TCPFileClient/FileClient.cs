@@ -175,4 +175,9 @@ public sealed class FileClient
             Response = response;
         }
     }
+
+    public void Disconnect()
+    {
+        Terminate();
+    }
 }

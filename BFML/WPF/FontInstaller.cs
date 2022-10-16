@@ -12,8 +12,8 @@ public static class FontInstaller
         
         int result = AddFontResource(file.FullName);
         
-        int error = Marshal.GetLastWin32Error();
-        if (error != 0) throw new Win32Exception(error);
+        //int error = Marshal.GetLastWin32Error();
+        //if (error != 0) throw new Win32Exception(error);
     }
     
     [DllImport("gdi32.dll", EntryPoint = "AddFontResourceW", SetLastError = true)]

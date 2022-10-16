@@ -1,4 +1,5 @@
-﻿using Common.Models;
+﻿using System.Globalization;
+using Common.Models;
 
 namespace TCPFileServer.DataAccess;
 
@@ -29,6 +30,8 @@ public sealed class Repository
         {
             _largeDataHandlerQueue.RunBlocking(_cancellationToken).GetAwaiter();
         }, _cancellationToken);
+        
+        PrepareUserConfigs();
     }
 
     #region SmallDataInterface
@@ -158,4 +161,16 @@ public sealed class Repository
     } 
 
     #endregion
+
+    private async Task PrepareUserConfigs()
+    {
+        LargeDataHandler dataHandler = await _largeDataHandlerQueue.GetDataHandler();
+        uint modsChecksum = dataHandler.GetModsChecksum();
+        dataHandler.Release();
+        SmallDataHandler smallDataHandler = await _smallDataHandlerQueue.GetDataHandler();
+        LaunchConfiguration config = smallDataHandler.GetLaunchConfig();
+        config.ModsChecksum = modsChecksum.ToString(CultureInfo.InvariantCulture);
+        smallDataHandler.WriteLaunchConfig(config);
+        smallDataHandler.Release();
+    }
 }

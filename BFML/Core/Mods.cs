@@ -1,7 +1,8 @@
-﻿using System;
+﻿using System.IO;
 using System.IO.Compression;
 using System.Threading.Tasks;
 using CmlLib.Core;
+using Common;
 using TCPFileClient.Utils;
 
 namespace BFML.Core;
@@ -15,10 +16,9 @@ public class Mods
         _minecraftPath = minecraftPath;
     }
 
-    public bool ChecksumMatches(string checksum)
+    public bool ChecksumMatches(uint checksum)
     {
-        return false;
-        throw new NotImplementedException();
+        return checksum == Checksum.FromDirectory(new DirectoryInfo(_minecraftPath.BasePath + "\\mods"));
     }
 
     public Task InstallFromArchive(string archivePath)
