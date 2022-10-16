@@ -54,7 +54,7 @@ public partial class StartUpWindow : Window
         }
     }
     
-    private Task<FileClient> ConnectToServer()
+    private async Task<FileClient> ConnectToServer()
     {
         FileClient fileClient = new FileClient(new MinecraftPath().BasePath);
         
@@ -67,7 +67,7 @@ public partial class StartUpWindow : Window
         }
         
         if (!success) throw new Exception("Failed connect to the server");
-        return Task.FromResult(fileClient);
+        return fileClient;
     }
 
     private Task<LoginResponse> TryLogIn(FileClient fileClient, LocalPrefs localPrefs)
