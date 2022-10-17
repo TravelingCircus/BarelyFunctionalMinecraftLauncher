@@ -88,9 +88,7 @@ public partial class LogInWindow : Window
     private async void LogInButtonOnClick(object sender, RoutedEventArgs e)
     {
         string nickname = InputNickname.Text;
-        ValidateString(nickname);
         string password = InputPassword.Text;
-        ValidateString(password);
 
         await TryLogIn(nickname, password);
     }
