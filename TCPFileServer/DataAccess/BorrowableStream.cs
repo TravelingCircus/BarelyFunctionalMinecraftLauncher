@@ -39,7 +39,6 @@ public sealed class BorrowableFileStream : Stream
     public override void Write(byte[] buffer, int offset, int count)
     {
         throw new InvalidOperationException("You're trying to write to a read-only stream...");
-        _stream.Write(buffer, offset, count);
     }
 
     public override bool CanRead => _stream.CanRead;

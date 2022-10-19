@@ -124,7 +124,7 @@ public sealed class FileClient
                 SendRequestsWhenAvailable(_networkChannel, _requests, cancellationToken).GetAwaiter();
             }, cancellationToken);
         }
-        catch (Exception e)
+        catch
         {
             return false;
         }

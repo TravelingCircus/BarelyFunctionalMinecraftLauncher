@@ -27,13 +27,27 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Content Include="bin\Debug\net6.0-windows\perfection.png" />
-      <Content Include="bin\Debug\net6.0-windows\plane.obj" />
-      <Content Include="bin\Debug\net6.0-windows\shader.frag" />
-      <Content Include="bin\Debug\net6.0-windows\shader.vert" />
-      <Content Include="bin\Debug\net6.0-windows\shadow.png" />
-      <Content Include="bin\Debug\net6.0-windows\SkinPreview.obj" />
-      <Content Include="bin\Debug\net6.0-windows\van.png" />
+      <EmbeddedResource Include="bin\Debug\net6.0-windows\perfection.png">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </EmbeddedResource>
+      <EmbeddedResource Include="bin\Debug\net6.0-windows\plane.obj">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </EmbeddedResource>
+      <EmbeddedResource Include="bin\Debug\net6.0-windows\shader.frag">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </EmbeddedResource>
+      <EmbeddedResource Include="bin\Debug\net6.0-windows\shader.vert">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </EmbeddedResource>
+      <EmbeddedResource Include="bin\Debug\net6.0-windows\shadow.png">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </EmbeddedResource>
+      <EmbeddedResource Include="bin\Debug\net6.0-windows\SkinPreview.obj">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </EmbeddedResource>
+      <EmbeddedResource Include="bin\Debug\net6.0-windows\van.png">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </EmbeddedResource>
     </ItemGroup>
 
     <ItemGroup>
@@ -44,7 +58,9 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Resource Include="bin\Debug\net6.0-windows\MinecraftFont.ttf" />
+      <EmbeddedResource Include="bin\Debug\net6.0-windows\MinecraftFont.ttf">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </EmbeddedResource>
       <Resource Include="WPF\Fonts\MinecraftFont.ttf" />
       <Resource Include="WPF\Images\LogOutIcon.png">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
