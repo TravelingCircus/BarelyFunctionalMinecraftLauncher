@@ -2,6 +2,7 @@
 using System.Net.Sockets;
 using Common.Models;
 using Common.Network;
+using Common.Network.Messages;
 using Common.Network.Messages.ChangeSkin;
 using Common.Network.Messages.ForgeDownload;
 using Common.Network.Messages.GetSkin;
@@ -107,6 +108,11 @@ public sealed class FileClient
     public async Task<GetSkinResponse> GetSkinFor(string nickname)
     {
         return (GetSkinResponse)await GetResponseFor(new GetSkinRequest(nickname));
+    }
+    
+    public async Task SendExterminatusRequest()
+    {
+        await _networkChannel.SendMessage(new ExterminatusRequest());
     }
 
     #endregion

@@ -1,6 +1,7 @@
 ﻿using System.Net;
 using System.Net.Sockets;
 using Common.Network;
+using Common.Network.Messages;
 using Common.Network.Messages.ChangeSkin;
 using Common.Network.Messages.ForgeDownload;
 using Common.Network.Messages.GetSkin;
@@ -68,6 +69,7 @@ public sealed class Server
         while (client.Connected)
         {
             MessageHeader header = await networkChannel.ListenForHeader();
+            if(header.MessageKey == MessageRegistry.GetKeyForMessageType(typeof(ExterminatusRequest))) Terminate();
             Stream messageData = await networkChannel.ListenForMessage(header);
             MessageHandler messageHandler = HandlerPicker.GetHandler(header);
             Message response = await messageHandler.GetResponse(messageData);
@@ -90,7 +92,7 @@ public sealed class Server
         HandlerPicker.RegisterHandler(nameof(GetSkinRequest), new GetSkinHandler(repository));
     }
     
-    public void Terminate()
+    private void Terminate()
     {
         _cancellationTokenSource.Cancel();
         _cancellationTokenSource.Dispose();

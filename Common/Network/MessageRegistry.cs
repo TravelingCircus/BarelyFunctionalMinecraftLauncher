@@ -1,4 +1,5 @@
-﻿using Common.Network.Messages.ChangeSkin;
+﻿using Common.Network.Messages;
+using Common.Network.Messages.ChangeSkin;
 using Common.Network.Messages.ForgeDownload;
 using Common.Network.Messages.GetSkin;
 using Common.Network.Messages.LaunchConfiguration;
@@ -28,7 +29,10 @@ public static class MessageRegistry
         {13, typeof(ModsDownloadRequest)},
         {14, typeof(ModsDownloadResponse)},
         {15, typeof(GetSkinRequest)},
-        {16, typeof(GetSkinResponse)}
+        {16, typeof(GetSkinResponse)},
+        
+        
+        {228, typeof(ExterminatusRequest)},
     };
 
     public static Message GetMessageFor(MessageHeader header)

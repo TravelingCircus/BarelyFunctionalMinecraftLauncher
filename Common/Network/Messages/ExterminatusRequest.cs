@@ -1,10 +1,10 @@
-﻿namespace Common.Network.Messages.LaunchConfiguration;
+﻿namespace Common.Network.Messages;
 
-public class LaunchConfigurationRequest: Message
+public class ExterminatusRequest: Message
 {
     public override MessageHeader GetHeader()
     {
-        return new MessageHeader(MessageRegistry.GetKeyForMessageType(typeof(LaunchConfigurationRequest)), 0);
+        return new MessageHeader(MessageRegistry.GetKeyForMessageType(typeof(ExterminatusRequest)), 0);
     }
 
     public override void ApplyData(Stream stream)
