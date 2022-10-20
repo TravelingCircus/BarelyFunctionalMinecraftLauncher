@@ -15,6 +15,8 @@ import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import org.apache.logging.log4j.core.net.Priority;
 import org.slf4j.Logger;
 
+import java.io.IOException;
+
 @Mod("bfmlintegration")
 public class ExampleMod
 {
@@ -23,17 +25,24 @@ public class ExampleMod
     public ExampleMod()
     {
         // Register the setup method for modloading
-        FMLJavaModLoadingContext.get().getModEventBus().addListener(this::setup);
+        FMLJavaModLoadingContext.get().getModEventBus().addListener((FMLCommonSetupEvent event) -> {
+            try {
+                setup(event);
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        });
 
         // Register ourselves for server and other game events we are interested in
         MinecraftForge.EVENT_BUS.register(this);
     }
 
-    private void setup(final FMLCommonSetupEvent event)
-    {
+    private void setup(final FMLCommonSetupEvent event) throws IOException {
         // some preinit code
         LOGGER.info("HELLO FROM PREINIT");
         LOGGER.info("DIRT BLOCK >> {}", Blocks.DIRT.getRegistryName());
+        BFMLFileClient fileClient = new BFMLFileClient();
+        fileClient.ConnectToServer();
     }
 
     // You can use SubscribeEvent and let the Event Bus discover methods to call
