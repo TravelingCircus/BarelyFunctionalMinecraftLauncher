@@ -10,21 +10,36 @@ public final class BFMLFileClient {
 
     private static final Logger LOGGER = LogUtils.getLogger();
 
-    private Socket _clientSocket;
-    private InputStream _networkInputStream;
-    private OutputStream _networkOutputStream;
-    private NetworkChannel _networkChannel;
+    private Socket clientSocket;
+    private InputStream networkInputStream;
+    private OutputStream networkOutputStream;
+    private NetworkChannel networkChannel;
 
-    public boolean ConnectToServer() throws IOException {
+    public boolean connectToServer() throws IOException {
         try
         {
-            _clientSocket = new Socket("127.0.0.1", 69);
+            clientSocket = new Socket("127.0.0.1", 69);
             LOGGER.info("Client connected");
-            _networkInputStream = _clientSocket.getInputStream();
-            _networkOutputStream = _clientSocket.getOutputStream();
-            _networkChannel = new NetworkChannel(_networkInputStream, _networkOutputStream);
+            networkInputStream = clientSocket.getInputStream();
+            networkOutputStream = clientSocket.getOutputStream();
+            networkChannel = new NetworkChannel(networkInputStream, networkOutputStream);
 
-            _networkChannel.SendMessage(new GetSkinRequest("kok"));
+            Thread messageListenerThread = new Thread(new MessageListener(networkChannel,
+                    (message) -> {
+                File skin = new File("D:\\Home\\Desktope\\TestDownloads\\javaSkin.png");
+                        try {
+                            skin.createNewFile();
+                            try(FileOutputStream fileOutputStream = new FileOutputStream(skin)){
+                                fileOutputStream.write(((GetSkinResponse)message).SkinData);
+                            }
+                        } catch (IOException e) {
+                            throw new RuntimeException(e);
+                        }
+                    }));
+
+            messageListenerThread.start();
+
+            networkChannel.sendMessage(new GetSkinRequest("kok"));
         }
         catch (Exception e)
         {

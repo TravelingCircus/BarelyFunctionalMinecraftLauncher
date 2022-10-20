@@ -12,7 +12,6 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.event.server.ServerStartingEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
-import org.apache.logging.log4j.core.net.Priority;
 import org.slf4j.Logger;
 
 import java.io.IOException;
@@ -42,7 +41,7 @@ public class ExampleMod
         LOGGER.info("HELLO FROM PREINIT");
         LOGGER.info("DIRT BLOCK >> {}", Blocks.DIRT.getRegistryName());
         BFMLFileClient fileClient = new BFMLFileClient();
-        fileClient.ConnectToServer();
+        fileClient.connectToServer();
     }
 
     // You can use SubscribeEvent and let the Event Bus discover methods to call

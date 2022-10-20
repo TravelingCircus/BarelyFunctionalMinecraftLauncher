@@ -1,25 +1,55 @@
 package com.example.examplemod;
 
-import com.mojang.logging.LogUtils;
-import org.slf4j.Logger;
+import org.apache.http.MethodNotSupportedException;
 
-import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.OutputStream;
-import java.util.stream.Stream;
+import java.nio.ByteBuffer;
+import java.nio.ByteOrder;
 
 public abstract class Message {
 
-    private static final Logger LOGGER = LogUtils.getLogger();
+    public Message() {
+
+    }
 
     public abstract MessageHeader getMessageHeader() throws Exception;
 
-    public abstract void ApplyData(Stream stream);
+    public abstract void applyData(InputStream stream) throws IOException, MethodNotSupportedException;
 
     public abstract byte[] getData() throws Exception;
 
     public void writeDataTo(OutputStream targetStream) throws Exception {
         targetStream.write(getData());
-        LOGGER.info("Written data to stream");
+    }
+
+    protected byte[] byteArrayReadStream(InputStream stream, int arrayLength) throws IOException {
+        byte[] bytes = new byte[arrayLength];
+        stream.read(bytes, 0, arrayLength);
+        return bytes;
+    }
+
+    protected String stringReadStream(InputStream stream) throws IOException {
+        int stringLength = intReadStream(stream);
+        byte[] stringBuffer = new byte[stringLength];
+        stream.read(stringBuffer, 0, stringLength);
+        ByteBuffer buffer = ByteBuffer.wrap(stringBuffer);
+        buffer.order(ByteOrder.LITTLE_ENDIAN);
+        return buffer.toString();
+    }
+
+    protected int intReadStream(InputStream stream) throws IOException {
+        byte[] intBuffer = new byte[4];
+        stream.read(intBuffer, 0, 4);
+        ByteBuffer buffer = ByteBuffer.wrap(intBuffer);
+        buffer.order(ByteOrder.LITTLE_ENDIAN);
+        return buffer.getInt();
+    }
+
+    protected boolean boolReadStream(InputStream stream) throws IOException {
+        byte[] byteBuffer = new byte[1];
+        stream.read(byteBuffer, 0, 1);
+        return (int) byteBuffer[0] != 0;
     }
 }

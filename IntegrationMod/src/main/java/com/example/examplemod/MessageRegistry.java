@@ -5,25 +5,27 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class MessageRegistry {
-    private static final HashMap<Byte, Class> _messages = new HashMap<Byte, Class>(){
+    private static final HashMap<Byte, Class> messages = new HashMap<Byte, Class>(){
         {
             {put((byte)15, GetSkinRequest.class);}
+            {put((byte)16, GetSkinResponse.class);}
         }
     };
 
-    public static Message GetMessageFor(MessageHeader header) throws NoSuchMethodException,
+    public static Message getMessageFor(MessageHeader header) throws NoSuchMethodException,
             InvocationTargetException, InstantiationException, IllegalAccessException {
-        return (Message) _messages.get(header.MessageKey).getDeclaredConstructor().newInstance();
+        Class<GetSkinResponse> message = messages.get(header.MessageKey);
+        return message.getDeclaredConstructor().newInstance();
     }
 
-    public static String GetMessageTypeName(MessageHeader header)
+    public static String getMessageTypeName(MessageHeader header)
     {
-        return _messages.get(header.MessageKey).getTypeName();
+        return messages.get(header.MessageKey).getTypeName();
     }
 
-    public static byte GetKeyForMessageType(Class messageClass) throws Exception {
+    public static byte getKeyForMessageType(Class messageClass) throws Exception {
         String typeName = messageClass.getTypeName();
-        for(Map.Entry<Byte, Class> entry: _messages.entrySet()){
+        for(Map.Entry<Byte, Class> entry: messages.entrySet()){
             Class value = entry.getValue();
             if(value.getTypeName().equals(messageClass.getTypeName())) return entry.getKey();
         }
