@@ -23,7 +23,6 @@ public class ExampleMod
 
     public ExampleMod()
     {
-        // Register the setup method for modloading
         FMLJavaModLoadingContext.get().getModEventBus().addListener((FMLCommonSetupEvent event) -> {
             try {
                 setup(event);
@@ -32,36 +31,14 @@ public class ExampleMod
             }
         });
 
-        // Register ourselves for server and other game events we are interested in
         MinecraftForge.EVENT_BUS.register(this);
     }
 
     private void setup(final FMLCommonSetupEvent event) throws IOException {
-        // some preinit code
-        LOGGER.info("HELLO FROM PREINIT");
-        LOGGER.info("DIRT BLOCK >> {}", Blocks.DIRT.getRegistryName());
+
+
+
         BFMLFileClient fileClient = new BFMLFileClient();
         fileClient.connectToServer();
-    }
-
-    // You can use SubscribeEvent and let the Event Bus discover methods to call
-    @SubscribeEvent
-    public void onServerStarting(ServerStartingEvent event)
-    {
-        // Do something when the server starts
-    }
-
-    // You can use EventBusSubscriber to automatically subscribe events on the contained class (this is subscribing to the MOD
-    // Event bus for receiving Registry Events)
-    @Mod.EventBusSubscriber(bus = Mod.EventBusSubscriber.Bus.MOD)
-    public static class RegistryEvents
-    {
-
-    }
-
-    @OnlyIn(Dist.CLIENT)
-    @SubscribeEvent(priority = EventPriority.HIGH)
-    public void kok(RenderPlayerEvent.Pre e){
-        //e.getRenderer().render();
     }
 }
