@@ -3,6 +3,7 @@ package com.example.examplemod;
 import com.example.examplemod.bfml.BFMLFileClient;
 import com.mojang.logging.LogUtils;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
@@ -15,22 +16,22 @@ public class BFMLIntegration
 {
     public static final String ID = "bfmlintegration";
     private static final Logger LOGGER = LogUtils.getLogger();
+    private final ServerSkins serverSkins;
+    private final BFMLFileClient bfmlFileClient;
 
     public BFMLIntegration()
     {
-        FMLJavaModLoadingContext.get().getModEventBus().addListener((FMLCommonSetupEvent event) -> {
-            try {
-                setup(event);
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
-        });
-
+        FMLJavaModLoadingContext.get().getModEventBus().register(this);
         MinecraftForge.EVENT_BUS.register(this);
+
+        bfmlFileClient = new BFMLFileClient();
+        serverSkins = new ServerSkins(bfmlFileClient);
+        MinecraftForge.EVENT_BUS.register(serverSkins);
     }
 
-    private void setup(final FMLCommonSetupEvent event) throws IOException {
-        BFMLFileClient fileClient = new BFMLFileClient();
-        fileClient.connectToServer();
+    @SubscribeEvent
+    private void setup(FMLCommonSetupEvent event) throws IOException {
+        //BFMLFileClient fileClient = new BFMLFileClient();v
+        //fileClient.connectToServer();
     }
 }

@@ -7,6 +7,7 @@ import org.slf4j.Logger;
 
 import java.io.*;
 import java.net.Socket;
+import java.nio.ByteBuffer;
 import java.nio.file.NotDirectoryException;
 
 public final class BFMLFileClient {
@@ -29,9 +30,9 @@ public final class BFMLFileClient {
             Thread messageListenerThread = new Thread(new MessageListener(networkChannel,
                     (message) -> {
                     if(message instanceof GetSkinResponse){
-                        createSkinFrom(message);
+                        createSkinMessageFrom(message);
                     } else if (message instanceof LaunchConfigurationResponse) {
-                         checkModsFrom(message);
+                         checkModsMessageFrom(message);
                     }
             }));
 
@@ -46,7 +47,11 @@ public final class BFMLFileClient {
         return true;
     }
 
-    private void createSkinFrom(Message message){
+    public ByteBuffer downloadSkinForPlayer(String playerName){
+        throw new NotImplementedException();
+    }
+
+    private void createSkinMessageFrom(Message message){
         File skin = new File("D:\\Home\\Desktope\\TestDownloads\\javaSkin.png");
         try {
             skin.createNewFile();
@@ -58,7 +63,7 @@ public final class BFMLFileClient {
         }
     }
 
-    private void checkModsFrom(Message message){
+    private void checkModsMessageFrom(Message message){
         try{
             long requiredModsChecksum = Checksum.FromDirectory(new File(Minecraft.getInstance().gameDirectory + "\\mods"));
             long modsChecksum = Long.parseLong(((LaunchConfigurationResponse)message).ModsChecksum);
