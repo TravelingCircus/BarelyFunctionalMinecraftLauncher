@@ -38,8 +38,7 @@ public abstract class Message {
         ByteBuffer buffer = ByteBuffer.wrap(stringBuffer);
         buffer.order(ByteOrder.LITTLE_ENDIAN);
         byte[] bufferBytes = buffer.array();
-        String bufferString = new String(bufferBytes, StandardCharsets.UTF_8);
-        return bufferString;
+        return new String(bufferBytes, StandardCharsets.UTF_8);
     }
 
     protected int intReadStream(InputStream stream) throws IOException {
