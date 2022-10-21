@@ -1,8 +1,5 @@
 package com.example.examplemod;
 
-import com.mojang.logging.LogUtils;
-import org.slf4j.Logger;
-
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -11,8 +8,6 @@ import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 
 public final class NetworkChannel{
-
-    private static final Logger LOGGER = LogUtils.getLogger();
 
     private final InputStream networkInputStream;
     private final OutputStream networkOutputStream;
@@ -43,6 +38,5 @@ public final class NetworkChannel{
         networkOutputStream.write(message.getMessageHeader().ToByteArray());
         message.writeDataTo(networkOutputStream);
         networkOutputStream.flush();
-        LOGGER.info("Sent message");
     }
 }

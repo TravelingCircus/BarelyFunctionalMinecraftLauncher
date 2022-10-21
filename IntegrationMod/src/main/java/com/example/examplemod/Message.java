@@ -1,5 +1,7 @@
 package com.example.examplemod;
 
+import com.google.common.base.Utf8;
+import org.apache.commons.codec.Decoder;
 import org.apache.http.MethodNotSupportedException;
 
 import java.io.IOException;
@@ -7,6 +9,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
+import java.nio.charset.StandardCharsets;
 
 public abstract class Message {
 
@@ -36,7 +39,9 @@ public abstract class Message {
         stream.read(stringBuffer, 0, stringLength);
         ByteBuffer buffer = ByteBuffer.wrap(stringBuffer);
         buffer.order(ByteOrder.LITTLE_ENDIAN);
-        return buffer.toString();
+        byte[] bufferBytes = buffer.array();
+        String bufferString = new String(bufferBytes, StandardCharsets.UTF_8);
+        return bufferString;
     }
 
     protected int intReadStream(InputStream stream) throws IOException {

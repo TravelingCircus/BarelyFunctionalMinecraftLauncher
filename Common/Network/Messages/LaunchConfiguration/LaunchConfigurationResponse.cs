@@ -27,7 +27,7 @@ public class LaunchConfigurationResponse: Message
             StringReadStream(stream),
             StringReadStream(stream),
             StringReadStream(stream),
-            100);
+            IntReadStream(stream));
     }
 
     protected override Stream GetData()
