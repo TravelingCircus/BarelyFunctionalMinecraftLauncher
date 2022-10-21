@@ -21,6 +21,6 @@ public class BFMLPacketHandler {
                 STCPlayerSkinMessage.class,
                 STCPlayerSkinMessage::encode,
                 STCPlayerSkinMessage::decode,
-                STCPlayerSkinMessage::handle);
+                PlayerSkinMessageHandler::handle);
     }
 }
