@@ -1,4 +1,4 @@
-package com.example.examplemod;
+package com.example.examplemod.bfml;
 
 import com.mojang.logging.LogUtils;
 import net.minecraft.client.Minecraft;

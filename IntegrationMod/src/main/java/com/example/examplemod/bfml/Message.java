@@ -1,7 +1,5 @@
-package com.example.examplemod;
+package com.example.examplemod.bfml;
 
-import com.google.common.base.Utf8;
-import org.apache.commons.codec.Decoder;
 import org.apache.http.MethodNotSupportedException;
 
 import java.io.IOException;

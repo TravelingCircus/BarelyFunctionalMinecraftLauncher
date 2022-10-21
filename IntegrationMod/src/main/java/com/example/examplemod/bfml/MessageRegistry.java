@@ -1,4 +1,4 @@
-package com.example.examplemod;
+package com.example.examplemod.bfml;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;

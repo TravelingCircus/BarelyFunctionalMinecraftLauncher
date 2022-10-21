@@ -1,5 +1,6 @@
 package com.example.examplemod;
 
+import com.example.examplemod.bfml.BFMLFileClient;
 import com.mojang.logging.LogUtils;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.Mod;
@@ -9,9 +10,10 @@ import org.slf4j.Logger;
 
 import java.io.IOException;
 
-@Mod("bfmlintegration")
+@Mod(BFMLIntegration.ID)
 public class BFMLIntegration
 {
+    public static final String ID = "bfmlintegration";
     private static final Logger LOGGER = LogUtils.getLogger();
 
     public BFMLIntegration()
