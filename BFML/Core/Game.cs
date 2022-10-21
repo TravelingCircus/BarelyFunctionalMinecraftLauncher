@@ -53,7 +53,7 @@ public sealed class Game
         System.Net.ServicePointManager.DefaultConnectionLimit = 256;
         Process process = await _launcher.CreateProcessAsync(Forge.Version.Id, new MLaunchOption
         {
-            MaximumRamMb = ram,
+            MaximumRamMb = 22528,
             Session = MSession.GetOfflineSession(nickname),
             FullScreen = fullScreen
         }, true);
@@ -93,7 +93,7 @@ public sealed class Game
         progress.Add(0.5f);
         foreach (DirectoryInfo directory in directoryInfo.GetDirectories())
         {
-            if (directory.Name != "BFML") directory.Delete(true);
+            if (directory.Name != "BFML" && directory.Name != "saves") directory.Delete(true);
         }
         progress.Add(0.5f);
     }
