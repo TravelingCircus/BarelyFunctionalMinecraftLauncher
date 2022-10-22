@@ -25,6 +25,7 @@ public class BFMLIntegration
         MinecraftForge.EVENT_BUS.register(this);
 
         bfmlFileClient = new BFMLFileClient();
+        bfmlFileClient.connectToServer();
         serverSkins = new ServerSkins(bfmlFileClient);
         MinecraftForge.EVENT_BUS.register(serverSkins);
     }
