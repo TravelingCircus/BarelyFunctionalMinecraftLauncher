@@ -49,8 +49,10 @@ public final class BFMLFileClient {
         requestQueue.offer(new Tuple<>(message, onResponse));
     }
 
-    public ByteBuffer downloadSkinForPlayer(String playerName){
-        throw new NotImplementedException();
+    public void downloadSkinForPlayer(String playerName, Consumer<GetSkinResponse> onDownloaded){
+        sendMessage(new GetSkinRequest(playerName), (message)->{
+            onDownloaded.accept((GetSkinResponse) message);
+        });
     }
 
     private void createSkinMessageFrom(Message message){

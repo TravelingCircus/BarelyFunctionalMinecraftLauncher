@@ -20,14 +20,12 @@ public class ServerSkins {
 
     @SubscribeEvent
     public void onPlayerConnected(PlayerEvent.PlayerLoggedInEvent event){
-        ByteBuffer skin = downloadSkin(event.getPlayer());
-        skinsMap.put(event.getPlayer().getScoreboardName(), skin);
-        notifyOneAboutAll(event.getPlayer(), skin);
-        notifyAllAboutOne(event.getPlayer());
-    }
-
-    private ByteBuffer downloadSkin(Player player){
-        return fileClient.downloadSkinForPlayer(player.getScoreboardName());
+        fileClient.downloadSkinForPlayer(event.getPlayer().getScoreboardName(), (response)->{
+            ByteBuffer skin = ByteBuffer.wrap(response.SkinData);
+            skinsMap.put(event.getPlayer().getScoreboardName(), skin);
+            notifyOneAboutAll(event.getPlayer(), skin);
+            notifyAllAboutOne(event.getPlayer());
+        });
     }
 
     private void notifyAllAboutOne(Player one){
