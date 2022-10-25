@@ -1,15 +1,12 @@
 package com.example.examplemod;
 
 import com.example.examplemod.bfml.BFMLFileClient;
+import com.example.examplemod.simplechannel.BFMLPacketHandler;
 import com.mojang.logging.LogUtils;
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import org.slf4j.Logger;
-
-import java.io.IOException;
 
 @Mod(BFMLIntegration.ID)
 public class BFMLIntegration
@@ -24,15 +21,10 @@ public class BFMLIntegration
         FMLJavaModLoadingContext.get().getModEventBus().register(this);
         MinecraftForge.EVENT_BUS.register(this);
 
+        BFMLPacketHandler.registerMessages();
         bfmlFileClient = new BFMLFileClient();
         bfmlFileClient.connectToServer();
         serverSkins = new ServerSkins(bfmlFileClient);
         MinecraftForge.EVENT_BUS.register(serverSkins);
-    }
-
-    @SubscribeEvent
-    private void setup(FMLCommonSetupEvent event) throws IOException {
-        //BFMLFileClient fileClient = new BFMLFileClient();v
-        //fileClient.connectToServer();
     }
 }

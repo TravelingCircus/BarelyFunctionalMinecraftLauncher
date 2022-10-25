@@ -15,7 +15,7 @@ public class BFMLPacketHandler {
             PROTOCOL_VERSION::equals
     );
 
-    //TODO subscribe and like the video
+
     public static void registerMessages(){
         CHANNEL.registerMessage(MESSAGE_INDEX++,
                 STCPlayerSkinMessage.class,

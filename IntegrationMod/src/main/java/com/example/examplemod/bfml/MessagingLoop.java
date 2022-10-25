@@ -22,7 +22,7 @@ public final class MessagingLoop implements Runnable{
     @Override
     public void run() {
         try {
-            while (stopped){
+            while (!stopped){
                 if(requestQueue.isEmpty()) continue;
                 Tuple<Message, Consumer<Message>> request = requestQueue.poll();
 
