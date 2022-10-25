@@ -21,20 +21,19 @@ public final class MessagingLoop implements Runnable{
 
     @Override
     public void run() {
-        try {
-            while (!stopped){
-                if(requestQueue.isEmpty()) continue;
-                Tuple<Message, Consumer<Message>> request = requestQueue.poll();
+        while (!stopped){
+            if(requestQueue.isEmpty()) continue;
+            Tuple<Message, Consumer<Message>> request = requestQueue.poll();
 
+            try{
                 networkChannel.sendMessage(request.getA());
-
                 MessageHeader header = networkChannel.readHeader();
                 Message message = MessageRegistry.getMessageFor(header);
                 message.applyData(networkChannel.readMessage(header));
                 request.getB().accept(message);
+            } catch (Exception e) {
+                throw new RuntimeException(e);
             }
-        } catch (Exception e) {
-            throw new RuntimeException(e);
         }
     }
 

@@ -17,13 +17,10 @@ import java.util.function.Consumer;
 public final class BFMLFileClient {
 
     private static final Logger LOGGER = LogUtils.getLogger();
-
-    private Socket clientSocket;
-    private InputStream networkInputStream;
-    private OutputStream networkOutputStream;
     private NetworkChannel networkChannel;
     private Queue<Tuple<Message, Consumer<Message>>> requestQueue;
     private MessagingLoop responseListenThread;
+    private Thread messageListenerThread;
 
     public BFMLFileClient() {
         this.requestQueue = new LinkedList<>();
@@ -35,7 +32,7 @@ public final class BFMLFileClient {
             networkChannel = NetworkChannel.start("127.0.0.1", 69);
             responseListenThread = new MessagingLoop(networkChannel, requestQueue);
 
-            Thread messageListenerThread = new Thread(responseListenThread);
+            messageListenerThread = new Thread(responseListenThread);
             messageListenerThread.start();
         }
         catch (Exception e)
@@ -47,6 +44,7 @@ public final class BFMLFileClient {
 
     public void sendMessage(Message message, Consumer<Message> onResponse){
         requestQueue.offer(new Tuple<>(message, onResponse));
+        //messageListenerThread.notify();
     }
 
     public void downloadSkinForPlayer(String playerName, Consumer<GetSkinResponse> onDownloaded){
