@@ -12,18 +12,20 @@ import java.nio.ByteBuffer;
 import java.nio.file.NotDirectoryException;
 import java.util.LinkedList;
 import java.util.Queue;
+import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.LinkedBlockingQueue;
 import java.util.function.Consumer;
 
 public final class BFMLFileClient {
 
     private static final Logger LOGGER = LogUtils.getLogger();
     private NetworkChannel networkChannel;
-    private Queue<Tuple<Message, Consumer<Message>>> requestQueue;
+    private BlockingQueue<Tuple<Message, Consumer<Message>>> requestQueue;
     private MessagingLoop responseListenThread;
     private Thread messageListenerThread;
 
     public BFMLFileClient() {
-        this.requestQueue = new LinkedList<>();
+        this.requestQueue = new LinkedBlockingQueue<>();
     }
 
     public boolean connectToServer(){
