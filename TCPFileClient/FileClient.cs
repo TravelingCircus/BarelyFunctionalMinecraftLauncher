@@ -121,7 +121,7 @@ public sealed class FileClient
     {
         try
         {
-            _client = new TcpClient("127.0.0.1", 69);
+            _client = new TcpClient("3.123.51.46", 69);
             _networkStream = _client.GetStream();
             _networkChannel = new NetworkChannel(_networkStream);
             CancellationToken cancellationToken = _cancellationTokenSource.Token;

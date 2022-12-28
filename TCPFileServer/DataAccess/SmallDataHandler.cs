@@ -1,5 +1,4 @@
-﻿using Common;
-using Common.Models;
+﻿using Common.Models;
 
 namespace TCPFileServer.DataAccess;
 
@@ -13,8 +12,8 @@ public sealed class SmallDataHandler: DataHandler
     public SmallDataHandler(string repositoryPath)
     {
         _repositoryPath = repositoryPath;
-        _usersDirectory = repositoryPath + @"Users\";
-        _skinsDirectory = repositoryPath + @"Skins\";
+        _usersDirectory = repositoryPath + @"Users/";
+        _skinsDirectory = repositoryPath + @"Skins/";
         DefaultSkinPath = repositoryPath + @"DefaultSkin.png";
     }
 

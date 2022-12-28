@@ -13,13 +13,13 @@ public sealed class LargeDataHandler: DataHandler
     public LargeDataHandler(string repositoryPath)
     {
         _repositoryPath = repositoryPath;
-        _forgeDirectory = repositoryPath + @"Forge\";
-        _modsDirectory = repositoryPath + @"Mods\";
+        _forgeDirectory = repositoryPath + @"Forge/";
+        _modsDirectory = repositoryPath + @"Mods/";
     }
     
     public uint GetModsChecksum()
     {
-        DirectoryInfo directory = Directory.CreateDirectory(_repositoryPath + @"\tempmodschecksum" + new Random().Next());
+        DirectoryInfo directory = Directory.CreateDirectory(_repositoryPath + "/tempmodschecksum" + new Random().Next());
         ZipFile.ExtractToDirectory(new DirectoryInfo(_modsDirectory).GetFiles()[0].FullName, directory.FullName);
         uint checksum = Checksum.FromDirectory(new DirectoryInfo(directory.FullName));
         directory.Delete(true);

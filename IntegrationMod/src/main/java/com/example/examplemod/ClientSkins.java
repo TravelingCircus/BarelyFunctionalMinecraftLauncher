@@ -10,6 +10,9 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.ByteBuffer;
+import java.nio.file.FileSystems;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.Map;
 
 public class ClientSkins {
@@ -20,14 +23,14 @@ public class ClientSkins {
     }
 
     private static ResourceLocation save(ByteBuffer buffer, String playerName){
-        File skin = new File(Minecraft.getInstance().gameDirectory.getAbsolutePath() +
-                "\\resources\\bfmlintegration\\playerskin\\" + playerName + ".png");
         try {
-            skin.createNewFile();
-            try(FileOutputStream fileOutputStream = new FileOutputStream(skin)){
+            Path skinDirectory = getSkinsDirectory();
+            File skinFile = new File(skinDirectory + "\\" + playerName + ".png");
+            skinFile.createNewFile();
+            try(FileOutputStream fileOutputStream = new FileOutputStream(skinFile)){
                 fileOutputStream.write(buffer.array());
             }
-            return new ResourceLocation(skin.getAbsolutePath());
+            return new ResourceLocation(skinFile.getAbsolutePath());
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -45,5 +48,16 @@ public class ClientSkins {
         } catch (IllegalAccessException | NoSuchFieldException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    private static Path getSkinsDirectory() throws IOException {
+
+        ResourceLocation resourceLocation = new ResourceLocation(BFMLIntegration.ID, "playerskins");
+        String minecraftPath = Minecraft.getInstance().gameDirectory.getAbsolutePath();
+        Path skinDirectory = FileSystems.getDefault().getPath(
+                minecraftPath.substring(0, minecraftPath.length()-2) +
+                        "\\resources\\bfmlintegration\\playerskin");
+        Files.createDirectories(skinDirectory);
+        return skinDirectory;
     }
 }

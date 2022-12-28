@@ -30,14 +30,12 @@ public sealed class Server
     public void Start()
     {
         CancellationToken cancellationToken = _cancellationTokenSource.Token;
-        
-        Repository repository = new Repository(@"C:\Users\maksy\Desktope\TestRepo\", cancellationToken);
-        //Repository repository = new Repository(@"D:\Home\Desktope\TestDownloads\", cancellationToken);
+
+        string projectFilesPath = Environment.CurrentDirectory+@"/Repo/";
+        Repository repository = new Repository(projectFilesPath, cancellationToken);
         repository.Initialize();
         RegisterHandlers(repository);
 
-        //TODO properly register handlers
-        
         _tcpListener.Start();
         IsRunning = true;
         Console.WriteLine($"STARTED thread_{Thread.CurrentThread.ManagedThreadId}");
@@ -56,7 +54,15 @@ public sealed class Server
             if(tcpClient.Connected)Console.WriteLine($"RECEIVED CONNECTION thread_{Thread.CurrentThread.ManagedThreadId}");
             Task.Run(() =>
             {
-                HandleClient(tcpClient).GetAwaiter();
+                try
+                {
+                    HandleClient(tcpClient).GetAwaiter();
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine(e);
+                    throw;
+                }
             }, cancellationToken);
         }
         Console.WriteLine($"STOPPED LISTENING thread_{Thread.CurrentThread.ManagedThreadId}");

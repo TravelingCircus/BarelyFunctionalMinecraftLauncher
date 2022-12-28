@@ -53,7 +53,7 @@ public sealed class Game
         System.Net.ServicePointManager.DefaultConnectionLimit = 256;
         Process process = await _launcher.CreateProcessAsync(Forge.Version.Id, new MLaunchOption
         {
-            MaximumRamMb = 22528,
+            MaximumRamMb = ram,
             Session = MSession.GetOfflineSession(nickname),
             FullScreen = fullScreen
         }, true);
@@ -64,12 +64,9 @@ public sealed class Game
     {
         DeleteAllFiles(progress.AddTracker(0.1f));
         await InstallVanilla(progress.AddTracker(0.5f));
-        Task[] tasks =
-        {
-            InstallForge(progress.AddTracker(0.1f)),
-            InstallMods(progress.AddTracker(0.3f))
-        };
-        await Task.WhenAll(tasks);
+        await InstallForge(progress.AddTracker(0.1f));
+        await InstallMods(progress.AddTracker(0.3f));
+
         await _launcher.GetAllVersionsAsync();
     }
     

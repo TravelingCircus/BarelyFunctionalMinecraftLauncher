@@ -22,7 +22,7 @@ public sealed class Repository
 
     public void Initialize()
     {
-        Task.Run(() =>
+        Task.Run(() =>  
         {
             _smallDataHandlerQueue.RunBlocking(_cancellationToken).GetAwaiter();
         }, _cancellationToken);

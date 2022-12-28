@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
+using System.IO;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -89,8 +90,8 @@ public partial class MainWindow : Window
         if (!e.Data.GetDataPresent(DataFormats.FileDrop)) return;
 
         string[] files = (string[])e.Data.GetData(DataFormats.FileDrop)!;
-        if (files.Length != 1) return;
-
+        if (files.Length != 1 || !files[0].EndsWith(".png")) return;
+        
         SkinChangeResponse response = await _fileClient.SendSkinChangeRequest(_user.Nickname, files[0]);
         if (response.Success)
         {

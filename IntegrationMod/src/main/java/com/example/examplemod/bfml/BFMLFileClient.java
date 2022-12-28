@@ -46,25 +46,12 @@ public final class BFMLFileClient {
 
     public void sendMessage(Message message, Consumer<Message> onResponse){
         requestQueue.offer(new Tuple<>(message, onResponse));
-        //messageListenerThread.notify();
     }
 
     public void downloadSkinForPlayer(String playerName, Consumer<GetSkinResponse> onDownloaded){
         sendMessage(new GetSkinRequest(playerName), (message)->{
             onDownloaded.accept((GetSkinResponse) message);
         });
-    }
-
-    private void createSkinMessageFrom(Message message){
-        File skin = new File("D:\\Home\\Desktope\\TestDownloads\\javaSkin.png");
-        try {
-            skin.createNewFile();
-            try(FileOutputStream fileOutputStream = new FileOutputStream(skin)){
-                fileOutputStream.write(((GetSkinResponse)message).SkinData);
-            }
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
     }
 
     private void checkModsMessageFrom(Message message){
