@@ -13,8 +13,8 @@ public abstract class ZipFileMessage: Message
         int lastRead;
         do 
         {
-            lastRead = await dataStream.ReadAsync(buffer, 0, buffer.Length);
-            await targetStream.WriteAsync(buffer, 0, lastRead);
+            lastRead = await dataStream.ReadAsync(buffer);
+            await targetStream.WriteAsync(buffer.AsMemory(0, lastRead));
         } while (lastRead >= buffer.Length);
         await dataStream.FlushAsync();
         dataStream.Close();
