@@ -8,6 +8,7 @@ using OpenTK.Wpf;
 using System.Windows.Input;
 using BFML.Core;
 using CmlLib.Core;
+using Common;
 using Common.Misc;
 using Common.Models;
 using Common.Network.Messages.ChangeSkin;
@@ -18,20 +19,20 @@ namespace BFML.WPF;
 public partial class MainWindow
 {
     private Game _game;
+    private SkinPreviewRenderer _skinPreviewRenderer;
     private readonly User _user;
     private readonly LocalPrefs _localPrefs;
-    private readonly FileClient.FileClient _fileClient;
     private readonly LoadingScreen _loadingScreen;
-    private SkinPreviewRenderer _skinPreviewRenderer;
     private readonly LaunchConfiguration _launchConfig;
     private readonly ConfigurationVersion _configVersion;
+    private readonly IFileClient _fileClient;
 
-    public MainWindow(FileClient.FileClient fileClient, User user, LocalPrefs localPrefs,
+    public MainWindow(IFileClient fileClient, User user, LocalPrefs localPrefs,
         LaunchConfiguration launchConfig, ConfigurationVersion configVersion)
     {
         InitializeComponent();
-        _fileClient = fileClient;
         _user = user;
+        _fileClient = fileClient;
         _localPrefs = localPrefs;
         _launchConfig = launchConfig;
         _configVersion = configVersion;
@@ -90,11 +91,11 @@ public partial class MainWindow
         if (files.Length != 1 || !files[0].EndsWith(".png")) return;
         
         SkinChangeResponse response = await _fileClient.SendSkinChangeRequest(_user.Nickname, files[0]);
-        if (response.Success)
-        {
-            Utils.SaveSkin(files[0]);
-            _skinPreviewRenderer.ChangeSkin(_user.SkinPath);
-        }
+        
+        if (!response.Success) return;
+        
+        Utils.SaveSkin(files[0]);
+        _skinPreviewRenderer.ChangeSkin(_user.SkinPath);
     }
     
     private void SkinPreviewOnRender(TimeSpan obj)

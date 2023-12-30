@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using CmlLib.Core;
 using CmlLib.Core.Auth;
 using CmlLib.Core.Version;
+using Common;
 using Common.Misc;
 using Common.Models;
 using Common.Network.Messages.ForgeDownload;
@@ -17,12 +18,12 @@ public sealed class Game
     public readonly Mods Mods;
     public readonly Forge Forge;
     public readonly Vanilla Vanilla;
-    private readonly FileClient.FileClient _fileClient;
+    private readonly IFileClient _fileClient;
     private readonly CMLauncher _launcher;
     private readonly MinecraftPath _minecraftPath;
     private readonly LaunchConfiguration _launchConfiguration;
 
-    private Game(FileClient.FileClient fileClient, LaunchConfiguration launchConfiguration, CMLauncher launcher, Vanilla vanilla,
+    private Game(IFileClient fileClient, LaunchConfiguration launchConfiguration, CMLauncher launcher, Vanilla vanilla,
         Forge forge, MinecraftPath path)
     {
         _minecraftPath = path;
@@ -34,7 +35,7 @@ public sealed class Game
         _launcher = launcher;
     }
 
-    public static async Task<Game> SetUp(FileClient.FileClient fileClient, LaunchConfiguration launchConfiguration)
+    public static async Task<Game> SetUp(IFileClient fileClient, LaunchConfiguration launchConfiguration)
     {
         MinecraftPath minecraftPath = new MinecraftPath();
         CMLauncher launcher = new CMLauncher(minecraftPath);

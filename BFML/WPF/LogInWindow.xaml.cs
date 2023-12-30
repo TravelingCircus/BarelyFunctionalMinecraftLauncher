@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
 using BFML.Core;
+using Common;
 using Common.Models;
 using Common.Network.Messages.Login;
 using Common.Network.Messages.Registration;
@@ -12,20 +13,18 @@ namespace BFML.WPF;
 
 public partial class LogInWindow
 {
-    private readonly FileClient.FileClient _fileClient;
+    private readonly IFileClient _fileClient;
     private readonly LaunchConfiguration _launchConfiguration;
     private readonly ConfigurationVersion _version;
 
-    public LogInWindow()
-    {
-    }
+    public LogInWindow() { }
 
-    public LogInWindow(FileClient.FileClient fileClient, LaunchConfiguration launchConfiguration, ConfigurationVersion version)
+    public LogInWindow(IFileClient fileClient, LaunchConfiguration launchConfiguration, ConfigurationVersion version)
     {
         InitializeComponent();
+        _version = version;
         _fileClient = fileClient;
         _launchConfiguration = launchConfiguration;
-        _version = version;
     }
 
     private void ShutDown(object sender, RoutedEventArgs e)
@@ -54,16 +53,14 @@ public partial class LogInWindow
 
     private void MoveWindow(object sender, MouseEventArgs e)
     {
-        if (e.LeftButton == MouseButtonState.Pressed)
+        if (e.LeftButton != MouseButtonState.Pressed) return;
+        if (WindowState == WindowState.Maximized)
         {
-            if (WindowState == WindowState.Maximized)
-            {
-                WindowState = WindowState.Normal;
-                Application.Current.MainWindow.Top = 3;
-            }
-
-            DragMove();
+            WindowState = WindowState.Normal;
+            Application.Current.MainWindow.Top = 3;
         }
+
+        DragMove();
     }
 
     private async void RegisterButtonOnClick(object sender, RoutedEventArgs e)
@@ -144,14 +141,14 @@ public partial class LogInWindow
         }
     }
 
-    private void ValidateString(string text)
+    private static void ValidateString(string text)
     {
-        if (String.IsNullOrEmpty(text)) throw new NullReferenceException();
+        if (string.IsNullOrEmpty(text)) throw new NullReferenceException();
         if (!IsLegalUnicode(text)) throw new Exception($"[{text}] isn't valid unicode");
-        if (text.Length < 4 || text.Length > 16) throw new Exception("Too long or too short");
+        if (text.Length is < 4 or > 16) throw new Exception("Too long or too short");
     }
     
-    private bool IsLegalUnicode(string str)
+    private static bool IsLegalUnicode(string str)
     {
         for (int i = 0; i < str.Length; i++)
         {

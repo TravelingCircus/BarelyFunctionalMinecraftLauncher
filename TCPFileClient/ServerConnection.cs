@@ -1,5 +1,6 @@
 ﻿using System.Collections.Concurrent;
 using System.Net.Sockets;
+using Common;
 using Common.Models;
 using Common.Network;
 using Common.Network.Messages;
@@ -14,7 +15,7 @@ using Common.Network.Messages.Version;
 
 namespace FileClient;
 
-public sealed class FileClient
+public sealed class ServerConnection : IFileClient
 {
     private TcpClient _client;
     private NetworkStream _networkStream;
@@ -23,7 +24,7 @@ public sealed class FileClient
     private readonly ConcurrentQueue<Query> _requests;
     private readonly CancellationTokenSource _cancellationTokenSource;
 
-    public FileClient(string minecraftPath)
+    public ServerConnection(string minecraftPath)
     {
         _minecraftPath = minecraftPath;
         _requests = new ConcurrentQueue<Query>();
