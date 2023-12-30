@@ -17,6 +17,11 @@ public sealed class Skin
         Array.Copy(bytes, skin._skinBytes, bytes.Length);
         return skin;
     }
+    
+    public static Skin FromFile(FileInfo fileInfo)
+    {
+        return new Skin();
+    }
 
     public static Skin Default() => throw new NotImplementedException();
 }
