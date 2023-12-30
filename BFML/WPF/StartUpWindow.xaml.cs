@@ -66,7 +66,8 @@ public partial class StartUpWindow
 
     private static Result<IFileClient> GetLocalFileServer()
     {
-        return new ServerConnection(new MinecraftPath().BasePath);
+        IFileClient client = new LocalFileClient.FileClient();
+        return Result<IFileClient>.Ok(client);//TODO properly handle local client initialization
     }
     
     private static async Task<Result<ServerConnection>> ConnectToServer()
