@@ -1,24 +1,21 @@
-﻿using Common.Models;
-using Common.Network.Messages.ChangeSkin;
-using Common.Network.Messages.ForgeDownload;
-using Common.Network.Messages.GetSkin;
-using Common.Network.Messages.Login;
-using Common.Network.Messages.ModsDownload;
-using Common.Network.Messages.Registration;
-
+﻿using Common.Misc;
+using Common.Models;
 namespace Common;
 
 public interface IFileClient
 {
-    public bool ConnectToServer();
-    public void Disconnect();
-    public Task<ConfigurationVersion> DownloadConfigVersion();
-    public Task<LaunchConfiguration> DownloadLaunchConfiguration();
-    public Task<RegistrationResponse> SendRegistrationRequest(User user);
-    public Task<LoginResponse> SendLoginRequest(User user);
-    public Task<SkinChangeResponse> SendSkinChangeRequest(string nickname, string filePath);
-    public Task<ForgeDownloadResponse> DownloadForgeFiles(string tempDirectoryPath);
-    public Task<ModsDownloadResponse> DownloadMods(string directory);
-    public Task<GetSkinResponse> GetSkinFor(string nickname);
-    public Task SendExterminatusRequest();
+    public Task<bool> TryInit();
+    public Task<bool> TryDispose();
+    
+    public Task<Result<User>> Authenticate(User user);
+    public Task<Result<User>> CreateRecord(User user);
+    
+    public Task<ConfigurationVersion> LoadConfigVersion();
+    public Task<LaunchConfiguration> LoadLaunchConfiguration();
+    
+    public Task<bool> TryLoadForge(FileInfo target);
+    public Task<bool> TryLoadMods(FileInfo target);
+    
+    public Task<bool> TryChangeSkin(string filePath);
+    public Task<Skin> GetSkin();
 }

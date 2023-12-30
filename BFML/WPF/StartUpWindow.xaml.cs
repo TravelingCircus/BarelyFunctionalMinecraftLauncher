@@ -24,24 +24,20 @@ public partial class StartUpWindow
     {
         FontInstaller.InstallFont(new FileInfo(Environment.CurrentDirectory + "\\MinecraftFont.ttf"));
         
-        IFileClient serverConnection = await ConnectToServer() switch
-        {
-            {IsOk:true} result => result.Value,
-            _ => GetLocalFileServer().Value
-        };
+        IFileClient fileClient = await ResolveFileClient();
         LocalPrefs localPrefs = LocalPrefs.GetLocalPrefs();
         
-        ConfigurationVersion version = await serverConnection.DownloadConfigVersion();
-        LaunchConfiguration launchConfig = await serverConnection.DownloadLaunchConfiguration();
+        ConfigurationVersion version = await fileClient.LoadConfigVersion();
+        LaunchConfiguration launchConfig = await fileClient.LoadLaunchConfiguration();
 
-        LoginResponse loginResponse = await TryLogIn(serverConnection, localPrefs);
+        LoginResponse loginResponse = await TryLogIn(fileClient, localPrefs);
         if (loginResponse.Success)
         {
             MainWindow mainWindow = new MainWindow(
-                serverConnection, 
+                fileClient, 
                 loginResponse.User, 
                 localPrefs,
-                launchConfig, 
+                launchConfig,
                 version);
 
             mainWindow.Top = Top;
@@ -51,14 +47,23 @@ public partial class StartUpWindow
         }
         else
         {
-            LogInWindow logInWindow = new LogInWindow(serverConnection, launchConfig, version);
+            LogInWindow logInWindow = new LogInWindow(fileClient, launchConfig, version);
             logInWindow.Top = (Top + Height / 2) / 2;
             logInWindow.Left = Left + logInWindow.Width / 2;
             logInWindow.Show();
             Close();
         }
     }
-    
+
+    private static async Task<IFileClient> ResolveFileClient()
+    {
+        Result<ServerConnection> serverConnection = await ConnectToServer();
+
+        if (serverConnection.IsOk) return serverConnection.Value;
+
+        return GetLocalFileServer().Value;
+    }
+
     private static Result<IFileClient> GetLocalFileServer()
     {
         return new ServerConnection(new MinecraftPath().BasePath);

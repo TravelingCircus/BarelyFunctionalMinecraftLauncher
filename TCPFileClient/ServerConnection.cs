@@ -33,13 +33,13 @@ public sealed class ServerConnection : IFileClient
 
     #region Interface
     
-    public async Task<LaunchConfiguration> DownloadLaunchConfiguration()
+    public async Task<LaunchConfiguration> LoadLaunchConfiguration()
     {
         Message response = await GetResponseFor(new LaunchConfigurationRequest());
         return ((LaunchConfigurationResponse)response).LaunchConfiguration;
     }
     
-    public async Task<ConfigurationVersion> DownloadConfigVersion()
+    public async Task<ConfigurationVersion> LoadConfigVersion()
     {
         Message response = await GetResponseFor(new ConfigVersionRequest());
         return ((ConfigVersionResponse)response).ConfigurationVersion;
@@ -106,7 +106,7 @@ public sealed class ServerConnection : IFileClient
         return response;
     }
     
-    public async Task<GetSkinResponse> GetSkinFor(string nickname)
+    public async Task<GetSkinResponse> GetSkin(string nickname)
     {
         return (GetSkinResponse)await GetResponseFor(new GetSkinRequest(nickname));
     }

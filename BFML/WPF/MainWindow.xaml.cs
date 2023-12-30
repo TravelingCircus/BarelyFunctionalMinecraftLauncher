@@ -11,7 +11,6 @@ using CmlLib.Core;
 using Common;
 using Common.Misc;
 using Common.Models;
-using Common.Network.Messages.ChangeSkin;
 using XamlRadialProgressBar;
 
 namespace BFML.WPF;
@@ -90,9 +89,7 @@ public partial class MainWindow
         string[] files = (string[])e.Data.GetData(DataFormats.FileDrop)!;
         if (files.Length != 1 || !files[0].EndsWith(".png")) return;
         
-        SkinChangeResponse response = await _fileClient.SendSkinChangeRequest(_user.Nickname, files[0]);
-        
-        if (!response.Success) return;
+        if (!await _fileClient.TryChangeSkin(files[0])) return;
         
         Utils.SaveSkin(files[0]);
         _skinPreviewRenderer.ChangeSkin(_user.SkinPath);
