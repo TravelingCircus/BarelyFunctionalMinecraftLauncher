@@ -77,10 +77,10 @@ public partial class StartUpWindow
         {
             success = await serverConnection.TryInit();
             if(success) break;
-            await Task.Delay(2500);
+            await Task.Delay(1500);
         }
         
-        return success ? serverConnection : null;
+        return success ? serverConnection : new Exception("Failed to connect to the server.");
     }
 
     private static Task<Result<User>> TryLogIn(IFileClient fileClient, LocalPrefs localPrefs)
