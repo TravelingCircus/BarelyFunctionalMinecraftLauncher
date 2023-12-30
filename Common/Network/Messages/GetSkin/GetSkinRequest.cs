@@ -4,10 +4,7 @@ public sealed class GetSkinRequest: Message
 {
     public string Nickname;
 
-    public GetSkinRequest()
-    {
-        
-    }
+    public GetSkinRequest() { }
     
     public GetSkinRequest(string nickname)
     {
@@ -28,7 +25,7 @@ public sealed class GetSkinRequest: Message
     {
         MemoryStream buffer = new MemoryStream(GetHeader().DataLength);
         WriteToStream(buffer, Nickname);
-        
+            
         buffer.Flush();
         buffer.Position = 0;
         return buffer;

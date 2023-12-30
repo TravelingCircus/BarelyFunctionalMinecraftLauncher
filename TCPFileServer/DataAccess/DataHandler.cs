@@ -4,11 +4,8 @@ public abstract class DataHandler
 {
     private TaskCompletionSource _releaseSource;
 
-    private int borrows = 0;
-
     public void Borrow(TaskCompletionSource releaseSource)
     {
-        borrows++;
         _releaseSource = releaseSource;
     }
 

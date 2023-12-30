@@ -6,14 +6,12 @@ using OpenTK.Mathematics;
 
 namespace BFML._3D;
 
-public class Shader : IDisposable
+public sealed class Shader : IDisposable
 {
     private readonly int _handle;
 
     public Shader(string vertexPath, string fragmentPath)
     {
-        int vertexShader;
-        int fragmentShader;
         string vertexShaderSource;
         string fragmentShaderSource;
 
@@ -27,10 +25,10 @@ public class Shader : IDisposable
             fragmentShaderSource = reader.ReadToEnd();
         }
 
-        vertexShader = GL.CreateShader(ShaderType.VertexShader);
+        int vertexShader = GL.CreateShader(ShaderType.VertexShader);
         GL.ShaderSource(vertexShader, vertexShaderSource);
 
-        fragmentShader = GL.CreateShader(ShaderType.FragmentShader);
+        int fragmentShader = GL.CreateShader(ShaderType.FragmentShader);
         GL.ShaderSource(fragmentShader, fragmentShaderSource);
 
         GL.CompileShader(vertexShader);
@@ -92,7 +90,7 @@ public class Shader : IDisposable
 
     private bool _disposed;
 
-    protected virtual void Dispose(bool disposing)
+    private void Dispose(bool disposing)
     {
         if (_disposed) return;
 

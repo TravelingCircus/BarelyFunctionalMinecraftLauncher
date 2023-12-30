@@ -2,8 +2,8 @@
 
 public sealed class BorrowableFileStream : Stream
 {
-    private DataHandler _dataHandler;
-    private FileStream _stream;
+    private readonly FileStream _stream;
+    private readonly DataHandler _dataHandler;
 
     public BorrowableFileStream(FileStream stream, DataHandler dataHandler)
     {
@@ -11,25 +11,13 @@ public sealed class BorrowableFileStream : Stream
         _dataHandler = dataHandler;
     }
 
-    public string GetFileName()
-    {
-        return _stream.Name;
-    }
-    
-    public override int Read(byte[] buffer, int offset, int count)
-    {
-        return _stream.Read(buffer, offset, count);
-    }
+    public string GetFileName() => _stream.Name;
 
-    public override int Read(Span<byte> buffer)
-    {
-        return _stream.Read(buffer);
-    }
+    public override int Read(byte[] buffer, int offset, int count) => _stream.Read(buffer, offset, count);
 
-    public override long Seek(long offset, SeekOrigin origin)
-    {
-        return _stream.Seek(offset, origin);
-    }
+    public override int Read(Span<byte> buffer) => _stream.Read(buffer);
+
+    public override long Seek(long offset, SeekOrigin origin) => _stream.Seek(offset, origin);
 
     public override void SetLength(long value)
     {

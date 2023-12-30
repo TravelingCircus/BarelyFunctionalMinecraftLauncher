@@ -1,7 +1,6 @@
 ﻿using System.Net;
 using System.Net.Sockets;
 using Common.Network;
-using Common.Network.Messages;
 using Common.Network.Messages.ChangeSkin;
 using Common.Network.Messages.ForgeDownload;
 using Common.Network.Messages.GetSkin;
@@ -38,55 +37,53 @@ public sealed class Server
 
         _tcpListener.Start();
         IsRunning = true;
-        Console.WriteLine($"STARTED thread_{Thread.CurrentThread.ManagedThreadId}");
-        Task.Run(() =>
-        {
-            AcceptClientsBlocking(cancellationToken);
-        }, cancellationToken);
+        Task.Run(() => AcceptClientsBlocking(cancellationToken), cancellationToken);
+    }
+
+    public void Terminate()
+    {
+        _cancellationTokenSource.Cancel();
+        _cancellationTokenSource.Dispose();
+        _tcpListener.Stop();
+        IsRunning = false;
     }
 
     private void AcceptClientsBlocking(CancellationToken cancellationToken)
     {
         while (!cancellationToken.IsCancellationRequested)
         {
-            Console.WriteLine($"LISTENING thread_{Thread.CurrentThread.ManagedThreadId}");
             TcpClient tcpClient = _tcpListener.AcceptTcpClient();
-            if(tcpClient.Connected)Console.WriteLine($"RECEIVED CONNECTION thread_{Thread.CurrentThread.ManagedThreadId}");
             Task.Run(() =>
-            {
-                try
                 {
-                    HandleClient(tcpClient).GetAwaiter();
-                }
-                catch (Exception e)
-                {
-                    Console.WriteLine(e);
-                    throw;
-                }
-            }, cancellationToken);
+                    try
+                    {
+                        HandleClient(tcpClient).GetAwaiter();
+                    }
+                    catch (Exception e)
+                    {
+                        Console.WriteLine(e);
+                        throw;
+                    }
+                },
+                cancellationToken);
         }
-        Console.WriteLine($"STOPPED LISTENING thread_{Thread.CurrentThread.ManagedThreadId}");
     }
-    
-    private async Task HandleClient(TcpClient client)
+
+    private static async Task HandleClient(TcpClient client)
     {
         NetworkStream networkStream = client.GetStream();
         NetworkChannel networkChannel = new NetworkChannel(networkStream);
         while (client.Connected)
         {
             MessageHeader header = await networkChannel.ListenForHeader();
-            if(header.MessageKey == MessageRegistry.GetKeyForMessageType(typeof(ExterminatusRequest))) Terminate();
             Stream messageData = await networkChannel.ListenForMessage(header);
             MessageHandler messageHandler = HandlerPicker.GetHandler(header);
             Message response = await messageHandler.GetResponse(messageData);
             await networkChannel.SendMessage(response);
-            Console.WriteLine($"SENT RESPONSE thread_{Thread.CurrentThread.ManagedThreadId}");
         }
-        
-        Console.WriteLine($"HANDLING CONNECTION thread_{Thread.CurrentThread.ManagedThreadId}");
     }
 
-    private void RegisterHandlers(Repository repository)
+    private static void RegisterHandlers(Repository repository)
     {
         HandlerPicker.RegisterHandler(nameof(RegistrationRequest), new RegistrationHandler(repository));
         HandlerPicker.RegisterHandler(nameof(LoginRequest), new LoginHandler(repository));
@@ -96,14 +93,5 @@ public sealed class Server
         HandlerPicker.RegisterHandler(nameof(ForgeDownloadRequest), new ForgeDownloadHandler(repository));
         HandlerPicker.RegisterHandler(nameof(ModsDownloadRequest), new ModsDownloadHandler(repository));
         HandlerPicker.RegisterHandler(nameof(GetSkinRequest), new GetSkinHandler(repository));
-    }
-    
-    private void Terminate()
-    {
-        _cancellationTokenSource.Cancel();
-        _cancellationTokenSource.Dispose();
-        _tcpListener.Stop();
-        IsRunning = false;
-        Console.WriteLine($"TERMINATED thread_{Thread.CurrentThread.ManagedThreadId}");
     }
 }

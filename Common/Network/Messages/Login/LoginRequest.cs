@@ -7,10 +7,7 @@ public class LoginRequest: Message
     public string NickName;
     public string PasswordHash;
 
-    public LoginRequest()
-    {
-        
-    }
+    public LoginRequest() { }
 
     public LoginRequest(string nickName, string passwordHash)
     {
@@ -31,7 +28,7 @@ public class LoginRequest: Message
         MemoryStream buffer = new MemoryStream();
         byte[] nicknameBytes = Encoding.UTF8.GetBytes(NickName);
         byte[] passwordBytes = Encoding.UTF8.GetBytes(PasswordHash);
-        
+            
         buffer.Write(BitConverter.GetBytes(nicknameBytes.Length));
         buffer.Write(nicknameBytes);
         buffer.Write(BitConverter.GetBytes(passwordBytes.Length));

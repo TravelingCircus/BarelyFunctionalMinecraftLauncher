@@ -8,9 +8,7 @@ public class LoginResponse : Message
     public User User;
     public byte[] SkinData;
 
-    public LoginResponse()
-    {
-    }
+    public LoginResponse() { }
 
     public LoginResponse(bool success, User user, byte[] skinData)
     {
@@ -34,11 +32,10 @@ public class LoginResponse : Message
         Success = BoolReadStream(stream);
         string nickname = StringReadStream(stream);
         string passwordHash = StringReadStream(stream);
-        int grywniasPaid = IntReadStream(stream);
         int skinDataLength = IntReadStream(stream);
         SkinData = new byte[skinDataLength];
         _ = stream.Read(SkinData, 0, skinDataLength);
-        User = new User(nickname, passwordHash, grywniasPaid);
+        User = new User(nickname, passwordHash);
     }
 
     protected override Stream GetData()
@@ -47,7 +44,6 @@ public class LoginResponse : Message
         WriteToStream(buffer, Success);
         WriteToStream(buffer, User.Nickname);
         WriteToStream(buffer, User.PasswordHash);
-        WriteToStream(buffer, User.GryvnyasPaid);
         WriteToStream(buffer, SkinData.Length);
         buffer.Write(SkinData, 0, SkinData.Length);
         return buffer;

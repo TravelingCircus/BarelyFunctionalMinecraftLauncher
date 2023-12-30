@@ -2,15 +2,11 @@
 
 public sealed class ForgeDownloadResponse : ZipFileMessage
 {
-    public string TempForgePath;
     public byte[] ForgeBytes;
     private int _forgeBytesLength;
     private readonly Stream _stream;
     
-    public ForgeDownloadResponse()
-    {
-        
-    }
+    public ForgeDownloadResponse() { }
 
     public ForgeDownloadResponse(Stream stream, int forgeBytesLength)
     {
@@ -35,13 +31,7 @@ public sealed class ForgeDownloadResponse : ZipFileMessage
         throw new NotSupportedException();
     }
     
-    public override int GetDataLength() 
-    {
-        return _forgeBytesLength;
-    }
+    public override int GetDataLength() => _forgeBytesLength;
 
-    protected override Stream GetDataStream() 
-    {
-        return _stream;
-    }
+    protected override Stream GetDataStream() => _stream;
 }

@@ -6,10 +6,7 @@ namespace TCPFileServer.MessageHandlers;
 
 public sealed class ModsDownloadHandler: MessageHandler
 {
-    public ModsDownloadHandler(Repository repository) : base(repository)
-    {
-        
-    }
+    public ModsDownloadHandler(Repository repository) : base(repository) { }
 
     public override Task Handle(Stream dataStream)
     {

@@ -30,7 +30,7 @@ public sealed class Repository
         {
             _largeDataHandlerQueue.RunBlocking(_cancellationToken).GetAwaiter();
         }, _cancellationToken);
-        
+            
         PrepareUserConfigs();
     }
 
@@ -41,7 +41,7 @@ public sealed class Repository
         SmallDataHandler dataHandler = await _smallDataHandlerQueue.GetDataHandler();
 
         ConfigurationVersion configVersion = dataHandler.GetConfigVersion();
-        
+            
         dataHandler.Release();
         return configVersion;
     }
@@ -51,7 +51,7 @@ public sealed class Repository
         SmallDataHandler dataHandler = await _smallDataHandlerQueue.GetDataHandler();
 
         LaunchConfiguration launchConfiguration = dataHandler.GetLaunchConfig();
-        
+            
         dataHandler.Release();
         return launchConfiguration;
     }
@@ -71,7 +71,7 @@ public sealed class Repository
         SmallDataHandler dataHandler = await _smallDataHandlerQueue.GetDataHandler();
 
         byte[] skin = GetSkin(name, dataHandler);
-        
+            
         dataHandler.Release();
         return skin;
     }
@@ -86,7 +86,7 @@ public sealed class Repository
         {
             result[i] = (nicknames[i], GetSkin(nicknames[i], dataHandler));
         }
-        
+            
         dataHandler.Release();
         return result;
     }
@@ -100,7 +100,7 @@ public sealed class Repository
         string newSkinPath = dataHandler.SaveSkin(name, skin);
         user.SkinPath = newSkinPath;
         await dataHandler.RewriteUser(user);
-        
+            
         dataHandler.Release();
         return true;
     }
@@ -118,7 +118,7 @@ public sealed class Repository
 
         newUser.SkinPath = dataHandler.DefaultSkinPath;
         await dataHandler.RewriteUser(newUser);
-        
+            
         dataHandler.Release();
         return true;
     }

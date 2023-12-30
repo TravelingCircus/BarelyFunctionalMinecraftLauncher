@@ -6,9 +6,7 @@ public class ConfigVersionResponse : Message
 {
     public ConfigurationVersion ConfigurationVersion;
 
-    public ConfigVersionResponse()
-    {
-    }
+    public ConfigVersionResponse() { }
 
     public ConfigVersionResponse(ConfigurationVersion configVersion)
     {
@@ -36,7 +34,7 @@ public class ConfigVersionResponse : Message
         WriteToStream(buffer, ConfigurationVersion.MajorVersion);
         WriteToStream(buffer, ConfigurationVersion.MinorVersion);
         WriteToStream(buffer, ConfigurationVersion.Changelog);
-        
+            
         buffer.Flush();
         buffer.Position = 0;
         return buffer;

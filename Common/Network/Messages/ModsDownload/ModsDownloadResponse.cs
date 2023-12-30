@@ -7,10 +7,7 @@ public sealed class ModsDownloadResponse: ZipFileMessage
     private int _modsBytesLength;
     private readonly Stream _stream;
     
-    public ModsDownloadResponse()
-    {
-        
-    }
+    public ModsDownloadResponse() { }
 
     public ModsDownloadResponse(Stream stream, int modsBytesLength)
     {
@@ -35,13 +32,7 @@ public sealed class ModsDownloadResponse: ZipFileMessage
         throw new NotSupportedException();
     }
 
-    public override int GetDataLength()
-    {
-        return _modsBytesLength;
-    }
+    public override int GetDataLength() => _modsBytesLength;
 
-    protected override Stream GetDataStream()
-    {
-        return _stream;
-    }
+    protected override Stream GetDataStream() => _stream;
 }

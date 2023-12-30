@@ -4,9 +4,9 @@ namespace TCPFileServer.DataAccess;
 
 public class DataHandlerConsumersQueue<T> where T : DataHandler
 {
-    private T _handler;
-    private ConcurrentQueue<TaskCompletionSource<T>> _queue;
     private TaskCompletionSource _releaseSource;
+    private readonly T _handler;
+    private readonly ConcurrentQueue<TaskCompletionSource<T>> _queue;
 
     public DataHandlerConsumersQueue(T handler)
     {
@@ -23,13 +23,11 @@ public class DataHandlerConsumersQueue<T> where T : DataHandler
 
     public async Task RunBlocking(CancellationToken cancellationToken)
     {
-        TaskCompletionSource<T> consumer;
         while (!cancellationToken.IsCancellationRequested)
         {
             if (!_queue.TryDequeue(out TaskCompletionSource<T> queuedConsumer)) continue;
-            consumer = queuedConsumer;
-            
-            await BorrowHandler(consumer).ConfigureAwait(false);
+
+            await BorrowHandler(queuedConsumer).ConfigureAwait(false);
         }
     }
 
@@ -37,7 +35,7 @@ public class DataHandlerConsumersQueue<T> where T : DataHandler
     {
         _releaseSource = new TaskCompletionSource();
         _handler.Borrow(_releaseSource);
-            
+                
         consumer.SetResult(_handler);
         return _releaseSource.Task;
     }

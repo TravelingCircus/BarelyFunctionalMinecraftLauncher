@@ -4,9 +4,9 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:glWpfControl="clr-namespace:OpenTK.Wpf;assembly=GLWpfControl"
-    xmlns:local="clr-namespace:ToggleClass"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:xrpb="http://XamlRadialProgressBar/DotNet"
+    xmlns:wpf="clr-namespace:BFML.WPF"
     Width="1200"
     Height="700"
     AllowsTransparency="True"
@@ -330,7 +330,7 @@
                     Foreground="#dcdcdc"
                     Text="Fullscreen" />
 
-                <local:Toggle
+                <wpf:Toggle
                     x:Name="FullScreen"
                     Grid.Column="1"
                     Margin="313,452,31,220"

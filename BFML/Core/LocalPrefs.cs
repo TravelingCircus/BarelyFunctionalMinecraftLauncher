@@ -16,9 +16,7 @@ public sealed class LocalPrefs
     private static readonly string BFMLDirectoryPath = new MinecraftPath().BasePath + "\\BFML";
     private static readonly string PrefsPath = new MinecraftPath().BasePath + "\\BFML\\LocalPrefs.xml";
 
-    public LocalPrefs()
-    {
-    }
+    public LocalPrefs() { }
 
     public LocalPrefs(string nickname, string password, int dedicatedRam = 3072, bool isFullscreen = false)
     {

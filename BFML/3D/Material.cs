@@ -2,7 +2,7 @@
 
 namespace BFML._3D;
 
-public class Material
+public sealed class Material
 {
     public readonly Shader Shader;
     private Texture _texture;
@@ -18,7 +18,7 @@ public class Material
         _texture = new Texture(texturePath);
     }
 
-    public virtual void Use()
+    public void Use()
     {
         Shader.Use();
         _texture.Use(TextureUnit.Texture0);

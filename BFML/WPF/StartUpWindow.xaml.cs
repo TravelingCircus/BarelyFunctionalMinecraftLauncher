@@ -3,15 +3,14 @@ using System.IO;
 using System.Threading.Tasks;
 using System.Windows;
 using BFML.Core;
-using BFML.WPF;
-using CmlLib.Core;
+using Common;
+using Common.Misc;
 using Common.Models;
-using Common.Network.Messages.Login;
-using TCPFileClient;
+using FileClient;
 
-namespace BFML;
+namespace BFML.WPF;
 
-public partial class StartUpWindow : Window
+public partial class StartUpWindow
 {
     public StartUpWindow()
     {
@@ -23,20 +22,20 @@ public partial class StartUpWindow : Window
     {
         FontInstaller.InstallFont(new FileInfo(Environment.CurrentDirectory + "\\MinecraftFont.ttf"));
         
-        FileClient fileClient = await ConnectToServer();
+        IFileClient fileClient = await ResolveFileClient();
         LocalPrefs localPrefs = LocalPrefs.GetLocalPrefs();
         
-        ConfigurationVersion version = await fileClient.DownloadConfigVersion();
-        LaunchConfiguration launchConfig = await fileClient.DownloadLaunchConfiguration();
+        ConfigurationVersion version = await fileClient.LoadConfigVersion();
+        LaunchConfiguration launchConfig = await fileClient.LoadLaunchConfiguration();
 
-        LoginResponse loginResponse = await TryLogIn(fileClient, localPrefs);
-        if (loginResponse.Success)
+        Result<User> loginResult = await TryLogIn(fileClient, localPrefs);
+        if (loginResult.IsOk)
         {
             MainWindow mainWindow = new MainWindow(
                 fileClient, 
-                loginResponse.User, 
+                loginResult.Value, 
                 localPrefs,
-                launchConfig, 
+                launchConfig,
                 version);
 
             mainWindow.Top = Top;
@@ -53,26 +52,40 @@ public partial class StartUpWindow : Window
             Close();
         }
     }
-    
-    private async Task<FileClient> ConnectToServer()
+
+    private static async Task<IFileClient> ResolveFileClient()
     {
-        FileClient fileClient = new FileClient(new MinecraftPath().BasePath);
-        
-        bool success = false;
-        for (int i = 0; i < 10; i++)
-        {
-            success = fileClient.ConnectToServer();
-            if(success)break;
-            await Task.Delay(1000);
-        }
-        
-        if (!success) throw new Exception("Failed connect to the server");
-        return fileClient;
+        Result<ServerConnection> serverConnection = await ConnectToServer();
+
+        if (serverConnection.IsOk) return serverConnection.Value;
+
+        return GetLocalFileServer().Value;
     }
 
-    private Task<LoginResponse> TryLogIn(FileClient fileClient, LocalPrefs localPrefs)
+    private static Result<IFileClient> GetLocalFileServer()
+    {
+        IFileClient client = new LocalFileClient.FileClient();
+        return Result<IFileClient>.Ok(client);//TODO properly handle local client initialization
+    }
+    
+    private static async Task<Result<ServerConnection>> ConnectToServer()
+    {
+        ServerConnection serverConnection = new ServerConnection("3.123.51.46", 69);
+        
+        bool success = false;
+        for (int i = 0; i < 3; i++)
+        {
+            success = await serverConnection.TryInit();
+            if(success) break;
+            await Task.Delay(1500);
+        }
+        
+        return success ? serverConnection : new Exception("Failed to connect to the server.");
+    }
+
+    private static Task<Result<User>> TryLogIn(IFileClient fileClient, LocalPrefs localPrefs)
     {
         User user = new User(localPrefs.Nickname, localPrefs.Password);
-        return fileClient.SendLoginRequest(user);
+        return fileClient.Authenticate(user);
     }
 }

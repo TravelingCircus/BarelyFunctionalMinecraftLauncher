@@ -9,31 +9,30 @@ using OpenTK.Wpf;
 using System.Windows.Input;
 using BFML.Core;
 using CmlLib.Core;
+using Common;
 using Common.Misc;
 using Common.Models;
-using Common.Network.Messages.ChangeSkin;
-using TCPFileClient;
 using XamlRadialProgressBar;
 
 namespace BFML.WPF;
 
-public partial class MainWindow : Window
+public partial class MainWindow
 {
-    private readonly FileClient _fileClient;
+    private Game _game;
+    private SkinPreviewRenderer _skinPreviewRenderer;
     private readonly User _user;
     private readonly LocalPrefs _localPrefs;
-    private readonly ConfigurationVersion _configVersion;
+    private readonly IFileClient _fileClient;
+    private readonly LoadingScreen _loadingScreen;
     private readonly LaunchConfiguration _launchConfig;
-    private SkinPreviewRenderer _skinPreviewRenderer;
-    private LoadingScreen _loadingScreen;
-    private Game _game;
+    private readonly ConfigurationVersion _configVersion;
 
-    public MainWindow(FileClient fileClient, User user, LocalPrefs localPrefs,
-       LaunchConfiguration launchConfig, ConfigurationVersion configVersion)
+    public MainWindow(IFileClient fileClient, User user, LocalPrefs localPrefs,
+        LaunchConfiguration launchConfig, ConfigurationVersion configVersion)
     {
         InitializeComponent();
-        _fileClient = fileClient;
         _user = user;
+        _fileClient = fileClient;
         _localPrefs = localPrefs;
         _launchConfig = launchConfig;
         _configVersion = configVersion;
@@ -46,7 +45,6 @@ public partial class MainWindow : Window
     private async void OnWindowLoaded(object sender, RoutedEventArgs args)
     {
         Loaded -= OnWindowLoaded;
-        CheckIfUserPaid();
         ApplyLocalPrefs();
         _skinPreviewRenderer.ChangeSkin(_user.SkinPath);
         _game = await Game.SetUp(_fileClient, _launchConfig);
@@ -67,7 +65,7 @@ public partial class MainWindow : Window
         await _game.Launch((int)RamSlider.Value, FullScreen.IsChecked!.Value, _user.Nickname);
         
         await Task.Delay(10000);
-        _fileClient.Disconnect();
+        await _fileClient.TryDispose();
         Close();
     }
 
@@ -91,13 +89,13 @@ public partial class MainWindow : Window
 
         string[] files = (string[])e.Data.GetData(DataFormats.FileDrop)!;
         if (files.Length != 1 || !files[0].EndsWith(".png")) return;
+
+        FileInfo fileInfo = new FileInfo(files[0]);
+        Skin skin = Skin.FromFile(fileInfo);
+        if (!await _fileClient.TryChangeSkin(_user, skin)) return;
         
-        SkinChangeResponse response = await _fileClient.SendSkinChangeRequest(_user.Nickname, files[0]);
-        if (response.Success)
-        {
-            Utils.SaveSkin(files[0]);
-            _skinPreviewRenderer.ChangeSkin(_user.SkinPath);
-        }
+        Utils.SaveSkin(fileInfo.FullName);
+        _skinPreviewRenderer.ChangeSkin(_user.SkinPath);
     }
     
     private void SkinPreviewOnRender(TimeSpan obj)
@@ -200,21 +198,6 @@ public partial class MainWindow : Window
         _localPrefs.IsFullscreen = FullScreen.IsChecked!.Value;
         _localPrefs.DedicatedRAM = (int)RamSlider.Value;
         LocalPrefs.SaveLocalPrefs(_localPrefs);
-    }
-    
-    private void CheckIfUserPaid()
-    {
-        if (_user.GryvnyasPaid < _launchConfig.RequiredGriwnas)
-        {
-            DisablePlayButton();
-        }
-    }
-    
-    private void DisablePlayButton()    
-    {
-        PlayButton.IsEnabled = false;
-        PlayButton.Content = "Not Paid";
-        PlayButton.Opacity = 0.5f;
     }
     
     private void ExitAccount(object sender, RoutedEventArgs e)

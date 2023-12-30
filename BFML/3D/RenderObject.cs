@@ -1,6 +1,4 @@
-﻿using ABOBAEngine.Components;
-using ABOBAEngine.Rendering.Models;
-using OpenTK.Graphics.OpenGL4;
+﻿using OpenTK.Graphics.OpenGL4;
 using OpenTK.Mathematics;
 
 namespace BFML._3D;

@@ -6,10 +6,7 @@ namespace TCPFileServer.MessageHandlers;
 
 public sealed class GetSkinHandler: MessageHandler
 {
-    public GetSkinHandler(Repository repository) : base(repository)
-    {
-        
-    }
+    public GetSkinHandler(Repository repository) : base(repository) { }
 
     public override Task Handle(Stream dataStream)
     {

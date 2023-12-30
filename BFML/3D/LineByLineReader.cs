@@ -3,13 +3,13 @@ using System.Collections.Generic;
 using System.IO;
 using System.Text;
 
-namespace ABOBAEngine.Utils;
+namespace BFML._3D;
 
 public sealed class LineByLineReader : IDisposable
 {
     public bool IsEmpty { get; private set; }
     private int _position;
-    private TextBuffer _inactiveBuffer => _activeBuffer.Equals(_buffers[0]) ? _buffers[1] : _buffers[0];
+    private TextBuffer InactiveBuffer => _activeBuffer.Equals(_buffers[0]) ? _buffers[1] : _buffers[0];
     private TextBuffer _activeBuffer;
     
     private readonly TextBuffer[] _buffers;
@@ -17,7 +17,7 @@ public sealed class LineByLineReader : IDisposable
     private readonly FileStream _fileStream;
     private readonly byte[] _byteBuffer;
 
-    private Func<ReadOnlyMemory<char>> LineReadDelegate;
+    private Func<ReadOnlyMemory<char>> _lineReadDelegate;
     
     public LineByLineReader(FileStream fileStream, int bufferLength = 500000)
     {
@@ -32,7 +32,7 @@ public sealed class LineByLineReader : IDisposable
 
     public ReadOnlyMemory<char> ReadLine()
     {
-        ReadOnlyMemory<char> result = LineReadDelegate.Invoke();
+        ReadOnlyMemory<char> result = _lineReadDelegate.Invoke();
         _position += result.Length+1;
         if (_position >= _bufferLength - 1) SwapBuffers();
         if (result.Length > 1 && result.Span[^1] == '\r')
@@ -51,7 +51,7 @@ public sealed class LineByLineReader : IDisposable
             if (iteratorPosition + 1 >= _bufferLength) return GetNextLineOnVerge();
             iteratorPosition++;
         }
-        var result = _activeBuffer.ReadOnlyMemory.Slice(_position, iteratorPosition - _position);
+        ReadOnlyMemory<char> result = _activeBuffer.ReadOnlyMemory.Slice(_position, iteratorPosition - _position);
         return result;
     }
     
@@ -88,7 +88,7 @@ public sealed class LineByLineReader : IDisposable
             result.Add(span[iteratorPosition]);
         }
         SwapBuffers();
-        ReadOnlyMemory<char> afterTear = LineReadDelegate.Invoke();
+        ReadOnlyMemory<char> afterTear = _lineReadDelegate.Invoke();
         result.AddRange(afterTear.ToArray());
 
         return new ReadOnlyMemory<char>(result.ToArray());
@@ -96,8 +96,8 @@ public sealed class LineByLineReader : IDisposable
 
     private void SwapBuffers()
     {
-        ReadToBuffer(_inactiveBuffer);
-        LineReadDelegate = _inactiveBuffer.IsFull ? GetNextLine : GetNextLineWithChecks;
+        ReadToBuffer(InactiveBuffer);
+        _lineReadDelegate = InactiveBuffer.IsFull ? GetNextLine : GetNextLineWithChecks;
         
         _activeBuffer = _activeBuffer.Equals(_buffers[0]) ? _buffers[1] : _buffers[0];
         _position = 0;
@@ -106,7 +106,7 @@ public sealed class LineByLineReader : IDisposable
     private void InitializeBuffers()
     {
         ReadToBuffer(_buffers[0]);
-        LineReadDelegate = _buffers[0].IsFull ? GetNextLine : GetNextLineWithChecks;
+        _lineReadDelegate = _buffers[0].IsFull ? GetNextLine : GetNextLineWithChecks;
     }
     
     private void ReadToBuffer(TextBuffer buffer)

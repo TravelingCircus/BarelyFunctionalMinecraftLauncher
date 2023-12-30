@@ -38,7 +38,7 @@ public static class DataSerializer
         XmlSerializer xml = new XmlSerializer(typeof(ConfigurationVersion));
         xml.Serialize(buffer, version);
     }
-    
+
     public static ConfigurationVersion ConfigVersionFromXml(Stream stream)
     {
         XmlSerializer serializer = new XmlSerializer(typeof(ConfigurationVersion));

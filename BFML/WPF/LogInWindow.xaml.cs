@@ -4,36 +4,33 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
 using BFML.Core;
+using Common;
+using Common.Misc;
 using Common.Models;
-using Common.Network.Messages.Login;
-using Common.Network.Messages.Registration;
-using TCPFileClient;
 
 namespace BFML.WPF;
 
-public partial class LogInWindow : Window
+public partial class LogInWindow
 {
-    private readonly FileClient _fileClient;
+    private readonly IFileClient _fileClient;
     private readonly LaunchConfiguration _launchConfiguration;
     private readonly ConfigurationVersion _version;
 
-    public LogInWindow()
-    {
-    }
+    public LogInWindow() { }
 
-    public LogInWindow(FileClient fileClient, LaunchConfiguration launchConfiguration, ConfigurationVersion version)
+    public LogInWindow(IFileClient fileClient, LaunchConfiguration launchConfiguration, ConfigurationVersion version)
     {
         InitializeComponent();
+        _version = version;
         _fileClient = fileClient;
         _launchConfiguration = launchConfiguration;
-        _version = version;
     }
 
     private void ShutDown(object sender, RoutedEventArgs e)
     {
         try
         {
-            App.Current.Shutdown();
+            Application.Current.Shutdown();
         }
         catch (Exception ex)
         {
@@ -55,16 +52,14 @@ public partial class LogInWindow : Window
 
     private void MoveWindow(object sender, MouseEventArgs e)
     {
-        if (e.LeftButton == MouseButtonState.Pressed)
+        if (e.LeftButton != MouseButtonState.Pressed) return;
+        if (WindowState == WindowState.Maximized)
         {
-            if (WindowState == WindowState.Maximized)
-            {
-                WindowState = WindowState.Normal;
-                Application.Current.MainWindow.Top = 3;
-            }
-
-            DragMove();
+            WindowState = WindowState.Normal;
+            Application.Current.MainWindow.Top = 3;
         }
+
+        DragMove();
     }
 
     private async void RegisterButtonOnClick(object sender, RoutedEventArgs e)
@@ -75,38 +70,38 @@ public partial class LogInWindow : Window
         ValidateString(password);
 
         User newUser = new User(nickname, password);
-        RegistrationResponse response = await _fileClient.SendRegistrationRequest(newUser);
-        if (!response.Success)
+        Result<User> registrationResult = await _fileClient.CreateRecord(newUser);
+        if (!registrationResult.IsOk)
         {
             //TODO Display that user exists
             return;
         }
 
-        await TryLogIn(nickname, password);
+        await TryLogIn(registrationResult.Value);
     }
 
     private async void LogInButtonOnClick(object sender, RoutedEventArgs e)
     {
         string nickname = InputNickname.Text;
         string password = InputPassword.Text;
-
-        await TryLogIn(nickname, password);
+        User user = new User(nickname, password);
+        
+        await TryLogIn(user);
     }
 
-    private async Task TryLogIn(string nickname, string password)
+    private async Task TryLogIn(User user)
     {
-        User newUser = new User(nickname, password);
-        LoginResponse response = await _fileClient.SendLoginRequest(newUser);
-        newUser = response.User;
-        if (!response.Success)
+        Result<User> loginResult = await _fileClient.Authenticate(user);
+        if (!loginResult.IsOk)
         {
             //TODO Display that user doesn't exists
             return;
         }
 
-        LocalPrefs.SaveLocalPrefs(nickname, password);
+        User authenticatedUser = loginResult.Value;
+        LocalPrefs.SaveLocalPrefs(authenticatedUser.Nickname, authenticatedUser.PasswordHash);
         LocalPrefs localPrefs = LocalPrefs.GetLocalPrefs();
-        MainWindow mainWindow = new MainWindow(_fileClient, newUser, localPrefs, _launchConfiguration, _version);
+        MainWindow mainWindow = new MainWindow(_fileClient, loginResult.Value, localPrefs, _launchConfiguration, _version);
         mainWindow.Show();
         Close();
     }
@@ -145,14 +140,14 @@ public partial class LogInWindow : Window
         }
     }
 
-    private void ValidateString(string text)
+    private static void ValidateString(string text)
     {
-        if (String.IsNullOrEmpty(text)) throw new NullReferenceException();
+        if (string.IsNullOrEmpty(text)) throw new NullReferenceException();
         if (!IsLegalUnicode(text)) throw new Exception($"[{text}] isn't valid unicode");
-        if (text.Length < 4 || text.Length > 16) throw new Exception("Too long or too short");
+        if (text.Length is < 4 or > 16) throw new Exception("Too long or too short");
     }
     
-    private bool IsLegalUnicode(string str)
+    private static bool IsLegalUnicode(string str)
     {
         for (int i = 0; i < str.Length; i++)
         {

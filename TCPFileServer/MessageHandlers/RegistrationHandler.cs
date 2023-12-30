@@ -7,10 +7,7 @@ namespace TCPFileServer.MessageHandlers;
 
 public sealed class RegistrationHandler : MessageHandler
 {
-    public RegistrationHandler(Repository repository): base(repository) 
-    {
-        
-    }
+    public RegistrationHandler(Repository repository): base(repository) { }
 
     public override Task Handle(Stream dataStream)
     {

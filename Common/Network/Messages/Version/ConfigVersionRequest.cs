@@ -12,8 +12,5 @@ public class ConfigVersionRequest : Message
         throw new NotImplementedException();
     }
 
-    protected override Stream GetData()
-    {
-        return new MemoryStream(0);
-    }
+    protected override Stream GetData() => new MemoryStream(0);
 }

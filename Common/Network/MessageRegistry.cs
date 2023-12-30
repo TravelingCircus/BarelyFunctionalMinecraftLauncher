@@ -29,21 +29,12 @@ public static class MessageRegistry
         {13, typeof(ModsDownloadRequest)},
         {14, typeof(ModsDownloadResponse)},
         {15, typeof(GetSkinRequest)},
-        {16, typeof(GetSkinResponse)},
-        
-        
-        {228, typeof(ExterminatusRequest)},
+        {16, typeof(GetSkinResponse)}
     };
 
-    public static Message GetMessageFor(MessageHeader header)
-    {
-        return (Message)Activator.CreateInstance(_messages[header.MessageKey]);
-    }
+    public static Message GetMessageFor(MessageHeader header) => (Message)Activator.CreateInstance(GetMessageType(header));
 
-    public static string GetMessageTypeName(MessageHeader header)
-    {
-        return _messages[header.MessageKey].Name;
-    }
+    public static string GetMessageTypeName(MessageHeader header) => GetMessageType(header).Name;
 
     public static byte GetKeyForMessageType(Type messageType)
     {
@@ -55,4 +46,6 @@ public static class MessageRegistry
         }
         throw new ArgumentOutOfRangeException(nameof(messageType), messageType.Name + "is not a registered message");
     }
+
+    private static Type GetMessageType(MessageHeader header) => _messages[header.MessageKey];
 }

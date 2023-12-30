@@ -4,10 +4,7 @@ public class RegistrationResponse : Message
 {
     public bool Success;
 
-    public RegistrationResponse()
-    {
-        
-    }
+    public RegistrationResponse() { }
     
     public RegistrationResponse(bool success)
     {
