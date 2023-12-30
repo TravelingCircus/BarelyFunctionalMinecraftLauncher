@@ -16,6 +16,6 @@ public interface IFileClient
     public Task<bool> TryLoadForge(FileInfo target);
     public Task<bool> TryLoadMods(FileInfo target);
     
-    public Task<bool> TryChangeSkin(string filePath);
-    public Task<Skin> GetSkin();
+    public Task<bool> TryChangeSkin(User user, Skin skin);
+    public Task<Skin> GetSkin(User user);
 }

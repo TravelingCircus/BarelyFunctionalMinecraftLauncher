@@ -1,9 +1,9 @@
 ﻿using System.Collections.Concurrent;
 using System.Net.Sockets;
 using Common;
+using Common.Misc;
 using Common.Models;
 using Common.Network;
-using Common.Network.Messages;
 using Common.Network.Messages.ChangeSkin;
 using Common.Network.Messages.ForgeDownload;
 using Common.Network.Messages.GetSkin;
@@ -20,116 +20,133 @@ public sealed class ServerConnection : IFileClient
     private TcpClient _client;
     private NetworkStream _networkStream;
     private NetworkChannel _networkChannel;
-    private readonly string _minecraftPath;
+    private readonly int _port;
+    private readonly string _hostName;
     private readonly ConcurrentQueue<Query> _requests;
     private readonly CancellationTokenSource _cancellationTokenSource;
 
-    public ServerConnection(string minecraftPath)
+    public ServerConnection(string hostName, int port)
     {
-        _minecraftPath = minecraftPath;
+        _port = port;
+        _hostName = hostName;
         _requests = new ConcurrentQueue<Query>();
         _cancellationTokenSource = new CancellationTokenSource();
     }
 
     #region Interface
     
+    public Task<bool> TryInit()
+    {
+        bool result = ConnectToServer(_hostName, _port);
+        return Task.FromResult(result);
+    }
+
+    public Task<bool> TryDispose()
+    {
+        Terminate();
+        return Task.FromResult(true);
+    }
+
+    public async Task<Result<User>> Authenticate(User user)
+    {
+        LoginRequest request = new LoginRequest(user.Nickname, user.PasswordHash);
+        LoginResponse response = (LoginResponse)await GetResponseFor(request);
+        return response.Success 
+            ? Result<User>.Ok(user)
+            : Result<User>.Err(new ArgumentException($"Can't authenticate user {user.Nickname}."));
+    }
+
+    public async Task<Result<User>> CreateRecord(User user)
+    {
+        RegistrationRequest request = new RegistrationRequest(user.Nickname, user.PasswordHash);
+        RegistrationResponse response = (RegistrationResponse)await GetResponseFor(request);
+        return response.Success 
+            ? Result<User>.Ok(user)
+            : Result<User>.Err(new ArgumentException($"Can't create record for user {user.Nickname}."));
+    }
+
     public async Task<LaunchConfiguration> LoadLaunchConfiguration()
     {
         Message response = await GetResponseFor(new LaunchConfigurationRequest());
         return ((LaunchConfigurationResponse)response).LaunchConfiguration;
     }
-    
+
     public async Task<ConfigurationVersion> LoadConfigVersion()
     {
         Message response = await GetResponseFor(new ConfigVersionRequest());
         return ((ConfigVersionResponse)response).ConfigurationVersion;
     }
-
-    public async Task<RegistrationResponse> SendRegistrationRequest(User user)
-    {
-        Message response = await GetResponseFor(new RegistrationRequest(user.Nickname, user.PasswordHash));
-        return (RegistrationResponse)response;
-    }
     
-    public async Task<LoginResponse> SendLoginRequest(User user)
+    public async Task<bool> TryLoadForge(FileInfo target)
     {
-        LoginResponse response = (LoginResponse)await GetResponseFor(new LoginRequest(user.Nickname, user.PasswordHash));
+        ForgeDownloadRequest request = new ForgeDownloadRequest();
+        ForgeDownloadResponse response = (ForgeDownloadResponse)await GetResponseFor(request);
+
+        try
+        {
+            await using FileStream fileStream = target.Open(FileMode.OpenOrCreate);
+            await fileStream.WriteAsync(response.ForgeBytes.AsMemory(0, response.GetDataLength()));
+            await fileStream.FlushAsync();
+            fileStream.Close();
+        }
+        catch (Exception)
+        {
+            target.Delete();
+            return false;
+        }
         
-        string skinPath = _minecraftPath + @"\BFML\skin.png";
-        await using FileStream stream = File.Open(skinPath, FileMode.OpenOrCreate);
-        stream.Write(response.SkinData, 0, response.SkinData.Length);
-        response.User.SkinPath = skinPath;
-
-        return response;
+        return true;
     }
 
-    public async Task<SkinChangeResponse> SendSkinChangeRequest(string nickname, string filePath)
+    public async Task<bool> TryLoadMods(FileInfo target)
     {
-        DirectoryInfo directoryInfo = new DirectoryInfo(Path.GetDirectoryName(filePath)!);
-        int bytesLength = (int)directoryInfo.GetFiles(Path.GetFileName(filePath))[0].Length;
-
-        byte[] bytes = new byte[bytesLength];
-
-        await using FileStream fileStream = new FileStream(filePath, FileMode.Open);
-        _ = fileStream.Read(bytes, 0, bytesLength);
+        ModsDownloadRequest request = new ModsDownloadRequest();
+        ModsDownloadResponse response = (ModsDownloadResponse)await GetResponseFor(request);
         
-        Message response = await GetResponseFor(new SkinChangeRequest(nickname, bytes, bytesLength));
-        return (SkinChangeResponse)response;
-    }
-    
-    public async Task<ForgeDownloadResponse> DownloadForgeFiles(string tempDirectoryPath)
-    {
-        string tempForgePath = tempDirectoryPath + @"\Forge.zip";
-        ForgeDownloadResponse response = (ForgeDownloadResponse)await GetResponseFor(new ForgeDownloadRequest());
-        response.TempForgePath = tempForgePath;
-
-        await using FileStream fileStream = new FileStream(response.TempForgePath, FileMode.OpenOrCreate);
-        await fileStream.WriteAsync(response.ForgeBytes, 0, response.GetDataLength());
-        await fileStream.FlushAsync();
-        fileStream.Close();
-        response.ForgeBytes = null!;
+        try
+        {
+            await using FileStream fileStream = target.Open(FileMode.OpenOrCreate);
+            await fileStream.WriteAsync(response.ModsBytes.AsMemory(0, response.GetDataLength()));
+            await fileStream.FlushAsync();
+            fileStream.Close();
+        }
+        catch (Exception)
+        {
+            target.Delete();
+            return false;
+        }
         
-        return response;
+        return true;
     }
-    
-    public async Task<ModsDownloadResponse> DownloadMods(string directory)
-    {
-        ModsDownloadResponse response = (ModsDownloadResponse)await GetResponseFor(new ModsDownloadRequest());
-        response.ModsZipPath = directory + @"\mods.zip";
 
-        await using FileStream fileStream = new FileStream(response.ModsZipPath, FileMode.OpenOrCreate);
-        await fileStream.WriteAsync(response.ModsBytes, 0, response.GetDataLength());
-        await fileStream.FlushAsync();
-        fileStream.Close();
-        response.ModsBytes = null!;
+    public async Task<bool> TryChangeSkin(User user, Skin skin)
+    {
+        byte[] skinData = skin.SkinBytes.ToArray();
+        SkinChangeRequest request = new SkinChangeRequest(user.Nickname, skinData, skin.SkinBytes.Count);
+        SkinChangeResponse response = (SkinChangeResponse)await GetResponseFor(request);
+        return response.Success;
+    }
 
-        return response;
-    }
-    
-    public async Task<GetSkinResponse> GetSkin(string nickname)
+    public async Task<Skin> GetSkin(User user)
     {
-        return (GetSkinResponse)await GetResponseFor(new GetSkinRequest(nickname));
-    }
-    
-    public async Task SendExterminatusRequest()
-    {
-        await _networkChannel.SendMessage(new ExterminatusRequest());
+        GetSkinRequest request = new GetSkinRequest(user.Nickname);
+        GetSkinResponse response = (GetSkinResponse)await GetResponseFor(request);
+        return Skin.FromBytes(response.SkinData);
     }
 
     #endregion
 
-    public bool ConnectToServer()
+    private bool ConnectToServer(string hostName, int port)
     {
         try
         {
-            _client = new TcpClient("3.123.51.46", 69);
+            _client = new TcpClient(hostName, port);
             _networkStream = _client.GetStream();
             _networkChannel = new NetworkChannel(_networkStream);
             CancellationToken cancellationToken = _cancellationTokenSource.Token;
-            Task.Run(() =>
-            {
-                SendRequestsWhenAvailable(_networkChannel, _requests, cancellationToken).GetAwaiter();
-            }, cancellationToken);
+            Task.Run(
+                () => SendRequestsWhenAvailable(_networkChannel, _requests, cancellationToken).GetAwaiter(),
+                cancellationToken);
         }
         catch
         {
@@ -139,9 +156,12 @@ public sealed class ServerConnection : IFileClient
         return true;
     }
 
-    public void Disconnect()
+    private void Terminate()
     {
-        Terminate();
+        _cancellationTokenSource.Cancel();
+        _cancellationTokenSource.Dispose();
+        _networkStream.Dispose();
+        _client.Close();
     }
 
     private async Task SendRequestsWhenAvailable(NetworkChannel networkChannel, 
@@ -164,14 +184,6 @@ public sealed class ServerConnection : IFileClient
         TaskCompletionSource<Message> taskCompletionSource = new TaskCompletionSource<Message>();
         _requests.Enqueue(new Query(request, taskCompletionSource));
         return taskCompletionSource.Task;
-    }
-
-    private void Terminate()
-    {
-        _cancellationTokenSource.Cancel();
-        _cancellationTokenSource.Dispose();
-        _networkStream.Dispose();
-        _client.Close();
     }
 
     private class Query

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
+using System.IO;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -21,10 +22,10 @@ public partial class MainWindow
     private SkinPreviewRenderer _skinPreviewRenderer;
     private readonly User _user;
     private readonly LocalPrefs _localPrefs;
+    private readonly IFileClient _fileClient;
     private readonly LoadingScreen _loadingScreen;
     private readonly LaunchConfiguration _launchConfig;
     private readonly ConfigurationVersion _configVersion;
-    private readonly IFileClient _fileClient;
 
     public MainWindow(IFileClient fileClient, User user, LocalPrefs localPrefs,
         LaunchConfiguration launchConfig, ConfigurationVersion configVersion)
@@ -64,7 +65,7 @@ public partial class MainWindow
         await _game.Launch((int)RamSlider.Value, FullScreen.IsChecked!.Value, _user.Nickname);
         
         await Task.Delay(10000);
-        _fileClient.Disconnect();
+        await _fileClient.TryDispose();
         Close();
     }
 
@@ -88,10 +89,12 @@ public partial class MainWindow
 
         string[] files = (string[])e.Data.GetData(DataFormats.FileDrop)!;
         if (files.Length != 1 || !files[0].EndsWith(".png")) return;
+
+        FileInfo fileInfo = new FileInfo(files[0]);
+        Skin skin = Skin.FromFile(fileInfo);
+        if (!await _fileClient.TryChangeSkin(_user, skin)) return;
         
-        if (!await _fileClient.TryChangeSkin(files[0])) return;
-        
-        Utils.SaveSkin(files[0]);
+        Utils.SaveSkin(fileInfo.FullName);
         _skinPreviewRenderer.ChangeSkin(_user.SkinPath);
     }
     

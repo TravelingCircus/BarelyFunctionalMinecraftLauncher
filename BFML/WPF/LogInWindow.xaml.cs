@@ -5,9 +5,8 @@ using System.Windows;
 using System.Windows.Input;
 using BFML.Core;
 using Common;
+using Common.Misc;
 using Common.Models;
-using Common.Network.Messages.Login;
-using Common.Network.Messages.Registration;
 
 namespace BFML.WPF;
 
@@ -71,38 +70,38 @@ public partial class LogInWindow
         ValidateString(password);
 
         User newUser = new User(nickname, password);
-        RegistrationResponse response = await _fileClient.SendRegistrationRequest(newUser);
-        if (!response.Success)
+        Result<User> registrationResult = await _fileClient.CreateRecord(newUser);
+        if (!registrationResult.IsOk)
         {
             //TODO Display that user exists
             return;
         }
 
-        await TryLogIn(nickname, password);
+        await TryLogIn(registrationResult.Value);
     }
 
     private async void LogInButtonOnClick(object sender, RoutedEventArgs e)
     {
         string nickname = InputNickname.Text;
         string password = InputPassword.Text;
-
-        await TryLogIn(nickname, password);
+        User user = new User(nickname, password);
+        
+        await TryLogIn(user);
     }
 
-    private async Task TryLogIn(string nickname, string password)
+    private async Task TryLogIn(User user)
     {
-        User newUser = new User(nickname, password);
-        LoginResponse response = await _fileClient.SendLoginRequest(newUser);
-        newUser = response.User;
-        if (!response.Success)
+        Result<User> loginResult = await _fileClient.Authenticate(user);
+        if (!loginResult.IsOk)
         {
             //TODO Display that user doesn't exists
             return;
         }
 
-        LocalPrefs.SaveLocalPrefs(nickname, password);
+        User authenticatedUser = loginResult.Value;
+        LocalPrefs.SaveLocalPrefs(authenticatedUser.Nickname, authenticatedUser.PasswordHash);
         LocalPrefs localPrefs = LocalPrefs.GetLocalPrefs();
-        MainWindow mainWindow = new MainWindow(_fileClient, newUser, localPrefs, _launchConfiguration, _version);
+        MainWindow mainWindow = new MainWindow(_fileClient, loginResult.Value, localPrefs, _launchConfiguration, _version);
         mainWindow.Show();
         Close();
     }

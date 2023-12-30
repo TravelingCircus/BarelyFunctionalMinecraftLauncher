@@ -29,9 +29,7 @@ public static class MessageRegistry
         {13, typeof(ModsDownloadRequest)},
         {14, typeof(ModsDownloadResponse)},
         {15, typeof(GetSkinRequest)},
-        {16, typeof(GetSkinResponse)},
-            
-        {228, typeof(ExterminatusRequest)},
+        {16, typeof(GetSkinResponse)}
     };
 
     public static Message GetMessageFor(MessageHeader header) => (Message)Activator.CreateInstance(GetMessageType(header));

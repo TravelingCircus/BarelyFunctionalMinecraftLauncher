@@ -2,7 +2,6 @@
 
 public sealed class ForgeDownloadResponse : ZipFileMessage
 {
-    public string TempForgePath;
     public byte[] ForgeBytes;
     private int _forgeBytesLength;
     private readonly Stream _stream;

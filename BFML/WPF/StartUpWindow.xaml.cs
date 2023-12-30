@@ -7,7 +7,6 @@ using CmlLib.Core;
 using Common;
 using Common.Misc;
 using Common.Models;
-using Common.Network.Messages.Login;
 using FileClient;
 
 namespace BFML.WPF;
@@ -30,12 +29,12 @@ public partial class StartUpWindow
         ConfigurationVersion version = await fileClient.LoadConfigVersion();
         LaunchConfiguration launchConfig = await fileClient.LoadLaunchConfiguration();
 
-        LoginResponse loginResponse = await TryLogIn(fileClient, localPrefs);
-        if (loginResponse.Success)
+        Result<User> loginResult = await TryLogIn(fileClient, localPrefs);
+        if (loginResult.IsOk)
         {
             MainWindow mainWindow = new MainWindow(
                 fileClient, 
-                loginResponse.User, 
+                loginResult.Value, 
                 localPrefs,
                 launchConfig,
                 version);
@@ -72,12 +71,12 @@ public partial class StartUpWindow
     
     private static async Task<Result<ServerConnection>> ConnectToServer()
     {
-        ServerConnection serverConnection = new ServerConnection(new MinecraftPath().BasePath);
+        ServerConnection serverConnection = new ServerConnection("3.123.51.46", 69);
         
         bool success = false;
         for (int i = 0; i < 3; i++)
         {
-            success = serverConnection.ConnectToServer();
+            success = await serverConnection.TryInit();
             if(success) break;
             await Task.Delay(2500);
         }
@@ -85,9 +84,9 @@ public partial class StartUpWindow
         return success ? serverConnection : null;
     }
 
-    private static Task<LoginResponse> TryLogIn(IFileClient fileClient, LocalPrefs localPrefs)
+    private static Task<Result<User>> TryLogIn(IFileClient fileClient, LocalPrefs localPrefs)
     {
         User user = new User(localPrefs.Nickname, localPrefs.Password);
-        return fileClient.SendLoginRequest(user);
+        return fileClient.Authenticate(user);
     }
 }

@@ -1,4 +1,5 @@
-﻿using System.Diagnostics;
+﻿using System;
+using System.Diagnostics;
 using System.IO;
 using System.Threading.Tasks;
 using CmlLib.Core;
@@ -7,8 +8,6 @@ using CmlLib.Core.Version;
 using Common;
 using Common.Misc;
 using Common.Models;
-using Common.Network.Messages.ForgeDownload;
-using Common.Network.Messages.ModsDownload;
 using FileClient.Utils;
 
 namespace BFML.Core;
@@ -63,10 +62,15 @@ public sealed class Game
     public async Task CleanInstall(CompositeProgress progress)
     {
         DeleteAllFiles(progress.AddTracker(0.1f));
+        
         await InstallVanilla(progress.AddTracker(0.5f));
-        await InstallForge(progress.AddTracker(0.1f));
-        await InstallMods(progress.AddTracker(0.3f));
-
+        
+        if (!await TryInstallForge(progress.AddTracker(0.1f))) 
+            throw new InvalidOperationException("Can't install forge."); //TODO Refactor
+        
+        if (!await TryInstallMods(progress.AddTracker(0.3f))) 
+            throw new InvalidOperationException("Can't install mods."); //TODO Refactor
+        
         await _launcher.GetAllVersionsAsync();
     }
     
@@ -111,23 +115,31 @@ public sealed class Game
         progressTracker.Report(1f);
     }
     
-    private async Task InstallForge(ProgressTracker progressTracker)
+    private async Task<bool> TryInstallForge(ProgressTracker progressTracker)
     {
         using TempDirectory tempDirectory = new TempDirectory();
-        ForgeDownloadResponse response = await _fileClient.DownloadForgeFiles(tempDirectory.Info.FullName);
+        FileInfo targetFile = new FileInfo(tempDirectory.Info.FullName + "Forge.zip");
+        
+        if (!await _fileClient.TryLoadForge(targetFile)) return false;
+        
         progressTracker.Add(0.8f);
-        await Forge.Install(response.TempForgePath, _launchConfiguration);
+        await Forge.Install(targetFile.FullName, _launchConfiguration);
         progressTracker.Add(0.2f);
+        return true;
     }
 
-    private async Task InstallMods(ProgressTracker progressTracker)
+    private async Task<bool> TryInstallMods(ProgressTracker progressTracker)
     {
         if (!Directory.Exists(_minecraftPath.BasePath + @"\mods"))
             Directory.CreateDirectory(_minecraftPath.BasePath + @"\mods");
         using TempDirectory tempDirectory = new TempDirectory();
-        ModsDownloadResponse response = await _fileClient.DownloadMods(tempDirectory.Info.FullName);
+        FileInfo targetFile = new FileInfo(tempDirectory.Info.FullName + "Mods.zip");
+        
+        if (!await _fileClient.TryLoadMods(targetFile)) return false;
+        
         progressTracker.Add(0.8f);
-        await Mods.InstallFromArchive(response.ModsZipPath);
+        await Mods.InstallFromArchive(targetFile.FullName);
         progressTracker.Add(0.2f);
+        return true;
     }
 }
