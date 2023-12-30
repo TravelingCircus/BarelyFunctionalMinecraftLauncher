@@ -7,10 +7,7 @@ namespace TCPFileServer.MessageHandlers;
 
 public class LoginHandler: MessageHandler
 {
-    public LoginHandler(Repository repository): base(repository) 
-    {
-        
-    }
+    public LoginHandler(Repository repository): base(repository) { }
 
     public override Task Handle(Stream dataStream)
     {

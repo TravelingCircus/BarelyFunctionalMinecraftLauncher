@@ -1,5 +1,4 @@
-﻿using ABOBAEngine.Rendering.Models;
-using OpenTK.Graphics.OpenGL4;
+﻿using OpenTK.Graphics.OpenGL4;
 using OpenTK.Mathematics;
 
 namespace BFML._3D;
@@ -15,7 +14,7 @@ public class SkinPreviewRenderer
         _camera = new Camera(
             new Vector3(0f, -1.1f, -5f), 
             Quaternion.Identity
-            );
+        );
 
         GL.Enable(EnableCap.DepthTest);
         GL.Enable(EnableCap.Blend);

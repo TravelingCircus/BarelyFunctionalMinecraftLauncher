@@ -1,9 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
-using System.Text;
 
-namespace ABOBAEngine.Rendering.Models;
+namespace BFML._3D;
 
 public abstract class ObjLineParser
 {

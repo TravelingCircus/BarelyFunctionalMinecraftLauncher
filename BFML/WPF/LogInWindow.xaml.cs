@@ -7,13 +7,12 @@ using BFML.Core;
 using Common.Models;
 using Common.Network.Messages.Login;
 using Common.Network.Messages.Registration;
-using TCPFileClient;
 
 namespace BFML.WPF;
 
-public partial class LogInWindow : Window
+public partial class LogInWindow
 {
-    private readonly FileClient _fileClient;
+    private readonly FileClient.FileClient _fileClient;
     private readonly LaunchConfiguration _launchConfiguration;
     private readonly ConfigurationVersion _version;
 
@@ -21,7 +20,7 @@ public partial class LogInWindow : Window
     {
     }
 
-    public LogInWindow(FileClient fileClient, LaunchConfiguration launchConfiguration, ConfigurationVersion version)
+    public LogInWindow(FileClient.FileClient fileClient, LaunchConfiguration launchConfiguration, ConfigurationVersion version)
     {
         InitializeComponent();
         _fileClient = fileClient;
@@ -33,7 +32,7 @@ public partial class LogInWindow : Window
     {
         try
         {
-            App.Current.Shutdown();
+            Application.Current.Shutdown();
         }
         catch (Exception ex)
         {

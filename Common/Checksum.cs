@@ -12,11 +12,6 @@ public static class Checksum
             hashes[i] = unchecked((uint)files[i].Length/(uint)files.Length);
         }
 
-        uint result = 53214;
-        for (int i = 0; i < hashes.Length; i++)
-        {
-            result += hashes[i];
-        }
-        return result;
+        return hashes.Aggregate<uint, uint>(53214, (current, t) => current + t);
     }
 }

@@ -5,10 +5,7 @@ public sealed class GetSkinResponse: Message
     public int SkinDataLength;
     public byte[] SkinData;
 
-    public GetSkinResponse()
-    {
-        
-    }
+    public GetSkinResponse() { }
 
     public GetSkinResponse(int skinDataLength, byte[] skinData)
     {
@@ -33,7 +30,7 @@ public sealed class GetSkinResponse: Message
         MemoryStream buffer = new MemoryStream(GetHeader().DataLength);
         WriteToStream(buffer, SkinDataLength);
         buffer.Write(SkinData);
-        
+            
         buffer.Flush();
         buffer.Position = 0;
         return buffer;

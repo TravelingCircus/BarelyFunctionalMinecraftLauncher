@@ -12,8 +12,5 @@ public sealed class ForgeDownloadRequest : Message
         throw new NotSupportedException();
     }
 
-    protected override Stream GetData()
-    {
-        return new MemoryStream();
-    }
+    protected override Stream GetData() => new MemoryStream();
 }

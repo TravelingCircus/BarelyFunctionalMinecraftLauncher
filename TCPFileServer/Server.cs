@@ -82,7 +82,7 @@ public sealed class Server
             await networkChannel.SendMessage(response);
             Console.WriteLine($"SENT RESPONSE thread_{Thread.CurrentThread.ManagedThreadId}");
         }
-        
+            
         Console.WriteLine($"HANDLING CONNECTION thread_{Thread.CurrentThread.ManagedThreadId}");
     }
 

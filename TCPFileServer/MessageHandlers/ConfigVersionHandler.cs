@@ -7,10 +7,7 @@ namespace TCPFileServer.MessageHandlers;
 
 public class ConfigVersionHandler : MessageHandler
 {
-    public ConfigVersionHandler(Repository repository): base(repository)
-    {
-        
-    }
+    public ConfigVersionHandler(Repository repository): base(repository) { }
 
     public override Task Handle(Stream dataStream)
     {

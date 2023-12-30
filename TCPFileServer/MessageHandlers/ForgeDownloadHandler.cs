@@ -6,10 +6,7 @@ namespace TCPFileServer.MessageHandlers;
 
 public sealed class ForgeDownloadHandler: MessageHandler
 {
-    public ForgeDownloadHandler(Repository repository) : base(repository) 
-    {
-         
-    }
+    public ForgeDownloadHandler(Repository repository) : base(repository) { }
     
     public override Task Handle(Stream dataStream)
     {

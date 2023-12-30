@@ -6,17 +6,11 @@ public sealed class LaunchConfiguration
     public string VanillaVersion;
     public string ForgeVersion;
     public string ModsChecksum;
-    public int RequiredGriwnas;
 
-    public LaunchConfiguration()
-    {
-    }
-
-    public LaunchConfiguration(string vanillaVersion, string forgeVersion, string modsChecksum, int requiredGriwnas)
+    public LaunchConfiguration(string vanillaVersion, string forgeVersion, string modsChecksum)
     {
         VanillaVersion = vanillaVersion;
         ForgeVersion = forgeVersion;
         ModsChecksum = modsChecksum;
-        RequiredGriwnas = requiredGriwnas;
     }
 }

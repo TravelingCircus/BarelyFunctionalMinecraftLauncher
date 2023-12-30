@@ -1,4 +1,4 @@
-﻿namespace TCPFileClient.Utils;
+﻿namespace FileClient.Utils;
 
 public static class DirectoryExtensions
 {
@@ -26,17 +26,10 @@ public static class DirectoryExtensions
 
     public static int RoughSize(this DirectoryInfo directory)
     {
-        int size = 0;
         FileInfo[] fis = directory.GetFiles();
-        foreach (FileInfo file in fis) 
-        {      
-            size += (int)file.Length;    
-        }
+        int size = fis.Sum(file => (int) file.Length);
         DirectoryInfo[] directories = directory.GetDirectories();
-        foreach (DirectoryInfo innerDirectory in directories) 
-        {
-            size += innerDirectory.RoughSize();   
-        }
+        size += directories.Sum(innerDirectory => innerDirectory.RoughSize());
         return size;  
     }
 }

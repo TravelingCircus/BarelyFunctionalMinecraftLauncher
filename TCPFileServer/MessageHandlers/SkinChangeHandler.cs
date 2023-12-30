@@ -6,10 +6,7 @@ namespace TCPFileServer.MessageHandlers;
 
 public class SkinChangeHandler: MessageHandler
 {
-    public SkinChangeHandler(Repository repository) : base(repository) 
-    {
-        
-    }
+    public SkinChangeHandler(Repository repository) : base(repository) { }
     
     public override Task Handle(Stream dataStream)
     {

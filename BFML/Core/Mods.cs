@@ -3,7 +3,7 @@ using System.IO.Compression;
 using System.Threading.Tasks;
 using CmlLib.Core;
 using Common;
-using TCPFileClient.Utils;
+using FileClient.Utils;
 
 namespace BFML.Core;
 

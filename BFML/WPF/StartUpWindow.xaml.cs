@@ -3,15 +3,13 @@ using System.IO;
 using System.Threading.Tasks;
 using System.Windows;
 using BFML.Core;
-using BFML.WPF;
 using CmlLib.Core;
 using Common.Models;
 using Common.Network.Messages.Login;
-using TCPFileClient;
 
-namespace BFML;
+namespace BFML.WPF;
 
-public partial class StartUpWindow : Window
+public partial class StartUpWindow
 {
     public StartUpWindow()
     {
@@ -23,7 +21,7 @@ public partial class StartUpWindow : Window
     {
         FontInstaller.InstallFont(new FileInfo(Environment.CurrentDirectory + "\\MinecraftFont.ttf"));
         
-        FileClient fileClient = await ConnectToServer();
+        FileClient.FileClient fileClient = await ConnectToServer();
         LocalPrefs localPrefs = LocalPrefs.GetLocalPrefs();
         
         ConfigurationVersion version = await fileClient.DownloadConfigVersion();
@@ -54,9 +52,9 @@ public partial class StartUpWindow : Window
         }
     }
     
-    private async Task<FileClient> ConnectToServer()
+    private async Task<FileClient.FileClient> ConnectToServer()
     {
-        FileClient fileClient = new FileClient(new MinecraftPath().BasePath);
+        FileClient.FileClient fileClient = new FileClient.FileClient(new MinecraftPath().BasePath);
         
         bool success = false;
         for (int i = 0; i < 10; i++)
@@ -70,7 +68,7 @@ public partial class StartUpWindow : Window
         return fileClient;
     }
 
-    private Task<LoginResponse> TryLogIn(FileClient fileClient, LocalPrefs localPrefs)
+    private Task<LoginResponse> TryLogIn(FileClient.FileClient fileClient, LocalPrefs localPrefs)
     {
         User user = new User(localPrefs.Nickname, localPrefs.Password);
         return fileClient.SendLoginRequest(user);

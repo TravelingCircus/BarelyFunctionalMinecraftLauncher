@@ -4,10 +4,7 @@ public class SkinChangeResponse: Message
 {
     public bool Success;
 
-    public SkinChangeResponse()
-    {
-        
-    }
+    public SkinChangeResponse() { }
     
     public SkinChangeResponse(bool success)
     {
@@ -29,7 +26,7 @@ public class SkinChangeResponse: Message
         MemoryStream buffer = new MemoryStream(1);
         byte[] successBytes = BitConverter.GetBytes(Success);
         buffer.Write(successBytes);
-        
+            
         buffer.Flush();
         buffer.Position = 0;
         return buffer;

@@ -12,7 +12,7 @@ using Common.Network.Messages.ModsDownload;
 using Common.Network.Messages.Registration;
 using Common.Network.Messages.Version;
 
-namespace TCPFileClient;
+namespace FileClient;
 
 public sealed class FileClient
 {
@@ -116,7 +116,7 @@ public sealed class FileClient
     }
 
     #endregion
-    
+
     public bool ConnectToServer()
     {
         try
@@ -138,23 +138,26 @@ public sealed class FileClient
         return true;
     }
 
+    public void Disconnect()
+    {
+        Terminate();
+    }
+
     private async Task SendRequestsWhenAvailable(NetworkChannel networkChannel, 
         ConcurrentQueue<Query> queryQueue, CancellationToken cancellationToken)
     {
         while (!cancellationToken.IsCancellationRequested)
         {
-            if (queryQueue.TryDequeue(out Query query))
-            {
-                await networkChannel.SendMessage(query.Request);
-                MessageHeader header = await _networkChannel.ListenForHeader();
-                Stream messageData = await _networkChannel.ListenForMessage(header);
-                Message response = MessageRegistry.GetMessageFor(header);
-                response.ApplyData(messageData);
-                query.Response.SetResult(response);
-            }
+            if (!queryQueue.TryDequeue(out Query query)) continue;
+            await networkChannel.SendMessage(query.Request);
+            MessageHeader header = await _networkChannel.ListenForHeader();
+            Stream messageData = await _networkChannel.ListenForMessage(header);
+            Message response = MessageRegistry.GetMessageFor(header);
+            response.ApplyData(messageData);
+            query.Response.SetResult(response);
         }
     }
-    
+
     private Task<Message> GetResponseFor(Message request)
     {
         TaskCompletionSource<Message> taskCompletionSource = new TaskCompletionSource<Message>();
@@ -169,7 +172,7 @@ public sealed class FileClient
         _networkStream.Dispose();
         _client.Close();
     }
-    
+
     private class Query
     {
         public readonly Message Request;
@@ -180,10 +183,5 @@ public sealed class FileClient
             Request = request;
             Response = response;
         }
-    }
-
-    public void Disconnect()
-    {
-        Terminate();
     }
 }

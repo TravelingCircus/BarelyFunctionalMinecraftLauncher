@@ -6,10 +6,7 @@ public class SkinChangeRequest: Message
     public int SkinDataLength;
     public byte[] SkinData;
 
-    public SkinChangeRequest()
-    {
-        
-    }
+    public SkinChangeRequest() { }
 
     public SkinChangeRequest(string nickname, byte[] skinData, int skinDataLength)
     {
@@ -37,7 +34,7 @@ public class SkinChangeRequest: Message
         WriteToStream(buffer, Nickname);
         WriteToStream(buffer, SkinDataLength);
         buffer.Write(SkinData);
-        
+            
         buffer.Flush();
         buffer.Position = 0;
         return buffer;

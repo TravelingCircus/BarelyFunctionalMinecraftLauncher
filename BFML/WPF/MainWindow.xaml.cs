@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Diagnostics;
-using System.IO;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -12,24 +11,23 @@ using CmlLib.Core;
 using Common.Misc;
 using Common.Models;
 using Common.Network.Messages.ChangeSkin;
-using TCPFileClient;
 using XamlRadialProgressBar;
 
 namespace BFML.WPF;
 
-public partial class MainWindow : Window
+public partial class MainWindow
 {
-    private readonly FileClient _fileClient;
+    private Game _game;
     private readonly User _user;
     private readonly LocalPrefs _localPrefs;
-    private readonly ConfigurationVersion _configVersion;
-    private readonly LaunchConfiguration _launchConfig;
+    private readonly FileClient.FileClient _fileClient;
+    private readonly LoadingScreen _loadingScreen;
     private SkinPreviewRenderer _skinPreviewRenderer;
-    private LoadingScreen _loadingScreen;
-    private Game _game;
+    private readonly LaunchConfiguration _launchConfig;
+    private readonly ConfigurationVersion _configVersion;
 
-    public MainWindow(FileClient fileClient, User user, LocalPrefs localPrefs,
-       LaunchConfiguration launchConfig, ConfigurationVersion configVersion)
+    public MainWindow(FileClient.FileClient fileClient, User user, LocalPrefs localPrefs,
+        LaunchConfiguration launchConfig, ConfigurationVersion configVersion)
     {
         InitializeComponent();
         _fileClient = fileClient;
@@ -46,7 +44,6 @@ public partial class MainWindow : Window
     private async void OnWindowLoaded(object sender, RoutedEventArgs args)
     {
         Loaded -= OnWindowLoaded;
-        CheckIfUserPaid();
         ApplyLocalPrefs();
         _skinPreviewRenderer.ChangeSkin(_user.SkinPath);
         _game = await Game.SetUp(_fileClient, _launchConfig);
@@ -200,21 +197,6 @@ public partial class MainWindow : Window
         _localPrefs.IsFullscreen = FullScreen.IsChecked!.Value;
         _localPrefs.DedicatedRAM = (int)RamSlider.Value;
         LocalPrefs.SaveLocalPrefs(_localPrefs);
-    }
-    
-    private void CheckIfUserPaid()
-    {
-        if (_user.GryvnyasPaid < _launchConfig.RequiredGriwnas)
-        {
-            DisablePlayButton();
-        }
-    }
-    
-    private void DisablePlayButton()    
-    {
-        PlayButton.IsEnabled = false;
-        PlayButton.Content = "Not Paid";
-        PlayButton.Opacity = 0.5f;
     }
     
     private void ExitAccount(object sender, RoutedEventArgs e)

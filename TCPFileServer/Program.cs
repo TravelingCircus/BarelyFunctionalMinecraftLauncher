@@ -6,7 +6,7 @@ internal static class Program
     {
         Server server = new Server();
         server.Start();
-        
+            
         while (server.IsRunning)
         {
             await Task.Delay(100);

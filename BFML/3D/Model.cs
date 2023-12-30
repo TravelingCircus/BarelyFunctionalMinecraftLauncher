@@ -1,19 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace ABOBAEngine.Rendering.Models;
+namespace BFML._3D;
 
 public class Model
 {
-    public readonly float[] Vertices;
-    public readonly uint[] Triangles;
     public float[] AlbedoMapUVs => OptionalData[AlbedoUVsKey];
-    protected const byte AlbedoUVsKey = 0;
     public float[] NormalMapUVs => OptionalData[NormalUVsKey];
-    protected const byte NormalUVsKey = 1;
     public float[] VertexNormalsUVs => OptionalData[VertexNormalsKey];
-    protected const byte VertexNormalsKey = 2;
     
+    public readonly uint[] Triangles;
+    public readonly float[] Vertices;
+    protected const byte AlbedoUVsKey = 0;
+    protected const byte NormalUVsKey = 1;
+    protected const byte VertexNormalsKey = 2;
     protected readonly Dictionary<byte, float[]> OptionalData;
 
     private Model(float[] vertices, uint[] triangles)
@@ -30,36 +30,21 @@ public class Model
 
     public class ModelBuilder
     {
-        private Model _model;
+        private readonly Model _model;
 
         public ModelBuilder(float[] vertices, uint[] triangles)
         {
             _model = new Model(vertices, triangles);
         }
 
-        public Model Build()
-        {
-            return _model;
-        }
-        
+        public Model Build() => _model;
+
         public ModelBuilder WithAlbedoUVs(float[] albedoUVs)
         {
             if (albedoUVs.Length % 2 != 0)
                 throw new ArgumentException("Odd number of uv coordinates. Correct structure: [x,y,x,y,x,y...]");
-            AddOrRewrite(AlbedoUVsKey, albedoUVs);
+            _model.OptionalData[AlbedoUVsKey] = albedoUVs;
             return this;
-        }
-
-        private void AddOrRewrite(byte key, float[] value)
-        {
-            if (_model.OptionalData.ContainsKey(key))
-            {
-                _model.OptionalData[key] = value;
-            }
-            else
-            {
-                _model.OptionalData.Add(key, value);
-            }
         }
     }
 }

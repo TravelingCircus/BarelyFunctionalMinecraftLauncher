@@ -1,5 +1,4 @@
-﻿using System.ComponentModel;
-using System.IO;
+﻿using System.IO;
 using System.Runtime.InteropServices;
 
 namespace BFML.WPF;
@@ -17,6 +16,5 @@ public static class FontInstaller
     }
     
     [DllImport("gdi32.dll", EntryPoint = "AddFontResourceW", SetLastError = true)]
-    private static extern int AddFontResource([In][MarshalAs(UnmanagedType.LPWStr)]
-        string lpFileName);
+    private static extern int AddFontResource([In][MarshalAs(UnmanagedType.LPWStr)] string lpFileName);
 }

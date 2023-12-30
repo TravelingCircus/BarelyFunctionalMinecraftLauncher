@@ -4,7 +4,7 @@ namespace BFML._3D;
 
 public class Camera
 {
-    public Vector3 Position;
+    public readonly Vector3 Position;
     public readonly Quaternion Rotation;
 
     public Camera(Vector3 position, Quaternion rotation)
@@ -16,6 +16,6 @@ public class Camera
     public Matrix4 GetViewMatrix()
     {
         return Matrix4.CreateFromQuaternion(Rotation) 
-            * Matrix4.CreateTranslation(Position);
+               * Matrix4.CreateTranslation(Position);
     }
 }

@@ -1,6 +1,6 @@
-﻿namespace ABOBAEngine.Components;
+﻿namespace BFML._3D;
 
 public class SceneObject
 {
-    public Transform Transform = new Transform();
+    public readonly Transform Transform = new Transform();
 }

@@ -1,30 +1,23 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using ABOBAEngine.Utils;
-using BFML._3D;
 
-namespace ABOBAEngine.Rendering.Models;
+namespace BFML._3D;
 
 public sealed class ObjModelLoader : ModelLoader
 {
     private const string FileExtension = ".obj";
 
-    private ObjLineParser[] _parsers =
+    private readonly ObjLineParser[] _parsers =
     {
         new VertexObjLineParser(),
         new AlbedoUVObjLineParser(),
         new FaceObjLineParser()
-    };
+    }        ;
 
-    public ObjModelLoader(string path) : base(path)
-    {
-    }
+    public ObjModelLoader(string path) : base(path) { }
 
-    protected override bool IsValidFile(string path)
-    {
-        return path.EndsWith(FileExtension) && File.Exists(path);
-    }
+    protected override bool IsValidFile(string path) => path.EndsWith(FileExtension) && File.Exists(path);
 
     public override Model Load()
     {
@@ -47,11 +40,9 @@ public sealed class ObjModelLoader : ModelLoader
             ReadOnlyMemory<char> line = reader.ReadLine();
             for (int i = 0; i < _parsers.Length; i++)
             {
-                if (_parsers[i].LineFits(line))
-                {
-                    _parsers[i].Parse(line);
-                    break;
-                }
+                if (!_parsers[i].LineFits(line)) continue;
+                _parsers[i].Parse(line);
+                break;
             }
         }
 
@@ -85,11 +76,11 @@ public sealed class ObjModelLoader : ModelLoader
 
     private class UnfinishedObjData
     {
+        public uint[] UVIndices;
         public float[] Vertices;
         public float[] AlbedoUVs;
-        public uint[] VertexIndices;
         public uint[] NormalIndices;
-        public uint[] UVIndices;
+        public readonly uint[] VertexIndices;
 
         public UnfinishedObjData(float[] vertices, float[] albedoUVs, uint[] triangles, uint[] normalIndices,
             uint[] uvIndices)

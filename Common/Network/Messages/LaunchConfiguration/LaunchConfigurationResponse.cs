@@ -4,9 +4,7 @@ public class LaunchConfigurationResponse: Message
 {
     public Common.Models.LaunchConfiguration LaunchConfiguration;
 
-    public LaunchConfigurationResponse()
-    {
-    }
+    public LaunchConfigurationResponse() { }
 
     public LaunchConfigurationResponse(Common.Models.LaunchConfiguration launchConfiguration)
     {
@@ -26,8 +24,7 @@ public class LaunchConfigurationResponse: Message
         LaunchConfiguration = new Common.Models.LaunchConfiguration(
             StringReadStream(stream),
             StringReadStream(stream),
-            StringReadStream(stream),
-            IntReadStream(stream));
+            StringReadStream(stream));
     }
 
     protected override Stream GetData()
@@ -36,8 +33,7 @@ public class LaunchConfigurationResponse: Message
         WriteToStream(buffer, LaunchConfiguration.VanillaVersion);
         WriteToStream(buffer, LaunchConfiguration.ForgeVersion);
         WriteToStream(buffer, LaunchConfiguration.ModsChecksum);
-        WriteToStream(buffer, LaunchConfiguration.RequiredGriwnas);
-        
+            
         buffer.Flush();
         buffer.Position = 0;
         return buffer;
