@@ -74,12 +74,12 @@ public class FileClient : IFileClient
         throw new NotImplementedException();
     }
 
-    public Task<bool> TryChangeSkin(string filePath)    
+    public Task<bool> TryChangeSkin(User user, Skin skin)    
     {
         throw new NotImplementedException();
     }
 
-    public Task<Skin> GetSkin()
+    public Task<Skin> GetSkin(User user)
     {
         throw new NotImplementedException();
     }
