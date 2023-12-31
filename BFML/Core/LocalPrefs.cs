@@ -26,6 +26,8 @@ public sealed class LocalPrefs
         IsFullscreen = isFullscreen;
     }
 
+    internal LauncherMode LastLauncherMode { get; set; }
+
     public static void SaveLocalPrefs(string nickname, string password)
     {
         SaveLocalPrefs(new LocalPrefs(nickname, password));

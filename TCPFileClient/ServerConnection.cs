@@ -32,6 +32,27 @@ public sealed class ServerConnection : IFileClient
         _cancellationTokenSource = new CancellationTokenSource();
     }
 
+    private static async Task<Result<ServerConnection>> ConnectToServer()
+    {
+        ServerConnection serverConnection = new ServerConnection("3.123.51.46", 69);
+        
+        bool success = false;
+        for (int i = 0; i < 3; i++)
+        {
+            success = await serverConnection.TryInit();
+            if(success) break;
+            await Task.Delay(1500);
+        }
+        
+        return success ? serverConnection : new Exception("Failed to connect to the server.");
+    }
+
+    private static Task<Result<User>> TryLogIn(IFileClient fileClient, LocalPrefs localPrefs)
+    {
+        User user = new User(localPrefs.Nickname, localPrefs.Password);
+        return fileClient.Authenticate(user);
+    }
+    
     #region Interface
     
     public Task<bool> TryInit()

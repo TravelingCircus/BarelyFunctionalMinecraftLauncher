@@ -1,8 +1,8 @@
 ﻿namespace BFML.Repository;
 
-internal sealed class LocalModeRepo : Repo
+internal sealed class ManualModeRepo : Repo
 {
-    public LocalModeRepo(RepoIO repoIo)
+    public ManualModeRepo(RepoIO repoIo)
     {
         throw new System.NotImplementedException();
     }
