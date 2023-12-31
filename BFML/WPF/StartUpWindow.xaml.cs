@@ -5,6 +5,7 @@ using System.Windows;
 using BFML.Core;
 using BFML.Repository;
 using ICSharpCode.SharpZipLib;
+using Utils.Async;
 
 namespace BFML.WPF;
 
@@ -16,17 +17,10 @@ public partial class StartUpWindow
         Loaded += OnWindowLoaded;
     }
 
-    private async void OnWindowLoaded(object obj, RoutedEventArgs args)
+    private void OnWindowLoaded(object obj, RoutedEventArgs args)
     {
-        try
-        {
-            await Init();
-        }
-        catch (Exception e)
-        {
-            Console.WriteLine(e);
-            throw;
-        }
+        Loaded -= OnWindowLoaded;
+        Init().FireAndForget();
     }
 
     private async Task Init()
