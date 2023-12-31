@@ -15,34 +15,12 @@ internal class Program
 
         switch (xmlFile)
         {
-            case XmlFile.Version:
-                CreateVersionXml(path);
-                break;
             case XmlFile.LaunchConfig:
                 CreateLaunchConfigXml(path);
                 break;
             default:
                 throw new ArgumentOutOfRangeException();
         }
-    }
-
-    private static void CreateVersionXml(string path)
-    {
-        Console.WriteLine("Enter major version:");
-        int majorVersion = Convert.ToInt32(Console.ReadLine());
-                    
-        Console.WriteLine("Enter minor version:");
-        int minorVersion = Convert.ToInt32(Console.ReadLine());
-                    
-        Console.WriteLine("Enter changelog:");
-        string changeLog = Console.ReadLine();
-
-        ConfigurationVersion version = new ConfigurationVersion(
-            majorVersion, minorVersion, changeLog);
-            
-        using FileStream fileStream = new FileStream(path, FileMode.Create);
-
-        DataSerializer.ConfigVersionToXml(version, fileStream);
     }
         
     private static void CreateLaunchConfigXml(string path)
@@ -66,6 +44,5 @@ internal class Program
 
 internal enum XmlFile
 {
-    Version = 0,
-    LaunchConfig = 1
+    LaunchConfig = 0
 }

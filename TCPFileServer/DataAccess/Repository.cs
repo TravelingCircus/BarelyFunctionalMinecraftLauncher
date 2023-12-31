@@ -36,16 +36,6 @@ public sealed class Repository
 
     #region SmallDataInterface
 
-    public async Task<ConfigurationVersion> GetConfigurationVersion()
-    {
-        SmallDataHandler dataHandler = await _smallDataHandlerQueue.GetDataHandler();
-
-        ConfigurationVersion configVersion = dataHandler.GetConfigVersion();
-            
-        dataHandler.Release();
-        return configVersion;
-    }
-
     public async Task<LaunchConfiguration> GetLaunchConfiguration()
     {
         SmallDataHandler dataHandler = await _smallDataHandlerQueue.GetDataHandler();
@@ -93,12 +83,12 @@ public sealed class Repository
 
     public async Task<bool> UpdateUserSkin(string name, byte[] skin)
     {
+        throw new NotImplementedException();
         SmallDataHandler dataHandler = await _smallDataHandlerQueue.GetDataHandler();
 
         if(!dataHandler.UserExists(name)) return false;
         User user = dataHandler.GetUser(name);
         string newSkinPath = dataHandler.SaveSkin(name, skin);
-        user.SkinPath = newSkinPath;
         await dataHandler.RewriteUser(user);
             
         dataHandler.Release();
@@ -107,6 +97,7 @@ public sealed class Repository
 
     public async Task<bool> TryRegisterUser(User newUser)
     {
+        throw new NotImplementedException();
         //TODO assign default skin
         SmallDataHandler dataHandler = await _smallDataHandlerQueue.GetDataHandler();
 
@@ -116,7 +107,6 @@ public sealed class Repository
             return false;
         }
 
-        newUser.SkinPath = dataHandler.DefaultSkinPath;
         await dataHandler.RewriteUser(newUser);
             
         dataHandler.Release();
@@ -140,8 +130,7 @@ public sealed class Repository
     
     private byte[] GetSkin(string name, SmallDataHandler dataHandler)
     {
-        User user = dataHandler.GetUser(name);
-        return dataHandler.ReadFromRepository(user.SkinPath);
+        throw new NotImplementedException();
     }
     
     #endregion

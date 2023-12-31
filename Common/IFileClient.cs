@@ -10,7 +10,6 @@ public interface IFileClient
     public Task<Result<User>> Authenticate(User user);
     public Task<Result<User>> CreateRecord(User user);
     
-    public Task<ConfigurationVersion> LoadConfigVersion();
     public Task<LaunchConfiguration> LoadLaunchConfiguration();
     
     public Task<bool> TryLoadForge(FileInfo target);
