@@ -4,9 +4,9 @@ using Common.Models;
 
 namespace BFML.Repository;
 
-internal sealed class LocalModeRepo : Repo
+internal sealed class ManualModeRepo : Repo
 {
-    internal LocalModeRepo(RepoIO repoIo) : base(repoIo) { }
+    internal ManualModeRepo(RepoIO repoIo) : base(repoIo) { }
 
     internal override Task<Forge[]> LoadForgeList() => RepoIo.Forge.LoadForgeList();
 

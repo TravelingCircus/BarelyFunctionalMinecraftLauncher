@@ -1,5 +1,7 @@
 ﻿using System;
 using System.IO;
+using System.Xml.Serialization;
+using CmlLib.Core;
 
 namespace BFML.Core;
 

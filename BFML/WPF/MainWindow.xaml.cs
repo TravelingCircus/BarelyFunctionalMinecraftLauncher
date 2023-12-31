@@ -8,34 +8,26 @@ using BFML._3D;
 using OpenTK.Wpf;
 using System.Windows.Input;
 using BFML.Core;
+using BFML.Repository;
 using CmlLib.Core;
 using Common;
 using Common.Misc;
-using Common.Models;
 using XamlRadialProgressBar;
 
 namespace BFML.WPF;
 
 public partial class MainWindow
 {
+    private readonly ManualModeRepo _repo;
     private Game _game;
     private SkinPreviewRenderer _skinPreviewRenderer;
-    private readonly User _user;
-    private readonly LocalPrefs _localPrefs;
-    private readonly IFileClient _fileClient;
     private readonly LoadingScreen _loadingScreen;
-    private readonly LaunchConfiguration _launchConfig;
-    private readonly ConfigurationVersion _configVersion;
 
-    public MainWindow(IFileClient fileClient, User user, LocalPrefs localPrefs,
-        LaunchConfiguration launchConfig, ConfigurationVersion configVersion)
+    internal MainWindow(ManualModeRepo repo)
     {
+        _repo = repo;
+        
         InitializeComponent();
-        _user = user;
-        _fileClient = fileClient;
-        _localPrefs = localPrefs;
-        _launchConfig = launchConfig;
-        _configVersion = configVersion;
         _loadingScreen = new LoadingScreen(Loading, ProgressBar, ProgressText);
 
         SetUpSkinRenderer();
