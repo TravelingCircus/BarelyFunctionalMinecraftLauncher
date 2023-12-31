@@ -1,64 +1,42 @@
 ﻿using System;
 using System.IO;
-using System.Xml.Serialization;
-using CmlLib.Core;
 
 namespace BFML.Core;
 
 [Serializable]
-public sealed class LocalPrefs
+internal sealed class LocalPrefs
 {
-    public string Nickname;
-    public string Password;
-    public int DedicatedRAM;
-    public bool IsFullscreen;
+    internal string Nickname { get; set; }
+    internal string PasswordHash { get; set; }
     
-    private static readonly string BFMLDirectoryPath = new MinecraftPath().BasePath + "\\BFML";
-    private static readonly string PrefsPath = new MinecraftPath().BasePath + "\\BFML\\LocalPrefs.xml";
+    internal int DedicatedRAM { get; set; }
+    internal bool IsFullscreen { get; set; }
+    
+    internal string LastModPackGuid { get; set; }
+    internal string LastForgeVersion { get; set; }
+    internal string LastVanillaVersion { get; set; }
+    
+    internal LauncherMode LauncherMode { get; set; }
+    internal DirectoryInfo GameDirectory { get; set; }
 
-    public LocalPrefs() { }
+    internal LocalPrefs() : this(
+        string.Empty, string.Empty,
+        2048, false, string.Empty, 
+        string.Empty, string.Empty, LauncherMode.Manual, null) { }
 
-    public LocalPrefs(string nickname, string password, int dedicatedRam = 3072, bool isFullscreen = false)
+    public LocalPrefs(
+        string nickname, string passwordHash, int dedicatedRam, 
+        bool isFullscreen, string lastModPackGuid, string lastForgeVersion, 
+        string lastVanillaVersion, LauncherMode launcherMode, DirectoryInfo gameDirectory)
     {
         Nickname = nickname;
-        Password = password;
+        PasswordHash = passwordHash;
         DedicatedRAM = dedicatedRam;
         IsFullscreen = isFullscreen;
-    }
-
-    public static void SaveLocalPrefs(string nickname, string password)
-    {
-        SaveLocalPrefs(new LocalPrefs(nickname, password));
-    }
-    
-    public static void SaveLocalPrefs(LocalPrefs prefs)
-    {
-        if (!Directory.Exists(BFMLDirectoryPath)) Directory.CreateDirectory(BFMLDirectoryPath);
-        if (File.Exists(PrefsPath)) File.Delete(PrefsPath);
-        using (FileStream fileStream = new FileStream(PrefsPath, FileMode.OpenOrCreate))
-        {
-            XmlSerializer xml = new XmlSerializer(typeof(LocalPrefs));
-            xml.Serialize(fileStream, prefs);
-        }
-    }
-    
-    public static LocalPrefs GetLocalPrefs()
-    {
-        if (!File.Exists(PrefsPath))
-        {
-            SaveLocalPrefs("None", "None");
-            return new LocalPrefs("None", "None");
-        }
-        using FileStream fileStream = new FileStream(PrefsPath, FileMode.Open);
-        XmlSerializer serializer = new XmlSerializer(typeof(LocalPrefs));
-        LocalPrefs prefs = (serializer.Deserialize(fileStream) as LocalPrefs)!;
-        if (prefs is null) throw new InvalidDataException("Invalid local prefs xml stream");
-        return prefs;
-    }
-
-    public static void Clear()
-    {
-        File.Delete(PrefsPath);
-        SaveLocalPrefs("None", "None");
+        LastModPackGuid = lastModPackGuid;
+        LastForgeVersion = lastForgeVersion;
+        LastVanillaVersion = lastVanillaVersion;
+        LauncherMode = launcherMode;
+        GameDirectory = gameDirectory;
     }
 }
