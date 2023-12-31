@@ -9,12 +9,12 @@ internal sealed class ModPackAdapter : RepoAdapter
 {
     internal ModPackAdapter(DirectoryInfo directory) : base(directory) { }
     
-    internal Task<ModPackManifest> LoadManifest()
+    internal Task<ModPackManifest[]> LoadModPackManifestList()
     {
         throw new NotImplementedException();
     }
     
-    internal Task<bool> SaveManifest(ModPackManifest manifest)
+    internal Task<bool> SaveModPackManifest(ModPackManifest manifest)
     {
         throw new NotImplementedException();
     }

@@ -9,7 +9,7 @@ internal sealed class ForgeAdapter : RepoAdapter
 {
     internal ForgeAdapter(DirectoryInfo directory) : base(directory) { }
 
-    internal Task<Forge> LoadForge()
+    internal Task<Forge[]> LoadForgeList()
     {
         throw new NotImplementedException();
     }
