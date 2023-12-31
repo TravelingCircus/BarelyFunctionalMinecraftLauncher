@@ -38,7 +38,7 @@ public partial class StartUpWindow
             _ => { }, 
             err => throw err);
 
-        LauncherMode startLauncherMode = (await repoIo.Configs.LoadLocalPrefs()).LastLauncherMode;
+        LauncherMode startLauncherMode = (await repoIo.Configs.LoadLocalPrefs()).LauncherMode;
 
         if (startLauncherMode == LauncherMode.Manual) StartManualMode(repoIo);
         else if (startLauncherMode == LauncherMode.Centralized) StartCentralizedMode(repoIo);

@@ -6,10 +6,10 @@ namespace BFML.Repository;
 
 internal sealed class RepoIO
 {
-    private DirectoryInfo ForgeInfo => new DirectoryInfo(_repoInfo.FullName + "\\Forge");
-    private DirectoryInfo ConfigsInfo => new DirectoryInfo(_repoInfo.FullName + "\\Configs");
-    private DirectoryInfo ModPacksInfo => new DirectoryInfo(_repoInfo.FullName + "\\ModPacks");
-    private DirectoryInfo ResourcesInfo => new DirectoryInfo(_repoInfo.FullName + "\\Resources");
+    private DirectoryInfo ForgeDirectory => new DirectoryInfo(_repoInfo.FullName + "\\Forge");
+    private DirectoryInfo ConfigsDirectory => new DirectoryInfo(_repoInfo.FullName + "\\Configs");
+    private DirectoryInfo ModPacksDirectory => new DirectoryInfo(_repoInfo.FullName + "\\ModPacks");
+    private DirectoryInfo ResourcesDirectory => new DirectoryInfo(_repoInfo.FullName + "\\Resources");
     
     internal readonly ForgeAdapter Forge;
     internal readonly ConfigAdapter Configs;
@@ -20,10 +20,10 @@ internal sealed class RepoIO
     internal RepoIO(DirectoryInfo repoInfo)
     {
         _repoInfo = repoInfo;
-        Forge = new ForgeAdapter(ForgeInfo);
-        Configs = new ConfigAdapter(ConfigsInfo);
-        ModPacks = new ModPackAdapter(ModPacksInfo);
-        Resources = new ResourceAdapter(ResourcesInfo);
+        Forge = new ForgeAdapter(ForgeDirectory);
+        Configs = new ConfigAdapter(ConfigsDirectory);
+        ModPacks = new ModPackAdapter(ModPacksDirectory);
+        Resources = new ResourceAdapter(ResourcesDirectory);
     }
     
     internal Result<bool, InvalidDataException> Validate()
