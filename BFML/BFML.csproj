@@ -24,7 +24,6 @@
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\LocalFileClient\LocalFileClient.csproj" />
       <ProjectReference Include="..\TCPFileClient\TCPFileClient.csproj" />
     </ItemGroup>
 
