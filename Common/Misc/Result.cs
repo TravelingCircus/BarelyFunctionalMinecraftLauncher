@@ -50,4 +50,10 @@ public readonly struct Result<T, TE>
     public static implicit operator Result<T, TE>(TE e) => new Result<T, TE>(default(T), e, false);
 
     public TR Match<TR>(Func<T, TR> success, Func<TE, TR> failure) => _success ? success(Value) : failure(Error);
+
+    public void Match(Action<T> success, Action<TE> failure)
+    {
+        if (_success) success(Value);
+        else failure(Error);
+    }
 }

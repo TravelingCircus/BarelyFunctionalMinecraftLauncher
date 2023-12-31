@@ -3,6 +3,7 @@ using System.IO;
 using System.Threading.Tasks;
 using System.Windows;
 using BFML.Core;
+using BFML.Repository;
 using Common;
 using Common.Misc;
 using Common.Models;
@@ -21,8 +22,14 @@ public partial class StartUpWindow
     private async void OnWindowLoaded(object obj, RoutedEventArgs args)
     {
         FontInstaller.InstallFont(new FileInfo(Environment.CurrentDirectory + "\\MinecraftFont.ttf"));
+
+        RepoIO repoIo = new RepoIO();
+        repoIo.Validate().Match(
+            _ => { }, 
+            err => throw err);
         
-        IFileClient fileClient = await ResolveFileClient();
+        LauncherMode startLauncherMode = repoIo.Configs.GetLocalPrefs().
+        Repo repo = (await BuildRepository()).Value;
         LocalPrefs localPrefs = LocalPrefs.GetLocalPrefs();
         
         ConfigurationVersion version = await fileClient.LoadConfigVersion();
@@ -53,19 +60,15 @@ public partial class StartUpWindow
         }
     }
 
-    private static async Task<IFileClient> ResolveFileClient()
+    private static async Task<Result<Repo>> BuildRepository()
     {
+        RepoIO repoIo = new RepoIO();
+        if (!repoIo.Validate()) return Result<Repo>.Err(new IOException("Failed to validate the repository."));
+        
         Result<ServerConnection> serverConnection = await ConnectToServer();
+        if (serverConnection.IsOk) return Result<Repo>.Ok(new RemoteModeRepo(repoIo, serverConnection));
 
-        if (serverConnection.IsOk) return serverConnection.Value;
-
-        return GetLocalFileServer().Value;
-    }
-
-    private static Result<IFileClient> GetLocalFileServer()
-    {
-        IFileClient client = new LocalFileClient.FileClient();
-        return Result<IFileClient>.Ok(client);//TODO properly handle local client initialization
+        return Result<Repo>.Ok(new LocalModeRepo(repoIo));
     }
     
     private static async Task<Result<ServerConnection>> ConnectToServer()
