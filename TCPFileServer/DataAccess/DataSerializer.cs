@@ -32,18 +32,4 @@ public static class DataSerializer
         if (launchConfig is null) throw new InvalidDataException("Invalid launchConfig xml stream");
         return launchConfig;
     }
-    
-    public static void ConfigVersionToXml(ConfigurationVersion version, Stream buffer)
-    {
-        XmlSerializer xml = new XmlSerializer(typeof(ConfigurationVersion));
-        xml.Serialize(buffer, version);
-    }
-
-    public static ConfigurationVersion ConfigVersionFromXml(Stream stream)
-    {
-        XmlSerializer serializer = new XmlSerializer(typeof(ConfigurationVersion));
-        ConfigurationVersion version = (serializer.Deserialize(stream) as ConfigurationVersion)!;
-        if (version is null) throw new InvalidDataException("Invalid launchConfig xml stream");
-        return version;
-    }
 }

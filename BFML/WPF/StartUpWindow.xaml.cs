@@ -27,8 +27,8 @@ public partial class StartUpWindow
         repoIo.Validate().Match(
             _ => { }, 
             err => throw err);
-        
-        LauncherMode startLauncherMode = repoIo.Configs.GetLocalPrefs().
+
+        LauncherMode startLauncherMode = (await repoIo.Configs.LoadLocalPrefs());
         Repo repo = (await BuildRepository()).Value;
         LocalPrefs localPrefs = LocalPrefs.GetLocalPrefs();
         

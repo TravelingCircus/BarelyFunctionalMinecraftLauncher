@@ -11,7 +11,6 @@ using Common.Network.Messages.LaunchConfiguration;
 using Common.Network.Messages.Login;
 using Common.Network.Messages.ModsDownload;
 using Common.Network.Messages.Registration;
-using Common.Network.Messages.Version;
 
 namespace FileClient;
 
@@ -69,12 +68,6 @@ public sealed class ServerConnection : IFileClient
     {
         Message response = await GetResponseFor(new LaunchConfigurationRequest());
         return ((LaunchConfigurationResponse)response).LaunchConfiguration;
-    }
-
-    public async Task<ConfigurationVersion> LoadConfigVersion()
-    {
-        Message response = await GetResponseFor(new ConfigVersionRequest());
-        return ((ConfigVersionResponse)response).ConfigurationVersion;
     }
     
     public async Task<bool> TryLoadForge(FileInfo target)
