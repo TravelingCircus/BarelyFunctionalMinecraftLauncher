@@ -33,11 +33,12 @@ public sealed class ServerConnection : IDisposable
         ServerConnection serverConnection = new ServerConnection();
         
         bool success = false;
-        for (int i = 0; i < 3; i++)
+        for (int i = 0; i < 5; i++)
         {
             success = serverConnection.TryConnectToServer(hostName, port);
             if(success) break;
-            await Task.Delay(1500);
+            int delay = 200 * (int)Math.Pow(2, i);
+            await Task.Delay(delay);
         }
         
         return success ? serverConnection : new Exception("Failed to connect to the server.");

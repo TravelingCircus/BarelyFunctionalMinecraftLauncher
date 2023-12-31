@@ -43,7 +43,6 @@ internal sealed class ConfigAdapter : RepoAdapter
     {
         FileInfo prefsFile = LocalPrefsFile;
         if (prefsFile.Exists) prefsFile.Delete();
-        SaveLocalPrefs(new LocalPrefs());
-        return Task.FromResult(true);
+        return SaveLocalPrefs(new LocalPrefs());
     }
 }
