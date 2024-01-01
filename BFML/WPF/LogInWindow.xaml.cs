@@ -99,7 +99,7 @@ public partial class LogInWindow
         }
 
         User authenticatedUser = loginResult.Value;
-        LocalPrefs localPrefs = await _repo.LoadLocalPrefs();
+        LocalPrefs localPrefs = _repo.LocalPrefs;
         localPrefs.Nickname = authenticatedUser.Nickname;
         localPrefs.PasswordHash = authenticatedUser.PasswordHash;
         await _repo.SaveLocalPrefs(localPrefs);

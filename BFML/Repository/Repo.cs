@@ -7,8 +7,7 @@ namespace BFML.Repository;
 
 internal abstract class Repo
 {
-    internal LocalPrefs LocalPrefs => _localPrefs;
-    private LocalPrefs _localPrefs;
+    internal LocalPrefs LocalPrefs { get; private set; }
     protected readonly RepoIO RepoIo;
 
     protected Repo(RepoIO repoIo)
@@ -18,7 +17,7 @@ internal abstract class Repo
 
     public virtual async Task<bool> TryInit()
     {
-        _localPrefs = await RepoIo.Configs.LoadLocalPrefs();
+        LocalPrefs = await RepoIo.Configs.LoadLocalPrefs();
 
         return true;
     }
@@ -32,14 +31,14 @@ internal abstract class Repo
     internal async Task<bool> SaveLocalPrefs(LocalPrefs localPrefs)
     {
         bool success = await RepoIo.Configs.SaveLocalPrefs(localPrefs);
-        if (success) _localPrefs = localPrefs;
+        if (success) LocalPrefs = localPrefs;
         return success;
     }
 
     internal async Task<bool> ClearLocalPrefs()
     {
         bool success = await RepoIo.Configs.ClearLocalPrefs();
-        if(success) _localPrefs = new LocalPrefs();
+        if(success) LocalPrefs = new LocalPrefs();
         return success;
     }
 }
