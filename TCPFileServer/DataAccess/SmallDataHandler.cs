@@ -40,15 +40,7 @@ public sealed class SmallDataHandler: DataHandler
         LaunchConfiguration launchConfig = DataSerializer.LaunchConfigFromXml(fileStream);
         return launchConfig;
     }
-
-    public ConfigurationVersion GetConfigVersion()
-    {
-        string fileName = "ConfigVersion.xml";
-        using Stream fileStream = ReadFromRepository(_repositoryPath, fileName);
-        ConfigurationVersion version = DataSerializer.ConfigVersionFromXml(fileStream);
-        return version;
-    }
-
+    
     public string[] GetAllNicknames()
     {
         DirectoryInfo usersDirectory = new DirectoryInfo(_usersDirectory);

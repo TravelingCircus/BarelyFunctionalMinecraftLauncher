@@ -1,12 +1,10 @@
-﻿using Common.Network.Messages;
-using Common.Network.Messages.ChangeSkin;
+﻿using Common.Network.Messages.ChangeSkin;
 using Common.Network.Messages.ForgeDownload;
 using Common.Network.Messages.GetSkin;
 using Common.Network.Messages.LaunchConfiguration;
 using Common.Network.Messages.Login;
 using Common.Network.Messages.ModsDownload;
 using Common.Network.Messages.Registration;
-using Common.Network.Messages.Version;
 
 namespace Common.Network;
 
@@ -20,8 +18,6 @@ public static class MessageRegistry
         {4, typeof(LoginResponse)},
         {5, typeof(LaunchConfigurationRequest)},
         {6, typeof(LaunchConfigurationResponse)},
-        {7, typeof(ConfigVersionRequest)},
-        {8, typeof(ConfigVersionResponse)},
         {9, typeof(SkinChangeRequest)},
         {10, typeof(SkinChangeResponse)},
         {11, typeof(ForgeDownloadRequest)},

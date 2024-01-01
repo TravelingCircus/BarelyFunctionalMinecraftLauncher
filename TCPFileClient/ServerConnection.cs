@@ -11,41 +11,45 @@ using Common.Network.Messages.LaunchConfiguration;
 using Common.Network.Messages.Login;
 using Common.Network.Messages.ModsDownload;
 using Common.Network.Messages.Registration;
-using Common.Network.Messages.Version;
 
 namespace FileClient;
 
-public sealed class ServerConnection : IFileClient
+public sealed class ServerConnection : IDisposable
 {
     private TcpClient _client;
     private NetworkStream _networkStream;
     private NetworkChannel _networkChannel;
-    private readonly int _port;
-    private readonly string _hostName;
     private readonly ConcurrentQueue<Query> _requests;
     private readonly CancellationTokenSource _cancellationTokenSource;
 
-    public ServerConnection(string hostName, int port)
+    private ServerConnection()
     {
-        _port = port;
-        _hostName = hostName;
         _requests = new ConcurrentQueue<Query>();
         _cancellationTokenSource = new CancellationTokenSource();
     }
 
-    #region Interface
-    
-    public Task<bool> TryInit()
+    public static async Task<Result<ServerConnection>> Connect(string hostName, int port)
     {
-        bool result = ConnectToServer(_hostName, _port);
-        return Task.FromResult(result);
+        ServerConnection serverConnection = new ServerConnection();
+        
+        bool success = false;
+        for (int i = 0; i < 5; i++)
+        {
+            success = serverConnection.TryConnectToServer(hostName, port);
+            if(success) break;
+            int delay = 200 * (int)Math.Pow(2, i);
+            await Task.Delay(delay);
+        }
+        
+        return success ? serverConnection : new Exception("Failed to connect to the server.");
     }
 
-    public Task<bool> TryDispose()
+    public void Dispose()
     {
         Terminate();
-        return Task.FromResult(true);
     }
+
+    #region Interface
 
     public async Task<Result<User>> Authenticate(User user)
     {
@@ -69,12 +73,6 @@ public sealed class ServerConnection : IFileClient
     {
         Message response = await GetResponseFor(new LaunchConfigurationRequest());
         return ((LaunchConfigurationResponse)response).LaunchConfiguration;
-    }
-
-    public async Task<ConfigurationVersion> LoadConfigVersion()
-    {
-        Message response = await GetResponseFor(new ConfigVersionRequest());
-        return ((ConfigVersionResponse)response).ConfigurationVersion;
     }
     
     public async Task<bool> TryLoadForge(FileInfo target)
@@ -136,7 +134,7 @@ public sealed class ServerConnection : IFileClient
 
     #endregion
 
-    private bool ConnectToServer(string hostName, int port)
+    private bool TryConnectToServer(string hostName, int port)
     {
         try
         {
@@ -164,21 +162,6 @@ public sealed class ServerConnection : IFileClient
         _client.Close();
     }
 
-    private async Task SendRequestsWhenAvailable(NetworkChannel networkChannel, 
-        ConcurrentQueue<Query> queryQueue, CancellationToken cancellationToken)
-    {
-        while (!cancellationToken.IsCancellationRequested)
-        {
-            if (!queryQueue.TryDequeue(out Query query)) continue;
-            await networkChannel.SendMessage(query.Request);
-            MessageHeader header = await _networkChannel.ListenForHeader();
-            Stream messageData = await _networkChannel.ListenForMessage(header);
-            Message response = MessageRegistry.GetMessageFor(header);
-            response.ApplyData(messageData);
-            query.Response.SetResult(response);
-        }
-    }
-
     private Task<Message> GetResponseFor(Message request)
     {
         TaskCompletionSource<Message> taskCompletionSource = new TaskCompletionSource<Message>();
@@ -186,12 +169,27 @@ public sealed class ServerConnection : IFileClient
         return taskCompletionSource.Task;
     }
 
+    private static async Task SendRequestsWhenAvailable(NetworkChannel networkChannel, 
+        ConcurrentQueue<Query> queryQueue, CancellationToken cancellationToken)
+    {
+        while (!cancellationToken.IsCancellationRequested)
+        {
+            if (!queryQueue.TryDequeue(out Query query)) continue;
+            await networkChannel.SendMessage(query.Request);
+            MessageHeader header = await networkChannel.ListenForHeader();
+            Stream messageData = await networkChannel.ListenForMessage(header);
+            Message response = MessageRegistry.GetMessageFor(header);
+            response.ApplyData(messageData);
+            query.Response.SetResult(response);
+        }
+    }
+
     private class Query
     {
-        public readonly Message Request;
-        public readonly TaskCompletionSource<Message> Response;
+        internal readonly Message Request;
+        internal readonly TaskCompletionSource<Message> Response;
 
-        public Query(Message request, TaskCompletionSource<Message> response)
+        internal Query(Message request, TaskCompletionSource<Message> response)
         {
             Request = request;
             Response = response;
