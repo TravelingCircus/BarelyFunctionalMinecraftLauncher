@@ -16,7 +16,7 @@ internal sealed class Game
     private readonly Repo _repo;
     private readonly CMLauncher _launcher;
 
-    private Game(Repo repo)
+    internal Game(Repo repo)
     {
         _repo = repo;
         MinecraftPath minecraftPath = new MinecraftPath();
@@ -31,7 +31,7 @@ internal sealed class Game
     private async Task StartGameProcess(LaunchConfiguration launchConfiguration, MVersion version)
     {
         System.Net.ServicePointManager.DefaultConnectionLimit = 256;
-        Process process = await _launcher.CreateProcessAsync(version.Id, new MLaunchOption
+        Process process = await _launcher.CreateProcessAsync("1.18.2", new MLaunchOption
         {
             MaximumRamMb = launchConfiguration.Ram,
             Session = MSession.GetOfflineSession(launchConfiguration.Nickname),

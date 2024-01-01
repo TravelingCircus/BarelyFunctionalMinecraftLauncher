@@ -10,13 +10,14 @@ using System.Windows.Input;
 using BFML.Core;
 using BFML.Repository;
 using Common;
+using Common.Misc;
+using Common.Models;
 
 namespace BFML.WPF;
 
 public partial class MainWindow
 {
     private readonly ManualModeRepo _repo;
-    private Game _game;
     private SkinPreviewRenderer _skinPreviewRenderer;
     private readonly LoadingScreen _loadingScreen;
 
@@ -40,23 +41,23 @@ public partial class MainWindow
 
     private async void OnPlayButton(object sender, RoutedEventArgs e)
     {
-        MessageBox.Show(new NotImplementedException().Message, "Not quite there yet");
-        
-        /*if(_game is null) return;
         PlayButton.IsEnabled = false;
 
-        if (!_game.IsReadyToLaunch())
+        LaunchConfiguration launchConfiguration 
+            = new LaunchConfiguration("1.18.2", "1.18.2", "1.18.2", 4096);
+        Game game = new Game(_repo); 
+        
+        if (!game.IsReadyToLaunch())
         {
             CompositeProgress progress = _loadingScreen.Show();
-            await _game.CleanInstall(progress);
+            await game.CleanInstall(launchConfiguration, progress);
             _loadingScreen.Hide();
         }
-        SaveLocalPrefs();
-        await _game.Launch((int)RamSlider.Value, FullScreen.IsChecked!.Value, _user.Nickname);
+        
+        await game.Launch(launchConfiguration);
         
         await Task.Delay(10000);
-        await _fileClient.TryDispose();
-        Close();*/
+        Close();
     }
 
     #region PlayerModelRendering

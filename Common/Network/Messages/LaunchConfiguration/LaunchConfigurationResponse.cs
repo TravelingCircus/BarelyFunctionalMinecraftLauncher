@@ -24,7 +24,8 @@ public class LaunchConfigurationResponse: Message
         LaunchConfiguration = new Common.Models.LaunchConfiguration(
             StringReadStream(stream),
             StringReadStream(stream),
-            StringReadStream(stream));
+            StringReadStream(stream)
+                        ,4096);
     }
 
     protected override Stream GetData()

@@ -34,7 +34,7 @@ internal class Program
         Console.WriteLine("Enter modsChecksum:");
         string modsChecksum = Console.ReadLine();
 
-        LaunchConfiguration launchConfig = new LaunchConfiguration(vanillaVersion, forgeVersion, modsChecksum);
+        LaunchConfiguration launchConfig = new LaunchConfiguration(vanillaVersion, forgeVersion, modsChecksum, 4096);
             
         using FileStream fileStream = new FileStream(path, FileMode.Create);
 
