@@ -28,6 +28,10 @@ internal sealed class RepoIO
     
     internal Result<bool, InvalidDataException> Validate()
     {
-        throw new System.NotImplementedException();
+        return _repoInfo.Exists 
+               && ForgeDirectory.Exists 
+               && ConfigsDirectory.Exists 
+               && ModPacksDirectory.Exists 
+               && ResourcesDirectory.Exists;
     }
 }

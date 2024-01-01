@@ -79,4 +79,11 @@
       </Resource>
     </ItemGroup>
 
+    <ItemGroup>
+      <Folder Include="bin\Debug\net6.0-windows\Repo\Configs\" />
+      <Folder Include="bin\Debug\net6.0-windows\Repo\Forge\" />
+      <Folder Include="bin\Debug\net6.0-windows\Repo\ModPacks\" />
+      <Folder Include="bin\Debug\net6.0-windows\Repo\Resources\" />
+    </ItemGroup>
+
 </Project>

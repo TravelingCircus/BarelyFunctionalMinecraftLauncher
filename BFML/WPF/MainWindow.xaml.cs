@@ -27,15 +27,15 @@ public partial class MainWindow
         InitializeComponent();
         _loadingScreen = new LoadingScreen(Loading, ProgressBar, ProgressText);
 
-        SetUpSkinRenderer();
+        //SetUpSkinRenderer();
         Loaded += OnWindowLoaded;
     }
 
     private async void OnWindowLoaded(object sender, RoutedEventArgs args)
     {
         Loaded -= OnWindowLoaded;
-        ApplyLocalPrefs();
-        _skinPreviewRenderer.ChangeSkin(_repo.DefaultSkin);
+        //ApplyLocalPrefs();
+        //_skinPreviewRenderer.ChangeSkin(_repo.DefaultSkin);
     }
 
     private async void OnPlayButton(object sender, RoutedEventArgs e)
