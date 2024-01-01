@@ -79,7 +79,7 @@ public partial class MainWindow
     private async void OnSkinFileDrop(object sender, DragEventArgs e)
     {
         if (!e.Data.GetDataPresent(DataFormats.FileDrop)) return;
-
+ 
         string[] files = (string[])e.Data.GetData(DataFormats.FileDrop)!;
         if (files.Length != 1 || !files[0].EndsWith(".png")) return;
 
