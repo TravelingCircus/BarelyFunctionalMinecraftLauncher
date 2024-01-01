@@ -99,10 +99,9 @@ public partial class LogInWindow
         }
 
         User authenticatedUser = loginResult.Value;
-        LocalPrefs localPrefs = await _repo.LoadLocalPrefs();
-        localPrefs.Nickname = authenticatedUser.Nickname;
-        localPrefs.PasswordHash = authenticatedUser.PasswordHash;
-        await _repo.SaveLocalPrefs(localPrefs);
+        _repo.LocalPrefs.Nickname = authenticatedUser.Nickname;
+        _repo.LocalPrefs.PasswordHash = authenticatedUser.PasswordHash;
+        await _repo.SaveLocalPrefs(_repo.LocalPrefs);
         //MainWindow mainWindow = new MainWindow(_repo, loginResult.Value); //TODO CentrilizedModeWindow
         //mainWindow.Show();
         Close();

@@ -11,7 +11,7 @@ using FileClient.Utils;
 
 namespace BFML.Core;
 
-public sealed class Game
+internal sealed class Game
 {
     private readonly Repo _repo;
     private readonly CMLauncher _launcher;

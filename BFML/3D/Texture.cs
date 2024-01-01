@@ -9,9 +9,9 @@ public class Texture
 {
     public readonly int Handle;
 
-    public Texture(string path)
+    public Texture(byte[] png)
     {
-        Image<Rgba32> image = Image.Load<Rgba32>(path);
+        Image<Rgba32> image = Image.Load<Rgba32>(png);
         image.Mutate(x => x.Flip(FlipMode.Vertical));
         byte[] pixels = new byte[4 * image.Height * image.Width];
         image.CopyPixelDataTo(pixels);

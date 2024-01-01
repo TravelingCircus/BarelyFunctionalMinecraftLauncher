@@ -16,4 +16,9 @@ public sealed class LaunchConfiguration
         ForgeVersion = forgeVersion;
         ModsChecksum = modsChecksum;
     }
+
+    public bool IsValid()
+    {
+        return true; //TODO Validate configuration
+    }
 }

@@ -7,15 +7,15 @@ public sealed class Material
     public readonly Shader Shader;
     private Texture _texture;
 
-    public Material(Shader shader, string texturePath)
+    public Material(Shader shader, byte[] png)
     {
         Shader = shader;
-        ChangeTexture(texturePath);
+        ChangeTexture(png);
     }
 
-    public void ChangeTexture(string texturePath)
+    public void ChangeTexture(byte[] png)
     {
-        _texture = new Texture(texturePath);
+        _texture = new Texture(png);
     }
 
     public void Use()
