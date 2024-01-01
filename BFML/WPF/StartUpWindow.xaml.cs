@@ -27,7 +27,7 @@ public partial class StartUpWindow
     {
         FontInstaller.InstallFont(new FileInfo(Environment.CurrentDirectory + "\\MinecraftFont.ttf"));
 
-        RepoIO repoIo = new RepoIO(new DirectoryInfo(""));
+        RepoIO repoIo = new RepoIO(new DirectoryInfo(Directory.GetCurrentDirectory()+"\\Repo"));
         repoIo.Validate().Match(
             _ => { }, 
             err => throw err);

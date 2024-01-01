@@ -1,4 +1,6 @@
-﻿using OpenTK.Graphics.OpenGL4;
+﻿using System.Linq;
+using Common;
+using OpenTK.Graphics.OpenGL4;
 using OpenTK.Mathematics;
 
 namespace BFML._3D;
@@ -9,7 +11,7 @@ public class SkinPreviewRenderer
     private RenderObject _skinPreviewRenderObject;
     private RenderObject _dustRenderObject;
     
-    public void SetUp()
+    public void SetUp(byte[] skinPng, byte[] shadowPng)
     {
         _camera = new Camera(
             new Vector3(0f, -1.1f, -5f), 
@@ -27,12 +29,12 @@ public class SkinPreviewRenderer
         ObjModelLoader skinModelLoader = new ObjModelLoader("SkinPreview.obj");
         Model skinModel =  skinModelLoader.Load();
         Shader shader = new Shader("shader.vert", "shader.frag");
-        Material skinMaterial = new Material(shader, "van.png");
+        Material skinMaterial = new Material(shader, skinPng);
         _skinPreviewRenderObject = RenderObject.Instantiate(skinModel, skinMaterial);
 
         ObjModelLoader dustModelLoader = new ObjModelLoader("plane.obj");
         Model dustModel =  dustModelLoader.Load();
-        Material dustMaterial = new Material(shader, "shadow.png");
+        Material dustMaterial = new Material(shader, shadowPng);
         _dustRenderObject = RenderObject.Instantiate(dustModel, dustMaterial);
     }
 
@@ -49,8 +51,8 @@ public class SkinPreviewRenderer
         _dustRenderObject.Render(_camera);
     }
 
-    public void ChangeSkin(string pngPath)
+    public void ChangeSkin(Skin skin)
     {
-        _skinPreviewRenderObject.Material.ChangeTexture(pngPath);
+        _skinPreviewRenderObject.Material.ChangeTexture(skin.SkinBytes.ToArray());
     }
 }

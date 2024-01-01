@@ -1,18 +1,15 @@
 ﻿using System;
 using System.Diagnostics;
 using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
 using BFML._3D;
 using OpenTK.Wpf;
 using System.Windows.Input;
 using BFML.Core;
 using BFML.Repository;
-using CmlLib.Core;
 using Common;
-using Common.Misc;
-using XamlRadialProgressBar;
 
 namespace BFML.WPF;
 
@@ -30,21 +27,22 @@ public partial class MainWindow
         InitializeComponent();
         _loadingScreen = new LoadingScreen(Loading, ProgressBar, ProgressText);
 
-        SetUpSkinRenderer();
+        //SetUpSkinRenderer();
         Loaded += OnWindowLoaded;
     }
 
     private async void OnWindowLoaded(object sender, RoutedEventArgs args)
     {
         Loaded -= OnWindowLoaded;
-        ApplyLocalPrefs();
-        _skinPreviewRenderer.ChangeSkin(_user.SkinPath);
-        _game = await Game.SetUp(_fileClient, _launchConfig);
+        //ApplyLocalPrefs();
+        //_skinPreviewRenderer.ChangeSkin(_repo.DefaultSkin);
     }
 
     private async void OnPlayButton(object sender, RoutedEventArgs e)
     {
-        if(_game is null) return;
+        MessageBox.Show(new NotImplementedException().Message, "Not quite there yet");
+        
+        /*if(_game is null) return;
         PlayButton.IsEnabled = false;
 
         if (!_game.IsReadyToLaunch())
@@ -58,7 +56,7 @@ public partial class MainWindow
         
         await Task.Delay(10000);
         await _fileClient.TryDispose();
-        Close();
+        Close();*/
     }
 
     #region PlayerModelRendering
@@ -72,22 +70,21 @@ public partial class MainWindow
         };
         OpenTkControl.Start(settings);
         _skinPreviewRenderer = new SkinPreviewRenderer();
-        _skinPreviewRenderer.SetUp();
+        _skinPreviewRenderer.SetUp(_repo.DefaultSkin.SkinBytes.ToArray(), 
+            _repo.DefaultSkin.SkinBytes.ToArray());
     }
     
     private async void OnSkinFileDrop(object sender, DragEventArgs e)
     {
         if (!e.Data.GetDataPresent(DataFormats.FileDrop)) return;
-
+ 
         string[] files = (string[])e.Data.GetData(DataFormats.FileDrop)!;
         if (files.Length != 1 || !files[0].EndsWith(".png")) return;
 
         FileInfo fileInfo = new FileInfo(files[0]);
         Skin skin = Skin.FromFile(fileInfo);
-        if (!await _fileClient.TryChangeSkin(_user, skin)) return;
-        
-        Utils.SaveSkin(fileInfo.FullName);
-        _skinPreviewRenderer.ChangeSkin(_user.SkinPath);
+        //TODO rewrite saved skin
+        _skinPreviewRenderer.ChangeSkin(skin);
     }
     
     private void SkinPreviewOnRender(TimeSpan obj)
@@ -137,78 +134,24 @@ public partial class MainWindow
 
     #endregion
 
-    #region Loading
-
-    private sealed class LoadingScreen
-    {
-        private readonly Border _loading;
-        private readonly RadialProgressBar _progressBar;
-        private readonly TextBlock _progressText;
-        private CompositeProgress _progress;
-
-        public LoadingScreen(Border loading, RadialProgressBar progressBar, TextBlock progressText)
-        {
-            _loading = loading;
-            _progressBar = progressBar;
-            _progressText = progressText;
-        }
-
-        public CompositeProgress Show()
-        {
-            _loading.Visibility = Visibility.Visible;
-            _progressBar.Value = 0f;
-            _progressText.Text = "0";
-            _progress = new CompositeProgress();
-            _progress.Changed += OnProgressChange;
-            return _progress;
-        }
-
-        public void Hide()
-        {
-            _loading.Visibility = Visibility.Collapsed;
-            _progress.Changed -= OnProgressChange;
-        }
-
-        private void OnProgressChange(float progressValue)
-        {
-            _progressBar.Value = progressValue * 100f;
-            _progressText.Text = $"{(int)(progressValue * 100f)}";
-        }
-    }
-
-    #endregion
-    
     private void ApplyLocalPrefs()
     {
-        RamSlider.Value = _localPrefs.DedicatedRAM;
-        NicknameText.Text = _user.Nickname;
-        ChangeLog.Text = _configVersion.Changelog;
-    }
-
-    private void SaveLocalPrefs()
-    {
-        _localPrefs.IsFullscreen = FullScreen.IsChecked!.Value;
-        _localPrefs.DedicatedRAM = (int)RamSlider.Value;
-        LocalPrefs.SaveLocalPrefs(_localPrefs);
+        RamSlider.Value = _repo.LocalPrefs.DedicatedRAM;
+        NicknameText.Text = _repo.LocalPrefs.Nickname;
     }
     
-    private void ExitAccount(object sender, RoutedEventArgs e)
+    private void OnReloadFiles(object sender, RoutedEventArgs e)
     {
-        LocalPrefs.Clear();
-        LogInWindow logInWindow = new LogInWindow(_fileClient, _launchConfig, _configVersion);
-        logInWindow.Show();
-        Close();
+        MessageBox.Show(new NotImplementedException().Message, "Not quite there yet");
     }
 
-    private async void OnReloadFiles(object sender, RoutedEventArgs e)
+    private void ExitAccount(object sender, RoutedEventArgs e)
     {
-        CompositeProgress progress = _loadingScreen.Show();
-        await _game.CleanInstall(progress);
-        _loadingScreen.Hide();
+        MessageBox.Show(new NotImplementedException().Message, "Not quite there yet");
     }
 
     private void OnOpenFolderButton(object sender, RoutedEventArgs e)
     {
-        Process.Start(new ProcessStartInfo(new MinecraftPath().BasePath) { UseShellExecute = true });
+        Process.Start(new ProcessStartInfo(_repo.LocalPrefs.GameDirectory.FullName) { UseShellExecute = true });
     }
 }

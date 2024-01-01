@@ -1,12 +1,10 @@
 ﻿using System;
 using System.IO;
-using System.Xml.Serialization;
-using CmlLib.Core;
 
 namespace BFML.Core;
 
 [Serializable]
-internal sealed class LocalPrefs
+public sealed class LocalPrefs
 {
     internal string Nickname { get; set; }
     internal string PasswordHash { get; set; }
@@ -26,7 +24,7 @@ internal sealed class LocalPrefs
         2048, false, string.Empty, 
         string.Empty, string.Empty, LauncherMode.Manual, null) { }
 
-    public LocalPrefs(
+    internal LocalPrefs(
         string nickname, string passwordHash, int dedicatedRam, 
         bool isFullscreen, string lastModPackGuid, string lastForgeVersion, 
         string lastVanillaVersion, LauncherMode launcherMode, DirectoryInfo gameDirectory)

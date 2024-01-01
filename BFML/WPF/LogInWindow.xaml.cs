@@ -4,26 +4,23 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
 using BFML.Core;
-using Common;
+using BFML.Repository;
 using Common.Misc;
 using Common.Models;
+using Utils.Async;
 
 namespace BFML.WPF;
 
 public partial class LogInWindow
 {
-    private readonly IFileClient _fileClient;
-    private readonly LaunchConfiguration _launchConfiguration;
-    private readonly ConfigurationVersion _version;
+    private readonly CentralizedModeRepo _repo;
 
-    public LogInWindow() { }
+    internal LogInWindow() { }
 
-    public LogInWindow(IFileClient fileClient, LaunchConfiguration launchConfiguration, ConfigurationVersion version)
+    internal LogInWindow(CentralizedModeRepo repo)
     {
         InitializeComponent();
-        _version = version;
-        _fileClient = fileClient;
-        _launchConfiguration = launchConfiguration;
+        _repo = repo;
     }
 
     private void ShutDown(object sender, RoutedEventArgs e)
@@ -65,33 +62,36 @@ public partial class LogInWindow
     private async void RegisterButtonOnClick(object sender, RoutedEventArgs e)
     {
         string nickname = InputNickname.Text;
-        ValidateString(nickname);
         string password = InputPassword.Text;
+        ValidateString(nickname);
         ValidateString(password);
 
         User newUser = new User(nickname, password);
-        Result<User> registrationResult = await _fileClient.CreateRecord(newUser);
+        Result<User> registrationResult = await _repo.CreateRecord(newUser);
         if (!registrationResult.IsOk)
         {
             //TODO Display that user exists
             return;
         }
 
-        await TryLogIn(registrationResult.Value);
+        User registeredUser = registrationResult.Value;
+        TryLogIn(registeredUser).FireAndForget();
     }
 
-    private async void LogInButtonOnClick(object sender, RoutedEventArgs e)
+    private void LogInButtonOnClick(object sender, RoutedEventArgs e)
     {
         string nickname = InputNickname.Text;
         string password = InputPassword.Text;
-        User user = new User(nickname, password);
+        ValidateString(nickname);
+        ValidateString(password);
         
-        await TryLogIn(user);
+        User user = new User(nickname, password);
+        TryLogIn(user).FireAndForget();
     }
 
     private async Task TryLogIn(User user)
     {
-        Result<User> loginResult = await _fileClient.Authenticate(user);
+        Result<User> loginResult = await _repo.Authenticate(user);
         if (!loginResult.IsOk)
         {
             //TODO Display that user doesn't exists
@@ -99,45 +99,39 @@ public partial class LogInWindow
         }
 
         User authenticatedUser = loginResult.Value;
-        LocalPrefs.SaveLocalPrefs(authenticatedUser.Nickname, authenticatedUser.PasswordHash);
-        LocalPrefs localPrefs = LocalPrefs.GetLocalPrefs();
-        MainWindow mainWindow = new MainWindow(_fileClient, loginResult.Value, localPrefs, _launchConfiguration, _version);
-        mainWindow.Show();
+        LocalPrefs localPrefs = _repo.LocalPrefs;
+        localPrefs.Nickname = authenticatedUser.Nickname;
+        localPrefs.PasswordHash = authenticatedUser.PasswordHash;
+        await _repo.SaveLocalPrefs(localPrefs);
+        //MainWindow mainWindow = new MainWindow(_repo, loginResult.Value); //TODO CentrilizedModeWindow
+        //mainWindow.Show();
         Close();
     }
-    
-    private void InputNicknameTextChanged(object sender, System.Windows.Controls.TextChangedEventArgs e)
+
+    private void TextNicknameMouseDown(object sender, MouseButtonEventArgs e)
     {
-        if (!string.IsNullOrEmpty(InputNickname.Text) && InputNickname.Text.Length > 0)
-        {
-            TextNickname.Visibility = Visibility.Collapsed;
-        }
-        else
-        {
-            TextNickname.Visibility = Visibility.Visible;
-        }
+        InputNickname.Focus();
     }
 
     private void TextPasswordMouseDown(object sender, MouseButtonEventArgs e)
     {
         InputPassword.Focus();
     }
-    
-    private void TextNicknameMouseDown(object sender, MouseButtonEventArgs e)
+
+    private void InputNicknameTextChanged(object sender, System.Windows.Controls.TextChangedEventArgs e) 
     {
-        InputNickname.Focus();
+        bool hasText = !string.IsNullOrEmpty(InputNickname.Text) && InputNickname.Text.Length > 0;
+        TextNickname.Visibility = hasText 
+            ? Visibility.Collapsed
+            : Visibility.Visible;
     }
 
     private void InputPasswordPasswordChanged(object sender, System.Windows.Controls.TextChangedEventArgs e)
     {
-        if (!string.IsNullOrEmpty(InputPassword.Text) && InputPassword.Text.Length > 0)
-        {
-            TextPassword.Visibility = Visibility.Collapsed;
-        }
-        else
-        {
-            TextPassword.Visibility = Visibility.Visible;
-        }
+        bool hasText = !string.IsNullOrEmpty(InputPassword.Text) && InputPassword.Text.Length > 0;
+        TextPassword.Visibility = hasText 
+            ? Visibility.Collapsed
+            : Visibility.Visible;
     }
 
     private static void ValidateString(string text)
