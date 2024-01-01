@@ -9,9 +9,7 @@ using OpenTK.Wpf;
 using System.Windows.Input;
 using BFML.Core;
 using BFML.Repository;
-using CmlLib.Core;
 using Common;
-using Common.Misc;
 
 namespace BFML.WPF;
 
