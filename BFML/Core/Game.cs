@@ -31,7 +31,7 @@ internal sealed class Game
             VanillaVersion = vanilla,
             ForgeVersion = forge,
             ModPack = modPack,
-            DedicatedRam = _repo.LocalPrefs.DedicatedRAM,
+            DedicatedRam = _repo.LocalPrefs.DedicatedRam,
             FullScreen = _repo.LocalPrefs.IsFullscreen,
             Validation = _repo.LocalPrefs.FileValidationMode
         };

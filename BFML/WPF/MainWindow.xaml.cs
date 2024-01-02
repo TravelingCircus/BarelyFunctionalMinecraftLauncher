@@ -139,7 +139,7 @@ public partial class MainWindow
 
     private void ApplyLocalPrefs()
     {
-        RamSlider.Value = _repo.LocalPrefs.DedicatedRAM;
+        RamSlider.Value = _repo.LocalPrefs.DedicatedRam;
         NicknameText.Text = _repo.LocalPrefs.Nickname;
     }
     

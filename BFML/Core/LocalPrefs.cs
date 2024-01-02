@@ -1,16 +1,18 @@
 ﻿using System;
 using System.IO;
+using System.Xml;
+using System.Xml.Schema;
+using System.Xml.Serialization;
 using BFML.Repository;
 
 namespace BFML.Core;
 
-[Serializable]
-public sealed class LocalPrefs
+public sealed class LocalPrefs : IXmlSerializable
 {
     internal string Nickname { get; set; }
     internal string PasswordHash { get; set; }
     
-    internal int DedicatedRAM { get; set; }
+    internal int DedicatedRam { get; set; }
     internal bool IsFullscreen { get; set; }
     
     internal string LastModPackGuid { get; set; }
@@ -33,12 +35,42 @@ public sealed class LocalPrefs
     {
         Nickname = nickname;
         PasswordHash = passwordHash;
-        DedicatedRAM = dedicatedRam;
+        DedicatedRam = dedicatedRam;
         IsFullscreen = isFullscreen;
         LastModPackGuid = lastModPackGuid;
         LastForgeVersion = lastForgeVersion;
         LastVanillaVersion = lastVanillaVersion;
         LauncherMode = launcherMode;
-        GameDirectory = gameDirectory;
+    }
+
+    public XmlSchema GetSchema() => null;
+
+    public void ReadXml(XmlReader reader)
+    {
+        reader.ReadToFollowing("Nickname");
+        Nickname = reader.ReadElementString("Nickname");
+        PasswordHash = reader.ReadElementString("PasswordHash");
+        DedicatedRam = int.Parse(reader.ReadElementString("DedicatedRam"));
+        IsFullscreen = bool.Parse(reader.ReadElementString("IsFullscreen"));
+        LauncherMode = Enum.Parse<LauncherMode>(reader.ReadElementString("LauncherMode"));
+        LastVanillaVersion = reader.ReadElementString("LastVanillaVersion");
+        LastForgeVersion = reader.ReadElementString("LastForgeVersion");
+        LastModPackGuid = reader.ReadElementString("LastModPackGuid");
+        GameDirectory = new DirectoryInfo(reader.ReadElementString("GameDirectory"));
+        FileValidationMode = Enum.Parse<FileValidation>(reader.ReadElementString("FileValidationMode"));
+    }
+
+    public void WriteXml(XmlWriter writer)
+    {
+        writer.WriteAttributeString("Nickname", Nickname);
+        writer.WriteAttributeString("PasswordHash", PasswordHash);
+        writer.WriteAttributeString("DedicatedRam", DedicatedRam.ToString());
+        writer.WriteAttributeString("IsFullscreen", IsFullscreen.ToString());
+        writer.WriteAttributeString("LauncherMode", LauncherMode.ToString());
+        writer.WriteAttributeString("LastVanillaVersion", LastVanillaVersion);
+        writer.WriteAttributeString("LastForgeVersion", LastForgeVersion);
+        writer.WriteAttributeString("LastModPackGuid", LastModPackGuid);
+        writer.WriteAttributeString("GameDirectory", GameDirectory.FullName);
+        writer.WriteAttributeString("FileValidationMode", FileValidationMode.ToString());
     }
 }

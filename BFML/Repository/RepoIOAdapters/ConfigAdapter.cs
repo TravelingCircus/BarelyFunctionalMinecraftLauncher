@@ -1,5 +1,6 @@
 ﻿using System.IO;
 using System.Threading.Tasks;
+using System.Xml;
 using System.Xml.Serialization;
 using BFML.Core;
 
@@ -22,10 +23,10 @@ internal sealed class ConfigAdapter : RepoAdapter
         }
         
         using FileStream fileStream = prefsFile.OpenRead();
+
         XmlSerializer serializer = new XmlSerializer(typeof(LocalPrefs));
-        if (serializer.Deserialize(fileStream) is not LocalPrefs prefs) 
-            throw new InvalidDataException("Invalid local prefs xml stream");
-        return Task.FromResult(prefs);
+        var kok = serializer.Deserialize(fileStream) as LocalPrefs;
+        return Task.FromResult(kok);
     }
 
     internal Task<bool> SaveLocalPrefs(LocalPrefs prefs)
