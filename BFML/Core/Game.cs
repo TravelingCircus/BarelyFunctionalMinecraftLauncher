@@ -1,6 +1,8 @@
-﻿using System.Diagnostics;
+﻿using System;
+using System.Diagnostics;
 using System.IO;
 using System.Threading.Tasks;
+using System.Windows;
 using BFML.Repository;
 using CmlLib.Core;
 using CmlLib.Core.Auth;
@@ -35,19 +37,22 @@ internal sealed class Game
             FullScreen = _repo.LocalPrefs.IsFullscreen,
             Validation = _repo.LocalPrefs.FileValidationMode
         };
-        
         return StartGameProcess(launchConfiguration);
     }
 
     private async Task StartGameProcess(LaunchConfiguration launchConfiguration)
     {
+        MVersion v = await _launcher.GetVersionAsync("1.18.2");
+        
+        await InstallVanilla(v, new ProgressTracker());
+        
         System.Net.ServicePointManager.DefaultConnectionLimit = 256;
-        Process process = await _launcher.CreateProcessAsync(launchConfiguration.VanillaVersion, new MLaunchOption
+        Process process = await _launcher.CreateProcessAsync(v, new MLaunchOption
         {
             MaximumRamMb = launchConfiguration.DedicatedRam,
             Session = MSession.GetOfflineSession(launchConfiguration.Nickname),
             FullScreen = launchConfiguration.FullScreen
-        }, launchConfiguration.Validation == FileValidation.Full);
+        }, false);
         process.Start();
     }
     
@@ -90,9 +95,9 @@ internal sealed class Game
         while (!download.IsCompleted && !download.IsFaulted)
         {
             await Task.Delay(300);
-            float downloaded = _repo.LocalPrefs.GameDirectory.RoughSize();
+            /*float downloaded = _repo.LocalPrefs.GameDirectory.RoughSize();
             float toDownload = 600 * 1024 * 1024f;
-            progressTracker.Report(downloaded / toDownload);
+            progressTracker.Report(downloaded / toDownload);*/
         }
         await download; 
         progressTracker.Report(1f);

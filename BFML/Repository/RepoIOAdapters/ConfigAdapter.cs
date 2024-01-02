@@ -25,8 +25,8 @@ internal sealed class ConfigAdapter : RepoAdapter
         using FileStream fileStream = prefsFile.OpenRead();
 
         XmlSerializer serializer = new XmlSerializer(typeof(LocalPrefs));
-        var kok = serializer.Deserialize(fileStream) as LocalPrefs;
-        return Task.FromResult(kok);
+        LocalPrefs loadedPrefs = serializer.Deserialize(fileStream) as LocalPrefs;
+        return Task.FromResult(loadedPrefs);
     }
 
     internal Task<bool> SaveLocalPrefs(LocalPrefs prefs)
