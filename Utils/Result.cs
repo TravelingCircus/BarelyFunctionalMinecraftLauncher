@@ -1,4 +1,4 @@
-﻿namespace Common.Misc;
+﻿namespace Utils;
 
 public readonly struct Result<T> 
 {

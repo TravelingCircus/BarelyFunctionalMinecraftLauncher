@@ -9,10 +9,9 @@ using OpenTK.Wpf;
 using System.Windows.Input;
 using BFML.Core;
 using BFML.Repository;
-using CmlLib.Core;
 using CmlLib.Core.Version;
-using CmlLib.Core.VersionLoader;
 using Common;
+using Utils.Async;
 
 namespace BFML.WPF;
 
@@ -35,19 +34,19 @@ public partial class MainWindow
         Loaded += OnWindowLoaded;
     }
 
-    private async void OnWindowLoaded(object sender, RoutedEventArgs args)
+    private void OnWindowLoaded(object sender, RoutedEventArgs args)
     {
         Loaded -= OnWindowLoaded;
         //ApplyLocalPrefs();
         //_skinPreviewRenderer.ChangeSkin(_repo.DefaultSkin);
     }
 
-    private async void OnPlayButton(object sender, RoutedEventArgs e)
+    private async Task LaunchGame()
     {
         PlayButton.IsEnabled = false;
         
         MVersion vanilla = await _game.Versions.GetVersionAsync("1.18.2");
-        await _game.Launch(_repo.LocalPrefs.Nickname, vanilla, false, null, null);
+        await _game.Launch(_repo.LocalPrefs.Nickname, vanilla, false);
         
         await Task.Delay(10000);
         Close();
@@ -130,6 +129,11 @@ public partial class MainWindow
 
     #region InputHandlers
 
+    private void OnPlayButton(object sender, RoutedEventArgs e)
+    {
+        LaunchGame().FireAndForget();
+    }
+    
     private void OnReloadFiles(object sender, RoutedEventArgs e)
     {
         MessageBox.Show(new NotImplementedException().Message, "Not quite there yet");

@@ -1,7 +1,6 @@
-﻿using System.Threading.Tasks;
-using BFML.Core;
+﻿using BFML.Core;
+using BFML.Repository.RepoIOAdapters;
 using Common;
-using Common.Models;
 
 namespace BFML.Repository;
 
@@ -10,7 +9,13 @@ internal sealed class ManualModeRepo : Repo
     internal ManualModeRepo(RepoIO repoIo) : base(repoIo) { }
     public Skin DefaultSkin { get; set; }
 
-    internal override Task<Forge[]> LoadForgeList() => RepoIo.Forge.LoadForgeList();
+    protected override bool ForgeFilter(Forge forge)
+    {
+        return forge.Name != ForgeAdapter.CentralizedReservedForge;
+    }
 
-    internal override Task<ModPack[]> LoadModPackList() => RepoIo.ModPacks.LoadModPackList();
+    protected override bool ModPackFilter(ModPack modPack)
+    {
+        return modPack.Name != ModPackAdapter.CentralizedReservedModPack;
+    }
 }

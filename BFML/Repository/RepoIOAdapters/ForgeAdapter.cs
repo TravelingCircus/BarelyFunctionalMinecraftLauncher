@@ -7,6 +7,8 @@ namespace BFML.Repository.RepoIOAdapters;
 
 internal sealed class ForgeAdapter : RepoAdapter
 {
+    public const string CentralizedReservedForge = "CentralizedForge";
+    
     internal ForgeAdapter(DirectoryInfo directory) : base(directory) { }
 
     internal Task<Forge[]> LoadForgeList()

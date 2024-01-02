@@ -1,7 +1,8 @@
-﻿using System.Threading.Tasks;
+﻿using System.Linq;
+using System.Threading.Tasks;
 using BFML.Core;
 using Common;
-using Common.Misc;
+using Utils;
 
 namespace BFML.Repository;
 
@@ -21,10 +22,24 @@ internal abstract class Repo
         if (loadResult.IsOk) LocalPrefs = loadResult.Value; 
         return loadResult.IsOk;
     }
-    
-    internal abstract Task<Forge[]> LoadForgeList();
 
-    internal abstract Task<ModPack[]> LoadModPackList();
+    protected abstract bool ForgeFilter(Forge forge);
+    
+    internal async Task<Forge[]> LoadForgeList()
+    {
+        return (await RepoIo.Forge.LoadForgeList())
+            .Where(ForgeFilter)
+            .ToArray();
+    }
+
+    protected abstract bool ModPackFilter(ModPack modPack);
+
+    internal async Task<ModPack[]> LoadModPackList()
+    {
+        return (await RepoIo.ModPacks.LoadModPackList())
+            .Where(ModPackFilter)
+            .ToArray();
+    }
 
     internal Task<Skin> LoadDefaultSkin() => RepoIo.Resources.LoadDefaultSkin();
 

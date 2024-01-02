@@ -3,14 +3,15 @@ using System.IO;
 using BFML.Repository;
 using CmlLib.Core.Version;
 using Common.Misc;
+using Utils;
 
 namespace BFML.Core;
 
 [Serializable]
 internal struct LaunchConfiguration
 {
-    internal bool IsModded = false;
     internal MVersion VanillaVersion = new MVersion("1.18.2");
+    internal bool IsModded = false;
     internal Forge ForgeVersion = null;
     internal ModPack ModPack = null;
     internal int DedicatedRam = 4096;
@@ -27,16 +28,16 @@ internal struct LaunchConfiguration
 
         if (!IsModded) return Result<bool>.Ok(true);
 
-        if (ForgeVersion.TargetVanillaVersion != VanillaVersion)
+        if (ForgeVersion.TargetVanillaVersion.ToString() != VanillaVersion.ToString())
         {
             return Result<bool>.Err(new InvalidDataException(
-                $"Forge version mismatch. Forge:{ForgeVersion.Version.Id} | Vanilla:{VanillaVersion.Id}"));
+                $"Forge version mismatch. Forge:{ForgeVersion.SubVersion} | Vanilla:{VanillaVersion.Id}"));
         }
         
-        if (ModPack.TargetVanillaVersion != VanillaVersion)
+        if (ModPack.VanillaVersion.ToString() != VanillaVersion.Id)
         {
             return Result<bool>.Err(new InvalidDataException(
-                $"ModPack version mismatch. ModPack:{ModPack.TargetVanillaVersion.Id} | Vanilla:{VanillaVersion.Id}"));
+                $"ModPack version mismatch. ModPack:{ModPack.VanillaVersion} | Vanilla:{VanillaVersion.Id}"));
         }
         
         return Result<bool>.Ok(true);
