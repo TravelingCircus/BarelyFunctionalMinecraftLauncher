@@ -3,7 +3,7 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:local="clr-namespace:BFML.WPF">
 
-    <Style x:Key="ToggleSyle1" TargetType="{x:Type local:Toggle}">
+    <Style x:Key="ToggleStyle1" TargetType="{x:Type local:Toggle}">
         <Setter Property="MaxHeight" Value="28" />
         <Setter Property="MaxWidth" Value="56" />
         <Setter Property="MinHeight" Value="28" />
@@ -21,10 +21,6 @@
                 Margin="2"
                 HorizontalAlignment="Left"
                 Fill="#ff9a3c" />
-
-
-
-
         </Border>
         <ControlTemplate.Triggers>
             <Trigger Property="IsChecked" Value="true">
@@ -54,8 +50,6 @@
                     </Setter.Value>
                 </Setter>
             </Trigger>
-
         </ControlTemplate.Triggers>
-
     </ControlTemplate>
 </ResourceDictionary>

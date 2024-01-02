@@ -45,7 +45,7 @@ public partial class StartUpWindow
     {
         ManualModeRepo repo = new ManualModeRepo(repoIo);
         await repo.TryInit();
-        MainWindow mainWindow = new MainWindow(repo)
+        ManualModeWindow mainWindow = new ManualModeWindow(repo)
         {
             Top = Top,
             Left = Left + Width / 2

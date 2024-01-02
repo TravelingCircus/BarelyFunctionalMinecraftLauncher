@@ -15,13 +15,13 @@ using Common.Misc;
 
 namespace BFML.WPF;
 
-public partial class MainWindow
+public partial class ManualModeWindow
 {
     private readonly ManualModeRepo _repo;
     private SkinPreviewRenderer _skinPreviewRenderer;
     private readonly LoadingScreen _loadingScreen;
 
-    internal MainWindow(ManualModeRepo repo)
+    internal ManualModeWindow(ManualModeRepo repo)
     {
         _repo = repo;
         
