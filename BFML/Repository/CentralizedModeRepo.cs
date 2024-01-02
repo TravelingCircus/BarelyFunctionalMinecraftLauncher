@@ -1,8 +1,10 @@
 ﻿using System.Threading.Tasks;
 using BFML.Core;
+using BFML.Repository.RepoIOAdapters;
 using Common.Misc;
 using Common.Models;
 using FileClient;
+using Utils;
 
 namespace BFML.Repository;
 
@@ -19,13 +21,13 @@ internal sealed class CentralizedModeRepo : Repo
 
     internal Task<Result<User>> Authenticate(User user) => _serverConnection.Authenticate(user);
 
-    internal override Task<Forge[]> LoadForgeList()
+    protected override bool ForgeFilter(Forge forge)
     {
-        throw new System.NotImplementedException();
+        return forge.Name == ForgeAdapter.CentralizedReservedForge;
     }
 
-    internal override Task<ModPack[]> LoadModPackList()
+    protected override bool ModPackFilter(ModPack modPack)
     {
-        throw new System.NotImplementedException();
+        return modPack.Name == ModPackAdapter.CentralizedReservedModPack;
     }
 }

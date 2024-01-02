@@ -18,6 +18,7 @@ internal sealed class Game
         _repo = repo;
         MinecraftPath minecraftPath = new MinecraftPath();
         _launcher = new CMLauncher(minecraftPath);
+        _launcher.GetAllVersions();
     }
 
     public Task Launch(string nickname, MVersion vanilla, bool isModded, Forge forge = null, ModPack modPack = null)
