@@ -1,6 +1,7 @@
 ﻿using System.Threading.Tasks;
 using BFML.Core;
 using Common;
+using Common.Misc;
 
 namespace BFML.Repository;
 
@@ -16,8 +17,9 @@ internal abstract class Repo
 
     public virtual async Task<bool> TryInit()
     {
-        LocalPrefs = await RepoIo.Configs.LoadLocalPrefs();
-        return true;
+        Result<LocalPrefs> loadResult = await RepoIo.Configs.LoadLocalPrefs();
+        if (loadResult.IsOk) LocalPrefs = loadResult.Value; 
+        return loadResult.IsOk;
     }
     
     internal abstract Task<Forge[]> LoadForgeList();
