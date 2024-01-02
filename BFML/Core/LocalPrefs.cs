@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using BFML.Repository;
 
 namespace BFML.Core;
 
@@ -18,6 +19,7 @@ public sealed class LocalPrefs
     
     internal LauncherMode LauncherMode { get; set; }
     internal DirectoryInfo GameDirectory { get; set; }
+    internal FileValidation FileValidationMode { get; set; }
 
     internal LocalPrefs() : this(
         string.Empty, string.Empty,

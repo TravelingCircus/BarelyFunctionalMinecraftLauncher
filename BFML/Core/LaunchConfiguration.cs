@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using BFML.Repository;
 using CmlLib.Core.Version;
 using Common.Misc;
 
@@ -15,6 +16,7 @@ internal struct LaunchConfiguration
     internal int DedicatedRam = 4096;
     internal bool FullScreen = false;
     internal string Nickname = "ABOBA";
+    internal FileValidation Validation = FileValidation.Full;
 
     public LaunchConfiguration() { }
 

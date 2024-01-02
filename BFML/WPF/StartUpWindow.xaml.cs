@@ -25,7 +25,7 @@ public partial class StartUpWindow
 
     private async Task Init()
     {
-        FontInstaller.InstallFont(new FileInfo(Environment.CurrentDirectory + "\\MinecraftFont.ttf"));
+        FontInstaller.InstallFont(new FileInfo(Environment.CurrentDirectory + "\\Repo\\Resources\\MinecraftFont.ttf"));
 
         RepoIO repoIo = new RepoIO(new DirectoryInfo(Directory.GetCurrentDirectory()+"\\Repo"));
         repoIo.Validate().Match(
@@ -34,18 +34,22 @@ public partial class StartUpWindow
 
         LauncherMode startLauncherMode = (await repoIo.Configs.LoadLocalPrefs()).LauncherMode;
 
-        if (startLauncherMode == LauncherMode.Manual) StartManualMode(repoIo);
+        if (startLauncherMode == LauncherMode.Manual) await StartManualMode(repoIo);
         else if (startLauncherMode == LauncherMode.Centralized) StartCentralizedMode(repoIo);
         else throw new ValueOutOfRangeException(nameof(startLauncherMode));
         
         Close();
     }
     
-    private void StartManualMode(RepoIO repoIo)
+    private async Task StartManualMode(RepoIO repoIo)
     {
-        MainWindow mainWindow = new MainWindow(new ManualModeRepo(repoIo));
-        mainWindow.Top = Top;
-        mainWindow.Left = Left + Width / 2;
+        ManualModeRepo repo = new ManualModeRepo(repoIo);
+        await repo.TryInit();
+        MainWindow mainWindow = new MainWindow(repo)
+        {
+            Top = Top,
+            Left = Left + Width / 2
+        };
         mainWindow.Show();
     }
 

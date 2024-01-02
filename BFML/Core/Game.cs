@@ -6,7 +6,6 @@ using CmlLib.Core;
 using CmlLib.Core.Auth;
 using CmlLib.Core.Version;
 using Common.Misc;
-using Common.Models;
 using FileClient.Utils;
 
 namespace BFML.Core;
@@ -23,20 +22,32 @@ internal sealed class Game
         _launcher = new CMLauncher(minecraftPath);
     }
 
-    public async Task Launch(LaunchConfiguration launchConfiguration)
+    public Task Launch(string nickname, MVersion vanilla, bool isModded, Forge forge = null, ModPack modPack = null)
     {
-        await StartGameProcess(launchConfiguration, new MVersion("1.18.2"));
+        LaunchConfiguration launchConfiguration = new LaunchConfiguration()
+        {
+            Nickname = nickname,
+            IsModded = isModded,
+            VanillaVersion = vanilla,
+            ForgeVersion = forge,
+            ModPack = modPack,
+            DedicatedRam = _repo.LocalPrefs.DedicatedRAM,
+            FullScreen = _repo.LocalPrefs.IsFullscreen,
+            Validation = _repo.LocalPrefs.FileValidationMode
+        };
+        
+        return StartGameProcess(launchConfiguration);
     }
 
-    private async Task StartGameProcess(LaunchConfiguration launchConfiguration, MVersion version)
+    private async Task StartGameProcess(LaunchConfiguration launchConfiguration)
     {
         System.Net.ServicePointManager.DefaultConnectionLimit = 256;
-        Process process = await _launcher.CreateProcessAsync("1.18.2", new MLaunchOption
+        Process process = await _launcher.CreateProcessAsync(launchConfiguration.VanillaVersion, new MLaunchOption
         {
             MaximumRamMb = launchConfiguration.DedicatedRam,
             Session = MSession.GetOfflineSession(launchConfiguration.Nickname),
             FullScreen = launchConfiguration.FullScreen
-        }, true);
+        }, launchConfiguration.Validation == FileValidation.Full);
         process.Start();
     }
     

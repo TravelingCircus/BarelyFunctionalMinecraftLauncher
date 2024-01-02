@@ -12,5 +12,5 @@ internal sealed class ManualModeRepo : Repo
 
     internal override Task<Forge[]> LoadForgeList() => RepoIo.Forge.LoadForgeList();
 
-    internal override Task<ModPackManifest[]> LoadModPackManifestList() => RepoIo.ModPacks.LoadModPackManifestList();
+    internal override Task<ModPack[]> LoadModPackList() => RepoIo.ModPacks.LoadModPackList();
 }
