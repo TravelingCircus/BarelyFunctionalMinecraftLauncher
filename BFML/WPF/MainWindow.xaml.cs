@@ -9,21 +9,24 @@ using OpenTK.Wpf;
 using System.Windows.Input;
 using BFML.Core;
 using BFML.Repository;
+using CmlLib.Core;
 using CmlLib.Core.Version;
+using CmlLib.Core.VersionLoader;
 using Common;
-using Common.Misc;
 
 namespace BFML.WPF;
 
 public partial class MainWindow
 {
     private readonly ManualModeRepo _repo;
-    private SkinPreviewRenderer _skinPreviewRenderer;
     private readonly LoadingScreen _loadingScreen;
+    private readonly Game _game;
+    private SkinPreviewRenderer _skinPreviewRenderer;
 
     internal MainWindow(ManualModeRepo repo)
     {
         _repo = repo;
+        _game = new Game(_repo);
         
         InitializeComponent();
         _loadingScreen = new LoadingScreen(Loading, ProgressBar, ProgressText);
@@ -42,21 +45,9 @@ public partial class MainWindow
     private async void OnPlayButton(object sender, RoutedEventArgs e)
     {
         PlayButton.IsEnabled = false;
-
-        LaunchConfiguration launchConfiguration = new LaunchConfiguration();
-        Game game = new Game(_repo); 
         
-        if (!game.IsReadyToLaunch())
-        {
-            CompositeProgress progress = _loadingScreen.Show();
-            await game.CleanInstall(launchConfiguration, progress);
-            _loadingScreen.Hide();
-        }
-
-        MVersion vanilla = new MVersion("1.18.2");
-        Forge forge;
-        ModPack modPack;
-        await game.Launch(_repo.LocalPrefs.Nickname, vanilla, false, null, null);
+        MVersion vanilla = await _game.Versions.GetVersionAsync("1.18.2");
+        await _game.Launch(_repo.LocalPrefs.Nickname, vanilla, false, null, null);
         
         await Task.Delay(10000);
         Close();
@@ -137,12 +128,8 @@ public partial class MainWindow
 
     #endregion
 
-    private void ApplyLocalPrefs()
-    {
-        RamSlider.Value = _repo.LocalPrefs.DedicatedRam;
-        NicknameText.Text = _repo.LocalPrefs.Nickname;
-    }
-    
+    #region InputHandlers
+
     private void OnReloadFiles(object sender, RoutedEventArgs e)
     {
         MessageBox.Show(new NotImplementedException().Message, "Not quite there yet");
@@ -157,4 +144,6 @@ public partial class MainWindow
     {
         Process.Start(new ProcessStartInfo(_repo.LocalPrefs.GameDirectory.FullName) { UseShellExecute = true });
     }
+
+    #endregion
 }
