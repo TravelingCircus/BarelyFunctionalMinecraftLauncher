@@ -9,9 +9,9 @@ using OpenTK.Wpf;
 using System.Windows.Input;
 using BFML.Core;
 using BFML.Repository;
+using CmlLib.Core.Version;
 using Common;
 using Common.Misc;
-using Common.Models;
 
 namespace BFML.WPF;
 
@@ -43,8 +43,7 @@ public partial class MainWindow
     {
         PlayButton.IsEnabled = false;
 
-        LaunchConfiguration launchConfiguration 
-            = new LaunchConfiguration("1.18.2", "1.18.2", "1.18.2", 4096);
+        LaunchConfiguration launchConfiguration = new LaunchConfiguration();
         Game game = new Game(_repo); 
         
         if (!game.IsReadyToLaunch())
@@ -53,8 +52,11 @@ public partial class MainWindow
             await game.CleanInstall(launchConfiguration, progress);
             _loadingScreen.Hide();
         }
-        
-        await game.Launch(launchConfiguration);
+
+        MVersion vanilla = new MVersion("1.18.2");
+        Forge forge;
+        ModPack modPack;
+        await game.Launch(_repo.LocalPrefs.Nickname, vanilla, false, null, null);
         
         await Task.Delay(10000);
         Close();

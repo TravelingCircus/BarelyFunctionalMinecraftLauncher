@@ -1,12 +1,12 @@
 ﻿namespace Common.Models;
 
-public sealed class ModPackManifest
+public readonly struct ModPackManifest
 {
-    public Guid Guid;
-    public string Name;
-    public string Version;
-    public string Changelog;
-    public string ForgeVersion;
-    public string VanillaVersion;
-    public ulong ModsChecksum;
+    public readonly Guid Guid;
+    public readonly string Name;
+    public readonly string ModPackVersion;
+    public readonly string Changelog;
+    public readonly string ForgeVersion;
+    public readonly string VanillaVersion;
+    public readonly ulong ModsChecksum;
 }

@@ -8,8 +8,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Common", "Common\Common.csp
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TCPFileServer", "TCPFileServer\TCPFileServer.csproj", "{2F776E28-D687-4C8E-89BB-F7DA79DE37E9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XmlFilesGenerator", "XmlFilesGenerator\XmlFilesGenerator.csproj", "{9947A9CC-9329-4B5E-8776-0EE807A7054E}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Utils", "Utils\Utils.csproj", "{E99E2A28-9559-4C23-B15A-51093777EB82}"
 EndProject
 Global
@@ -34,10 +32,6 @@ Global
 		{2F776E28-D687-4C8E-89BB-F7DA79DE37E9}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2F776E28-D687-4C8E-89BB-F7DA79DE37E9}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2F776E28-D687-4C8E-89BB-F7DA79DE37E9}.Release|Any CPU.Build.0 = Release|Any CPU
-		{9947A9CC-9329-4B5E-8776-0EE807A7054E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{9947A9CC-9329-4B5E-8776-0EE807A7054E}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{9947A9CC-9329-4B5E-8776-0EE807A7054E}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{9947A9CC-9329-4B5E-8776-0EE807A7054E}.Release|Any CPU.Build.0 = Release|Any CPU
 		{E99E2A28-9559-4C23-B15A-51093777EB82}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{E99E2A28-9559-4C23-B15A-51093777EB82}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E99E2A28-9559-4C23-B15A-51093777EB82}.Release|Any CPU.ActiveCfg = Release|Any CPU

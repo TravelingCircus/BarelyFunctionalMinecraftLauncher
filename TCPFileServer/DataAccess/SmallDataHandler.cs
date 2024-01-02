@@ -33,14 +33,6 @@ public sealed class SmallDataHandler: DataHandler
         return result;
     }
     
-    public LaunchConfiguration GetLaunchConfig()
-    {
-        string fileName = "LaunchConfiguration.xml";
-        using Stream fileStream = ReadFromRepository(_repositoryPath, fileName);
-        LaunchConfiguration launchConfig = DataSerializer.LaunchConfigFromXml(fileStream);
-        return launchConfig;
-    }
-    
     public string[] GetAllNicknames()
     {
         DirectoryInfo usersDirectory = new DirectoryInfo(_usersDirectory);
@@ -84,14 +76,5 @@ public sealed class SmallDataHandler: DataHandler
     {
         using FileStream fileStream = new FileStream(path, FileMode.Create);
         DataSerializer.UserToXml(newUser, fileStream);
-    }
-
-    public void WriteLaunchConfig(LaunchConfiguration config)
-    {
-        FileInfo file = new FileInfo(_repositoryPath + "LaunchConfiguration.xml");
-        if(file.Exists)file.Delete();
-        using FileStream stream = file.Create();
-        DataSerializer.LaunchConfigToXml(config, stream);
-        stream.Flush();
     }
 }

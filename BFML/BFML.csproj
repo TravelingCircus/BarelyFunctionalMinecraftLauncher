@@ -29,10 +29,19 @@
     </ItemGroup>
 
     <ItemGroup>
-      <EmbeddedResource Include="bin\Debug\net6.0-windows\perfection.png">
+      <EmbeddedResource Include="bin\Debug\net6.0-windows\plane.obj">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </EmbeddedResource>
-      <EmbeddedResource Include="bin\Debug\net6.0-windows\plane.obj">
+      <EmbeddedResource Include="bin\Debug\net6.0-windows\Repo\Resources\DefaultSkin.png">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </EmbeddedResource>
+      <EmbeddedResource Include="bin\Debug\net6.0-windows\Repo\Resources\MinecraftFont.ttf">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </EmbeddedResource>
+      <EmbeddedResource Include="bin\Debug\net6.0-windows\Repo\Resources\Perfection.png">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </EmbeddedResource>
+      <EmbeddedResource Include="bin\Debug\net6.0-windows\Repo\Resources\Shadow.png">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </EmbeddedResource>
       <EmbeddedResource Include="bin\Debug\net6.0-windows\shader.frag">
@@ -41,13 +50,7 @@
       <EmbeddedResource Include="bin\Debug\net6.0-windows\shader.vert">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </EmbeddedResource>
-      <EmbeddedResource Include="bin\Debug\net6.0-windows\shadow.png">
-        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      </EmbeddedResource>
       <EmbeddedResource Include="bin\Debug\net6.0-windows\SkinPreview.obj">
-        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      </EmbeddedResource>
-      <EmbeddedResource Include="bin\Debug\net6.0-windows\van.png">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </EmbeddedResource>
     </ItemGroup>
@@ -60,9 +63,6 @@
     </ItemGroup>
 
     <ItemGroup>
-      <EmbeddedResource Include="bin\Debug\net6.0-windows\MinecraftFont.ttf">
-        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      </EmbeddedResource>
       <Resource Include="WPF\Fonts\MinecraftFont.ttf" />
       <Resource Include="WPF\Images\LogOutIcon.png">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
@@ -80,13 +80,18 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Folder Include="bin\Debug\net6.0-windows\Repo\Forge\" />
-      <Folder Include="bin\Debug\net6.0-windows\Repo\ModPacks\" />
-      <Folder Include="bin\Debug\net6.0-windows\Repo\Resources\" />
-    </ItemGroup>
-
-    <ItemGroup>
-      <Content Include="bin\Debug\net6.0-windows\Repo\Configs\LocalPrefs.xml" />
+      <Content Include="bin\Debug\net6.0-windows\Repo\Configs\LocalPrefs.xml">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </Content>
+      <Content Include="bin\Debug\net6.0-windows\Repo\Forge\1.18.2-forge-40.2.0.zip">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </Content>
+      <Content Include="bin\Debug\net6.0-windows\Repo\ModPacks\TestModPack\Manifest.xml">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </Content>
+      <Content Include="bin\Debug\net6.0-windows\Repo\ModPacks\TestModPack\Mods.zip">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </Content>
     </ItemGroup>
 
 </Project>

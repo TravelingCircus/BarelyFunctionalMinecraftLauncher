@@ -24,7 +24,7 @@ internal sealed class CentralizedModeRepo : Repo
         throw new System.NotImplementedException();
     }
 
-    internal override Task<ModPackManifest[]> LoadModPackManifestList()
+    internal override Task<ModPack[]> LoadModPackList()
     {
         throw new System.NotImplementedException();
     }

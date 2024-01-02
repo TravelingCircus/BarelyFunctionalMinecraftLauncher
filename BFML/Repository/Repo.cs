@@ -1,7 +1,6 @@
 ﻿using System.Threading.Tasks;
 using BFML.Core;
 using Common;
-using Common.Models;
 
 namespace BFML.Repository;
 
@@ -18,13 +17,12 @@ internal abstract class Repo
     public virtual async Task<bool> TryInit()
     {
         LocalPrefs = await RepoIo.Configs.LoadLocalPrefs();
-
         return true;
     }
     
     internal abstract Task<Forge[]> LoadForgeList();
 
-    internal abstract Task<ModPackManifest[]> LoadModPackManifestList();
+    internal abstract Task<ModPack[]> LoadModPackList();
 
     internal Task<Skin> LoadDefaultSkin() => RepoIo.Resources.LoadDefaultSkin();
 
