@@ -7,7 +7,6 @@ using Common.Network;
 using Common.Network.Messages.ChangeSkin;
 using Common.Network.Messages.ForgeDownload;
 using Common.Network.Messages.GetSkin;
-using Common.Network.Messages.LaunchConfiguration;
 using Common.Network.Messages.Login;
 using Common.Network.Messages.ModsDownload;
 using Common.Network.Messages.Registration;
@@ -67,12 +66,6 @@ public sealed class ServerConnection : IDisposable
         return response.Success 
             ? Result<User>.Ok(user)
             : Result<User>.Err(new ArgumentException($"Can't create record for user {user.Nickname}."));
-    }
-
-    public async Task<LaunchConfiguration> LoadLaunchConfiguration()
-    {
-        Message response = await GetResponseFor(new LaunchConfigurationRequest());
-        return ((LaunchConfigurationResponse)response).LaunchConfiguration;
     }
     
     public async Task<bool> TryLoadForge(FileInfo target)

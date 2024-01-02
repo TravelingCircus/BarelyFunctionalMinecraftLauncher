@@ -33,7 +33,7 @@ internal sealed class Game
         System.Net.ServicePointManager.DefaultConnectionLimit = 256;
         Process process = await _launcher.CreateProcessAsync("1.18.2", new MLaunchOption
         {
-            MaximumRamMb = launchConfiguration.Ram,
+            MaximumRamMb = launchConfiguration.DedicatedRam,
             Session = MSession.GetOfflineSession(launchConfiguration.Nickname),
             FullScreen = launchConfiguration.FullScreen
         }, true);
@@ -44,7 +44,7 @@ internal sealed class Game
     {
         DeleteAllFiles(progress.AddTracker(0.1f));
 
-        MVersion vanillaVersion = new MVersion(launchConfiguration.VanillaVersion);
+        MVersion vanillaVersion = launchConfiguration.VanillaVersion;
         await InstallVanilla(vanillaVersion, progress.AddTracker(0.5f));
 
         await _launcher.GetAllVersionsAsync();

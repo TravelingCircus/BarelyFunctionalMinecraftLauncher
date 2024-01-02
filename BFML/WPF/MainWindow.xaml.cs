@@ -43,8 +43,7 @@ public partial class MainWindow
     {
         PlayButton.IsEnabled = false;
 
-        LaunchConfiguration launchConfiguration 
-            = new LaunchConfiguration("1.18.2", "1.18.2", "1.18.2", 4096);
+        LaunchConfiguration launchConfiguration = new LaunchConfiguration();
         Game game = new Game(_repo); 
         
         if (!game.IsReadyToLaunch())

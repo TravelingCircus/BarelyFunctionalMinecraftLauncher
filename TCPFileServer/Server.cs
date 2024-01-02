@@ -4,7 +4,6 @@ using Common.Network;
 using Common.Network.Messages.ChangeSkin;
 using Common.Network.Messages.ForgeDownload;
 using Common.Network.Messages.GetSkin;
-using Common.Network.Messages.LaunchConfiguration;
 using Common.Network.Messages.Login;
 using Common.Network.Messages.ModsDownload;
 using Common.Network.Messages.Registration;
@@ -86,7 +85,6 @@ public sealed class Server
     {
         HandlerPicker.RegisterHandler(nameof(RegistrationRequest), new RegistrationHandler(repository));
         HandlerPicker.RegisterHandler(nameof(LoginRequest), new LoginHandler(repository));
-        HandlerPicker.RegisterHandler(nameof(LaunchConfigurationRequest), new LaunchConfigurationHandler(repository));
         HandlerPicker.RegisterHandler(nameof(SkinChangeRequest), new SkinChangeHandler(repository));
         HandlerPicker.RegisterHandler(nameof(ForgeDownloadRequest), new ForgeDownloadHandler(repository));
         HandlerPicker.RegisterHandler(nameof(ModsDownloadRequest), new ModsDownloadHandler(repository));

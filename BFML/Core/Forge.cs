@@ -3,29 +3,30 @@ using System.IO.Compression;
 using System.Threading.Tasks;
 using CmlLib.Core;
 using CmlLib.Core.Version;
-using Common.Models;
 using FileClient.Utils;
 
 namespace BFML.Core;
 
-public sealed class Forge
+internal sealed class Forge
 {
-    public readonly MVersion Version;
+    internal readonly MVersion TargetVanillaVersion;
+    internal readonly MVersion Version;
     private readonly MinecraftPath _minecraftPath;
 
-    public Forge(MVersion version, MinecraftPath minecraftPath)
+    internal Forge(MVersion version, MVersion targetVanillaVersion, MinecraftPath minecraftPath)
     {
         Version = version;
         _minecraftPath = minecraftPath;
+        TargetVanillaVersion = targetVanillaVersion;
     }
 
-    public bool IsInstalled(LaunchConfiguration launchConfiguration)
+    internal bool IsInstalled(LaunchConfiguration launchConfiguration)
     {
         string forgeVersionPath = _minecraftPath.Versions + $@"\{launchConfiguration.ForgeVersion}";
         return new DirectoryInfo(forgeVersionPath).Exists;
     }
 
-    public Task Install(string archivePath, LaunchConfiguration launchConfiguration)
+    internal Task Install(string archivePath, LaunchConfiguration launchConfiguration)
     {
         using TempDirectory tempDirectory = new TempDirectory();
         using (ZipArchive archive = ZipFile.OpenRead(archivePath))

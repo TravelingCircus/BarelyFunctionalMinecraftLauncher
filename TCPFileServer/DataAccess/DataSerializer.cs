@@ -18,18 +18,4 @@ public static class DataSerializer
         if (user is null) throw new InvalidDataException("Invalid user xml stream");
         return user;
     }
-
-    public static void LaunchConfigToXml(LaunchConfiguration launchConfig, Stream buffer)
-    {
-        XmlSerializer xml = new XmlSerializer(typeof(LaunchConfiguration));
-        xml.Serialize(buffer, launchConfig);
-    }
-    
-    public static LaunchConfiguration LaunchConfigFromXml(Stream stream)
-    {
-        XmlSerializer serializer = new XmlSerializer(typeof(LaunchConfiguration));
-        LaunchConfiguration launchConfig = (serializer.Deserialize(stream) as LaunchConfiguration)!;
-        if (launchConfig is null) throw new InvalidDataException("Invalid launchConfig xml stream");
-        return launchConfig;
-    }
 }

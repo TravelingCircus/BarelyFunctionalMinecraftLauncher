@@ -35,16 +35,6 @@ public sealed class Repository
     }
 
     #region SmallDataInterface
-
-    public async Task<LaunchConfiguration> GetLaunchConfiguration()
-    {
-        SmallDataHandler dataHandler = await _smallDataHandlerQueue.GetDataHandler();
-
-        LaunchConfiguration launchConfiguration = dataHandler.GetLaunchConfig();
-            
-        dataHandler.Release();
-        return launchConfiguration;
-    }
     
     public async Task<User> GetUser(string name)
     {
@@ -153,13 +143,14 @@ public sealed class Repository
 
     private async Task PrepareUserConfigs()
     {
-        LargeDataHandler dataHandler = await _largeDataHandlerQueue.GetDataHandler();
+        throw new NotImplementedException();
+        /*LargeDataHandler dataHandler = await _largeDataHandlerQueue.GetDataHandler();
         uint modsChecksum = dataHandler.GetModsChecksum();
         dataHandler.Release();
         SmallDataHandler smallDataHandler = await _smallDataHandlerQueue.GetDataHandler();
         LaunchConfiguration config = smallDataHandler.GetLaunchConfig();
         config.ModsChecksum = modsChecksum.ToString(CultureInfo.InvariantCulture);
         smallDataHandler.WriteLaunchConfig(config);
-        smallDataHandler.Release();
+        smallDataHandler.Release();*/
     }
 }
