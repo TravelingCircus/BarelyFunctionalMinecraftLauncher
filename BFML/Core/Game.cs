@@ -1,4 +1,5 @@
 ﻿using System.Diagnostics;
+using System.Linq;
 using System.Threading.Tasks;
 using BFML.Repository;
 using CmlLib.Core;
@@ -9,16 +10,20 @@ namespace BFML.Core;
 
 internal sealed class Game
 {
-    internal MVersionCollection Versions => _launcher.Versions;
+    internal MVersionCollection Versions => _launcher.GetAllVersions();
     private readonly Repo _repo;
     private readonly CMLauncher _launcher;
 
     internal Game(Repo repo)
     {
         _repo = repo;
-        MinecraftPath minecraftPath = new MinecraftPath();
+        MinecraftPath minecraftPath = new MinecraftPath(_repo.LocalPrefs.GameDirectory.FullName);
         _launcher = new CMLauncher(minecraftPath);
-        _launcher.GetAllVersions();
+    }
+
+    public bool IsReadyToLaunch()
+    {
+        return true; //TODO
     }
 
     public Task Launch(string nickname, MVersion vanilla, bool isModded, Forge forge = null, ModPack modPack = null)
@@ -45,14 +50,9 @@ internal sealed class Game
         Process process = await _launcher.CreateProcessAsync(launchConfig.VanillaVersion, new MLaunchOption
         {
             MaximumRamMb = launchConfig.DedicatedRam,
-            Session = MSession.GetOfflineSession(launchConfig.Nickname),
+            Session = MSession.CreateOfflineSession(launchConfig.Nickname),
             FullScreen = launchConfig.FullScreen
         }, false);
         process.Start();
-    }
-    
-    public bool IsReadyToLaunch()
-    {
-        return true; //TODO
     }
 }

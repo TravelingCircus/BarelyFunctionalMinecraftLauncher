@@ -10,7 +10,7 @@ internal sealed class ModPackAdapter : RepoAdapter
 {
     public const string CentralizedReservedModPack = "CentralizedModpack";
     
-    internal ModPackAdapter(DirectoryInfo directory) : base(directory) { }
+    internal ModPackAdapter(DirectoryInfo directory, RepoIO repoIo) : base(directory, repoIo) { }
     
     internal Task<ModPack[]> LoadModPackList()
     {
