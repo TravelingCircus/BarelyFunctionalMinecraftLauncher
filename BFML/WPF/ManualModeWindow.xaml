@@ -247,6 +247,7 @@
                                         Text="Minecraft"
                                         TextAlignment="Left" />
                                     <ComboBox
+                                        x:Name="MinecraftVersion"
                                         Width="197.5"
                                         Margin="0, 12.5, 0, 12.5"
                                         FontSize="20"
@@ -266,6 +267,7 @@
                                         Text="Forge"
                                         TextAlignment="Left" />
                                     <ComboBox
+                                        x:Name="ForgeVersion"
                                         Width="197.5"
                                         Margin="0, 12.5, 0, 12.5"
                                         FontSize="20"
@@ -285,6 +287,7 @@
                                         Text="ModPack"
                                         TextAlignment="Left" />
                                     <ComboBox
+                                        x:Name="ModPack"
                                         Width="197.5"
                                         Margin="0, 12.5, 0, 12.5"
                                         FontSize="20"
@@ -381,7 +384,7 @@
                         Background="Transparent"
                         HorizontalContentAlignment="Center"
                         BorderThickness="0">
-                        
+
                         <TabItem 
                             Header="ChangeLog"
                             Template="{DynamicResource LeftTabItem}">
@@ -410,7 +413,260 @@
                         <TabItem
                             Header="Setting"
                             Template="{DynamicResource CentralTabItem}">
-                            
+                            <StackPanel>
+                                
+                                <Border
+                                    Height="50"
+                                    Margin="0, 5"
+                                    Background="#434343"
+                                    CornerRadius="5">
+                                    
+                                    <StackPanel 
+                                        Orientation="Horizontal">
+                                        
+                                        <TextBlock
+                                            Width="175"
+                                            Margin="12.5"
+                                            FontSize="20"
+                                            FontFamily="Minecraft"
+                                            Foreground="#dcdcdc"
+                                            Text="Minecraft path"
+                                            TextAlignment="Left" />
+                                    </StackPanel>
+                                </Border>
+                                
+                                <Border
+                                    Height="50"
+                                    Margin="0, 5"
+                                    Background="#434343"
+                                    CornerRadius="5">
+                                    
+                                    <StackPanel 
+                                        Orientation="Horizontal">
+                                        
+                                        <TextBlock
+                                            Width="175"
+                                            Margin="12.5"
+                                            FontSize="20"
+                                            FontFamily="Minecraft"
+                                            Foreground="#dcdcdc"
+                                            Text="Files validate"
+                                            TextAlignment="Left" />
+                                        <ComboBox
+                                            x:Name="FilesValidateMode"
+                                            Width="150"
+                                            Margin="0, 12.5"
+                                            FontSize="20"
+                                            FontFamily="Minecraft"
+                                            Foreground="#dcdcdc" />
+                                    </StackPanel>
+                                </Border>
+                                
+                                <Border
+                                    Height="75"
+                                    Margin="0, 5"
+                                    Background="#434343"
+                                    CornerRadius="5">
+                                    
+                                    <Grid>
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="37.5"/>
+                                            <RowDefinition Height="37.5"/>
+                                        </Grid.RowDefinitions>
+                                        
+                                        <StackPanel
+                                            Grid.Row="0"
+                                            Orientation="Horizontal">
+                                            
+                                            <TextBlock
+                                                Width="175"
+                                                Margin="12.5, 6.25"
+                                                FontSize="20"
+                                                FontFamily="Minecraft"
+                                                Foreground="#dcdcdc"
+                                                Text="Allocated Ram"
+                                                TextAlignment="Left" />
+                                            
+                                            <TextBlock
+                                                Width="75"
+                                                Margin="12.5, 6.25"
+                                                FontSize="20"
+                                                FontFamily="Minecraft"
+                                                Foreground="#dcdcdc"
+                                                Text="{Binding ElementName=RamSlider, Path=Value}"
+                                                TextAlignment="Center" />
+                                            
+                                            <TextBlock
+                                                Width="30"
+                                                Margin="0, 6.25"
+                                                FontSize="20"
+                                                FontFamily="Minecraft"
+                                                Foreground="#dcdcdc"
+                                                Text="MB"
+                                                TextAlignment="Center" />
+                                        </StackPanel>
+                                        
+                                        <Slider
+                                            x:Name="RamSlider"
+                                            Grid.Row="1"
+                                            Width="350"
+                                            Height="20"
+                                            Margin="0"
+                                            AutoToolTipPlacement="TopLeft"
+                                            Cursor="Hand"
+                                            IsSnapToTickEnabled="True"
+                                            Maximum="16384"
+                                            Style="{DynamicResource Horizontal_Slider}"
+                                            Template="{DynamicResource Slider}"
+                                            TickFrequency="512">
+                                            <Slider.Resources>
+                                                <Style TargetType="ToolTip">
+                                                    <Setter Property="OverridesDefaultStyle" Value="True" />
+                                                    <Setter Property="SnapsToDevicePixels" Value="True" />
+                                                    <Setter Property="Foreground" Value="#dcdcdc" />
+                                                    <Setter Property="FontFamily" Value="Minecraft" />
+                                                    <Setter Property="FontSize" Value="15" />
+
+                                                    <Setter Property="Template">
+                                                        <Setter.Value>
+                                                            <ControlTemplate TargetType="ToolTip">
+                                                                <ContentPresenter />
+                                                            </ControlTemplate>
+                                                        </Setter.Value>
+                                                    </Setter>
+                                                </Style>
+                                            </Slider.Resources>
+                                        </Slider>
+                                    </Grid>
+                                </Border>
+                                
+                                <Border
+                                    Height="50"
+                                    Margin="0, 5"
+                                    Background="#434343"
+                                    CornerRadius="5">
+                                    
+                                    <StackPanel 
+                                        Orientation="Horizontal">
+                                        
+                                        <TextBlock
+                                            Width="175"
+                                            Margin="12.5"
+                                            FontSize="20"
+                                            FontFamily="Minecraft"
+                                            Foreground="#dcdcdc"
+                                            Text="Fullscreen?"
+                                            TextAlignment="Left" />
+                                        <ToggleButton
+                                            x:Name="Fullscreen"
+                                            Width="75"
+                                            Margin="50, 12.5"
+                                            Cursor="Hand"
+                                            Template="{DynamicResource ToggleTemplate1}" />
+                                    </StackPanel>
+                                </Border>
+                                
+                                <Border
+                                    Height="50"
+                                    Margin="0, 5"
+                                    Background="#434343"
+                                    CornerRadius="5">
+                                    
+                                    <StackPanel 
+                                        Orientation="Horizontal">
+                                        
+                                        <TextBlock
+                                            Width="175"
+                                            Margin="12.5"
+                                            FontSize="20"
+                                            FontFamily="Minecraft"
+                                            Foreground="#dcdcdc"
+                                            Text="Snapshots?"
+                                            TextAlignment="Left" />
+                                        <ToggleButton
+                                            x:Name="Snapshots"
+                                            Width="75"
+                                            Margin="50, 12.5"
+                                            Cursor="Hand"
+                                            Template="{DynamicResource ToggleTemplate1}" />
+                                    </StackPanel>
+                                </Border>
+                                
+                                <Border
+                                    Height="125"
+                                    Margin="0, 5"
+                                    Background="#434343"
+                                    CornerRadius="5">
+                                    
+                                    <Grid>
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="25"/>
+                                            <RowDefinition Height="50"/>
+                                            <RowDefinition Height="50"/>
+                                        </Grid.RowDefinitions>
+                                        
+                                        <TextBlock
+                                            Grid.Row="0"
+                                            Width="175"
+                                            VerticalAlignment="Center"
+                                            FontSize="20"
+                                            FontFamily="Minecraft"
+                                            Foreground="#dcdcdc"
+                                            Text="Config server"
+                                            TextAlignment="Center" />
+                                        
+                                        <StackPanel 
+                                            Grid.Row="1"
+                                            VerticalAlignment="Center"
+                                            Orientation="Horizontal">
+                                        
+                                            <TextBlock
+                                                Width="125"
+                                                Margin="12.5, 0"
+                                                FontSize="20"
+                                                FontFamily="Minecraft"
+                                                Foreground="#dcdcdc"
+                                                Text="IPv4:"
+                                                TextAlignment="Left" />
+                                            <TextBox
+                                                x:Name="ServerIp"
+                                                Width="200"
+                                                FontSize="20"
+                                                FontFamily="Minecraft"
+                                                Foreground="#dcdcdc" 
+                                                Background="#595959"
+                                                BorderThickness="0"
+                                                TextAlignment="Center"
+                                                Text="255.255.255.255" />
+                                        </StackPanel>
+                                        
+                                        <StackPanel 
+                                            Grid.Row="2"
+                                            VerticalAlignment="Center"
+                                            Orientation="Horizontal">
+                                        
+                                            <TextBlock
+                                                Width="125"
+                                                Margin="12.5, 0"
+                                                FontSize="20"
+                                                FontFamily="Minecraft"
+                                                Foreground="#dcdcdc"
+                                                Text="Port:"
+                                                TextAlignment="Left" />
+                                            <TextBox
+                                                x:Name="ServerPort"
+                                                Width="200"
+                                                FontSize="20"
+                                                FontFamily="Minecraft"
+                                                Foreground="#dcdcdc" 
+                                                Background="#595959"
+                                                BorderThickness="0"
+                                                TextAlignment="Center"
+                                                Text="65568" />
+                                        </StackPanel>
+                                    </Grid>
+                                </Border>
+                            </StackPanel>
                         </TabItem>
 
                         <TabItem Header="ModPack" Template="{DynamicResource RightTabItem}" />
