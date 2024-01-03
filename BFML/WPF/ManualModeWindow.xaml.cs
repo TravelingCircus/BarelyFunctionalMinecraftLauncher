@@ -11,19 +11,21 @@ using BFML.Core;
 using BFML.Repository;
 using CmlLib.Core.Version;
 using Common;
-using Common.Misc;
+using Utils.Async;
 
 namespace BFML.WPF;
 
 public partial class ManualModeWindow
 {
     private readonly ManualModeRepo _repo;
-    private SkinPreviewRenderer _skinPreviewRenderer;
     private readonly LoadingScreen _loadingScreen;
+    private readonly Game _game;
+    private SkinPreviewRenderer _skinPreviewRenderer;
 
     internal ManualModeWindow(ManualModeRepo repo)
     {
         _repo = repo;
+        _game = new Game(_repo);
         
         InitializeComponent();
         _loadingScreen = new LoadingScreen(Loading, ProgressBar, ProgressText);
@@ -32,31 +34,19 @@ public partial class ManualModeWindow
         Loaded += OnWindowLoaded;
     }
 
-    private async void OnWindowLoaded(object sender, RoutedEventArgs args)
+    private void OnWindowLoaded(object sender, RoutedEventArgs args)
     {
         Loaded -= OnWindowLoaded;
         //ApplyLocalPrefs();
         //_skinPreviewRenderer.ChangeSkin(_repo.DefaultSkin);
     }
 
-    private async void OnPlayButton(object sender, RoutedEventArgs e)
+    private async Task LaunchGame()
     {
         PlayButton.IsEnabled = false;
-
-        LaunchConfiguration launchConfiguration = new LaunchConfiguration();
-        Game game = new Game(_repo); 
         
-        if (!game.IsReadyToLaunch())
-        {
-            CompositeProgress progress = _loadingScreen.Show();
-            await game.CleanInstall(launchConfiguration, progress);
-            _loadingScreen.Hide();
-        }
-
-        MVersion vanilla = new MVersion("1.18.2");
-        Forge forge;
-        ModPack modPack;
-        await game.Launch(_repo.LocalPrefs.Nickname, vanilla, false, null, null);
+        MVersion vanilla = await _game.Versions.GetVersionAsync("1.18.2");
+        await _game.Launch(_repo.LocalPrefs.Nickname, vanilla, false);
         
         await Task.Delay(10000);
         Close();
@@ -137,10 +127,11 @@ public partial class ManualModeWindow
 
     #endregion
 
-    private void ApplyLocalPrefs()
+    #region InputHandlers
+
+    private void OnPlayButton(object sender, RoutedEventArgs e)
     {
-        RamSlider.Value = _repo.LocalPrefs.DedicatedRAM;
-        NicknameText.Text = _repo.LocalPrefs.Nickname;
+        LaunchGame().FireAndForget();
     }
     
     private void OnReloadFiles(object sender, RoutedEventArgs e)
@@ -157,4 +148,6 @@ public partial class ManualModeWindow
     {
         Process.Start(new ProcessStartInfo(_repo.LocalPrefs.GameDirectory.FullName) { UseShellExecute = true });
     }
+
+    #endregion
 }

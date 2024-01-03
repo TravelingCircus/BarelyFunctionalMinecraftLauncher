@@ -8,6 +8,8 @@ namespace BFML.Repository.RepoIOAdapters;
 
 internal sealed class ModPackAdapter : RepoAdapter
 {
+    public const string CentralizedReservedModPack = "CentralizedModpack";
+    
     internal ModPackAdapter(DirectoryInfo directory) : base(directory) { }
     
     internal Task<ModPack[]> LoadModPackList()

@@ -17,7 +17,7 @@
     </ItemGroup>
 
     <ItemGroup>
-      <PackageReference Include="CmlLib.Core" Version="3.3.5" />
+      <PackageReference Include="CmlLib.Core" Version="3.3.8" />
       <PackageReference Include="OpenTK.GLWpfControl" Version="4.2.2" />
       <PackageReference Include="SixLabors.ImageSharp" Version="2.1.3" />
       <PackageReference Include="XamlRadialProgressBar" Version="1.0.3" />
@@ -92,6 +92,7 @@
       <Content Include="bin\Debug\net6.0-windows\Repo\ModPacks\TestModPack\Mods.zip">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </Content>
+      <Content Include="bin\Debug\net6.0-windows\Repo\ModPacks\TestModPack\Mods\emeraldequipment-forge-1.18.2-v1.0.1.jar" />
     </ItemGroup>
 
 </Project>

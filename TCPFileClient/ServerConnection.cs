@@ -10,6 +10,7 @@ using Common.Network.Messages.GetSkin;
 using Common.Network.Messages.Login;
 using Common.Network.Messages.ModsDownload;
 using Common.Network.Messages.Registration;
+using Utils;
 
 namespace FileClient;
 
