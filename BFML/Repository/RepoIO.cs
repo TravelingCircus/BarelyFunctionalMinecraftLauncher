@@ -21,10 +21,10 @@ internal sealed class RepoIO
     internal RepoIO(DirectoryInfo repoInfo)
     {
         _repoInfo = repoInfo;
-        Forge = new ForgeAdapter(ForgeDirectory);
-        Configs = new ConfigAdapter(ConfigsDirectory);
-        ModPacks = new ModPackAdapter(ModPacksDirectory);
-        Resources = new ResourceAdapter(ResourcesDirectory);
+        Forge = new ForgeAdapter(ForgeDirectory, this);
+        Configs = new ConfigAdapter(ConfigsDirectory, this);
+        ModPacks = new ModPackAdapter(ModPacksDirectory, this);
+        Resources = new ResourceAdapter(ResourcesDirectory, this);
     }
     
     internal Result<bool, InvalidDataException> Validate()

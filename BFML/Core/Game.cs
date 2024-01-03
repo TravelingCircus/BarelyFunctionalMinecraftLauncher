@@ -23,6 +23,8 @@ internal sealed class Game
 
     public Task Launch(string nickname, MVersion vanilla, bool isModded, Forge forge = null, ModPack modPack = null)
     {
+        Forge[] f = _repo.LoadForgeList().Result;
+        
         LaunchConfiguration launchConfig = new LaunchConfiguration()
         {
             Nickname = nickname,

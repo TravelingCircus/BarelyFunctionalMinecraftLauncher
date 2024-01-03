@@ -5,7 +5,7 @@ using Utils;
 
 namespace BFML.Core;
 
-internal sealed class Forge : IXmlSerializable
+public sealed class Forge : IXmlSerializable //Has to be public for serialization
 {
     internal string Name { get; private set; }
     internal Version TargetVanillaVersion { get; private set; }
@@ -16,11 +16,18 @@ internal sealed class Forge : IXmlSerializable
 
     public void ReadXml(XmlReader reader)
     {
-        throw new System.NotImplementedException();
+        reader.ReadToFollowing("Name");
+        Name = reader.ReadElementString("Name");
+        TargetVanillaVersion = new Version(reader.ReadElementString("Vanilla"));
+        SubVersion = new Version(reader.ReadElementString("SubVersion"));
+        HasJarFile = bool.Parse(reader.ReadElementString("HasJarFile"));
     }
 
     public void WriteXml(XmlWriter writer)
     {
-        throw new System.NotImplementedException();
+        writer.WriteElementString("Name", Name);
+        writer.WriteElementString("Vanilla", TargetVanillaVersion.ToString());
+        writer.WriteElementString("SubVersion", SubVersion.ToString());
+        writer.WriteElementString("HasJarFile", HasJarFile.ToString());
     }
 }
