@@ -8,6 +8,7 @@
     xmlns:xrpb="http://XamlRadialProgressBar/DotNet"
     Width="1200"
     Height="800"
+    Title="BFML"
     AllowsTransparency="True"
     Background="Transparent"
     MouseDown="MoveWindow"
@@ -342,8 +343,9 @@
                                     Grid.Row="0"
                                     Height="35"
                                     Width="35"
-                                    VerticalAlignment="Center"
                                     HorizontalAlignment="Center"
+                                    VerticalAlignment="Center"
+                                    IsHitTestVisible="False"
                                     Source="/WPF/Images/FolderIcon.png"
                                     Stretch="Fill" />
                                 
@@ -363,6 +365,7 @@
                                     Width="35"
                                     HorizontalAlignment="Center"
                                     VerticalAlignment="Center"
+                                    IsHitTestVisible="False"
                                     Source="/WPF/Images/RecycleIcon.png"
                                     Stretch="Fill" />
                             </Grid>
@@ -372,13 +375,49 @@
                 
                 <Grid 
                     Grid.Column="2"
-                    Width="380">
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="150" />
-                        <RowDefinition Height="650" />
-                    </Grid.RowDefinitions>
+                    Width="375">
                     
-                    <TextBlock
+                    <TabControl
+                        Height="784"
+                        Background="Transparent"
+                        HorizontalContentAlignment="Center"
+                        BorderThickness="0">
+                        
+                        <TabItem
+                            Header="Setting"
+                            Template="{DynamicResource CentralTabItem}">
+                            
+                        </TabItem>
+                        
+                        <TabItem 
+                            Header="ChangeLog"
+                            Template="{DynamicResource LeftTabItem}">
+                            <Grid>
+                                <Border
+                                    Grid.Column="0"
+                                    Height="720">
+                                    
+                                    <ScrollViewer
+                                        Margin="0, 0, 25, 0">
+                                        <Grid Height="5000">
+                                            <TextBlock
+                                                x:Name="ChangeLog"
+                                                Margin="0,0,10,0"
+                                                FontFamily="Minecraft"
+                                                FontSize="18"
+                                                Foreground="#dcdcdc"
+                                                Text="Alif-Lam-Ra. Dies ist ein Buch, das Wir zu dir hinabgesandt haben, damit du die Menschen mit der Erlaubnis ihres Herrn aus den Finsternissen hinaus ins Licht bringst, auf den Weg des Allmächtigen und Lobenswürdigen, Aliflamra kitabun anzalnahu ilayka litukhrija annasa mina aththulumati ila annoori biithni rabbihim ila sirati alAAazeezi alhameed (den Weg) Allahs, Dessen ist, was in den Himmeln und was auf der Erde. Und wehe den Ungläubigen vor einer strengen Strafe! Allahi allathee lahu ma fee assamawati wama fee alardi wawaylun lilkafireena min AAathabin shadeed Diejenigen, die das diesseitige Leben mehr lieben als das Jenseits und von Allahs Weg abhalten und danach trachten, ihn krumm zu machen; sie befinden sich in weit(reichend)em Irrtum. Allatheena yastahibboona alhayata addunya AAala alakhirati wayasuddoona AAan sabeeli Allahi wayabghoonaha AAiwajan olaika fee dalalin baAAeed Und Wir haben keinen Gesandten gesandt, außer in der Sprache seines Volkes, damit er ihnen (die Botschaft) klar macht. Allah läßt dann in die Irre gehen, wen Er will, und leitet recht, wen Er will. Und Er ist der Allmächtige und Allweise. Wama arsalna min rasoolin illa bilisani qawmihi liyubayyina lahum fayudillu Allahu man yashao wayahdee man yashao wahuwa alAAazeezu alhakeem Und Wir sandten ja bereits Musa mit Unseren Zeichen: Bringe dein Volk aus den Finsternissen hinaus ins Licht, und erinnere sie an die Tage Allahs. Darin sind wahrlich Zeichen für jeden sehr Standhaften und sehr Dankbaren. Walaqad arsalna moosa biayatina an akhrij qawmaka mina aththulumati ila annoori wathakkirhum biayyami Allahi inna fee thalika laayatin likulli sabbarin shakoor وَمَآ أَرۡسَلۡنَا مِن رَّسُولٍ إِلَّا بِلِسَانِ قَوۡمِهِۦ لِيُبَيِّنَ لَهُمۡۖ فَيُضِلُّ ٱللَّهُ مَن يَشَآءُ وَيَهۡدِي مَن يَشَآءُۚ وَهُوَ ٱلۡعَزِيزُ ٱلۡحَكِي"
+                                                TextWrapping="Wrap" />
+                                        </Grid>
+                                    </ScrollViewer>
+                                </Border>
+                            </Grid>
+                        </TabItem>
+
+                        <TabItem Header="ModPack" Template="{DynamicResource RightTabItem}" />
+                    </TabControl>
+                    
+                    <!--<TextBlock
                         Grid.Row="0"
                         Height="40"
                         Margin="0,0,0,0"
@@ -511,7 +550,7 @@
                                 TextWrapping="Wrap" />
 
                         </Grid>
-                    </ScrollViewer>
+                    </ScrollViewer>-->
                 </Grid>
             </Grid>
             <Border
