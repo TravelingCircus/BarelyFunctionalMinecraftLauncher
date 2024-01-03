@@ -27,7 +27,7 @@ internal abstract class Repo
     
     internal async Task<Forge[]> LoadForgeList()
     {
-        return (await RepoIo.Forge.LoadForgeList())
+        return (await RepoIo.Forge.LoadAllVersions())
             .Where(ForgeFilter)
             .ToArray();
     }

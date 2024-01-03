@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
 using System.Xml.Serialization;
 using BFML.Core;
@@ -14,21 +15,21 @@ internal sealed class ForgeAdapter : RepoAdapter
     
     internal ForgeAdapter(DirectoryInfo directory, RepoIO repoIo) : base(directory, repoIo) { }
 
-    internal Task<Forge[]> LoadForgeList()
-    {
-        List<Forge> forges = new List<Forge>();
-        foreach (DirectoryInfo forgeDirectory in AdapterDirectory.GetDirectories())
-        {
-            Result<Forge> result = LoadForge(forgeDirectory);
-            if (result.IsOk) forges.Add(result.Value);
-        }
-        return Task.FromResult(forges.ToArray());
-    }
+    internal Task<Forge[]> LoadAllVersions() => Task.FromResult(EnumerateVersions().ToArray());
 
+    internal IEnumerable<Forge> EnumerateVersions() => EnumerateVersionsInternal().Select(entry => entry.Forge);
+    
     internal Task<bool> IsInstalled(Forge forge)
     {
+        Result<(DirectoryInfo Version, DirectoryInfo Libs)> forgeFilesResult = FindForgeFiles(forge);
+        if (!forgeFilesResult.IsOk) return Task.FromResult(false);
+
+        (DirectoryInfo Version, DirectoryInfo Libs) forgeFiles = forgeFilesResult.Value;
+
+        DirectoryInfo gameRoot = RepoIo.Configs.LoadLocalPrefs().Result.GameDirectory;
+
         throw new NotImplementedException();
-        DirectoryInfo librariesDirectory = new DirectoryInfo(RepoIo.Configs.LoadLocalPrefs().Result.GameDirectory+"\\libraries");
+        return Task.FromResult<bool>(true);
     }
 
     internal Task<bool> Install(Forge forge)
@@ -36,7 +37,7 @@ internal sealed class ForgeAdapter : RepoAdapter
         throw new NotImplementedException();
     }
 
-    private Result<Forge> LoadForge(DirectoryInfo directory)
+    private Result<Forge> LoadForgeDescription(DirectoryInfo directory)
     {
         try
         {
@@ -52,9 +53,41 @@ internal sealed class ForgeAdapter : RepoAdapter
             return Result<Forge>.Err(e);
         }
     }
-    
-    private DirectoryInfo FindForgeDirectory()
+
+    private Result<(DirectoryInfo Version, DirectoryInfo Libs)> FindForgeFiles(Forge forge)
     {
-        throw new NotImplementedException();
-    } 
+        DirectoryInfo forgeFiles = EnumerateVersionsInternal()
+            .FirstOrDefault(entry => entry.Forge.Name == forge.Name).ForgeFiles;
+        if (forgeFiles is null || !forgeFiles.Exists)
+        {
+            return Result<(DirectoryInfo Forge, DirectoryInfo Libs)>
+                .Err(new Exception($"Forge version:{forge.Name} not found, or files directory does not exist."));
+        }
+
+        DirectoryInfo versionDirectory = new DirectoryInfo(forgeFiles + $"\\{forge.Name}");
+        DirectoryInfo librariesDirectory = new DirectoryInfo(forgeFiles + "\\libraries");
+
+        if (!versionDirectory.Exists)
+        {
+            return Result<(DirectoryInfo Version, DirectoryInfo Libs)>
+                .Err(new Exception($"Forge version {forge.Name} does not have a version directory."));
+        }
+        
+        if (!librariesDirectory.Exists)
+        {
+            return Result<(DirectoryInfo Version, DirectoryInfo Libs)>
+                .Err(new Exception($"Forge version {forge.Name} does not have a `libraries` directory."));
+        }
+        
+        return Result<(DirectoryInfo Version, DirectoryInfo Libs)>.Ok((versionDirectory, librariesDirectory));
+    }
+    
+    private IEnumerable<(Forge Forge, DirectoryInfo ForgeFiles)> EnumerateVersionsInternal()
+    {
+        foreach (DirectoryInfo forgeDirectory in AdapterDirectory.GetDirectories())
+        {
+            Result<Forge> result = LoadForgeDescription(forgeDirectory);
+            if (result.IsOk) yield return (result.Value, new DirectoryInfo(forgeDirectory+"\\ForgeFiles"));
+        }
+    }
 }
