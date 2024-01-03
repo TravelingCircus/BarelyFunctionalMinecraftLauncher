@@ -1,15 +1,14 @@
 ﻿<ResourceDictionary
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:local="clr-namespace:BFML.WPF">
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
 
-    <Style x:Key="ToggleStyle1" TargetType="{x:Type local:Toggle}">
+    <Style x:Key="ToggleStyle1" TargetType="{x:Type ToggleButton}">
         <Setter Property="MaxHeight" Value="28" />
         <Setter Property="MaxWidth" Value="56" />
         <Setter Property="MinHeight" Value="28" />
         <Setter Property="MinWidth" Value="56" />
     </Style>
-    <ControlTemplate x:Key="ToggleTemplate1" TargetType="{x:Type local:Toggle}">
+    <ControlTemplate x:Key="ToggleTemplate1" TargetType="{x:Type ToggleButton}">
         <Border
             x:Name="BackOfSwitch"
             Background="#FF595959"
