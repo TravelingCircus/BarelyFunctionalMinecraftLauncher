@@ -7,7 +7,7 @@ namespace BFML.Repository.RepoIOAdapters;
 
 internal sealed class ResourceAdapter : RepoAdapter
 {
-    internal ResourceAdapter(DirectoryInfo directory) : base(directory) { }
+    internal ResourceAdapter(DirectoryInfo directory, RepoIO repoIo) : base(directory, repoIo) { }
     
     internal Task<FileInfo> LoadFont()
     {

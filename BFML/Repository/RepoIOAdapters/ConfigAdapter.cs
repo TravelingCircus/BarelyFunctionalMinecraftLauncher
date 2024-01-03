@@ -10,7 +10,7 @@ internal sealed class ConfigAdapter : RepoAdapter
 {
     private FileInfo LocalPrefsFile => new FileInfo(AdapterDirectory.FullName + "\\LocalPrefs.xml");
 
-    internal ConfigAdapter(DirectoryInfo directory) : base(directory) { }
+    internal ConfigAdapter(DirectoryInfo directory, RepoIO repoIo) : base(directory, repoIo) { }
 
     internal Task<LocalPrefs> LoadLocalPrefs()
     {
