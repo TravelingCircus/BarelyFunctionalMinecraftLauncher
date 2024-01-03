@@ -18,8 +18,8 @@ internal sealed class ForgeAdapter : RepoAdapter
     internal Task<Forge[]> LoadAllVersions() => Task.FromResult(EnumerateVersions().ToArray());
 
     internal IEnumerable<Forge> EnumerateVersions() => EnumerateVersionsInternal().Select(entry => entry.Forge);
-    
-    internal Task<bool> IsInstalled(Forge forge)
+
+    internal Task<bool> IsInstalled(Forge forge, FileValidation validationMode)
     {
         Result<(DirectoryInfo Version, DirectoryInfo Libs)> forgeFilesResult = FindForgeFiles(forge);
         if (!forgeFilesResult.IsOk) return Task.FromResult(false);
@@ -28,13 +28,34 @@ internal sealed class ForgeAdapter : RepoAdapter
 
         DirectoryInfo gameRoot = RepoIo.Configs.LoadLocalPrefs().Result.GameDirectory;
 
-        throw new NotImplementedException();
-        return Task.FromResult<bool>(true);
+        SearchOption searchOption = validationMode > FileValidation.Heuristic
+            ? SearchOption.AllDirectories
+            : SearchOption.TopDirectoryOnly;
+        
+        bool libs = forgeFiles.Libs.IsSubset(new DirectoryInfo(gameRoot + "\\libraries"), searchOption);
+        bool version = forgeFiles.Version.IsSubset(new DirectoryInfo(gameRoot + $"\\versions\\{forge.Name}"), searchOption);
+
+        return Task.FromResult(libs && version);
     }
 
     internal Task<bool> Install(Forge forge)
     {
-        throw new NotImplementedException();
+        Result<(DirectoryInfo Version, DirectoryInfo Libs)> forgeFilesResult = FindForgeFiles(forge);
+        if (!forgeFilesResult.IsOk) return Task.FromResult(false);
+
+        (DirectoryInfo Version, DirectoryInfo Libs) forgeFiles = forgeFilesResult.Value;
+        
+        DirectoryInfo gameRoot = RepoIo.Configs.LoadLocalPrefs().Result.GameDirectory;
+
+        DirectoryInfo gameLibs = new DirectoryInfo(gameRoot + "\\libraries");
+        if (gameLibs.Exists) gameLibs.Delete(true);
+        if (!forgeFiles.Libs.CopyTo(gameLibs, true)) return Task.FromResult(false);
+
+        DirectoryInfo gameVersion = new DirectoryInfo(gameRoot + $"\\versions\\{forge.Name}");
+        if (gameVersion.Exists) gameVersion.Delete(true);
+        if (!forgeFiles.Version.CopyTo(gameVersion, true)) return Task.FromResult(false);
+        
+        return Task.FromResult(true);
     }
 
     private Result<Forge> LoadForgeDescription(DirectoryInfo directory)

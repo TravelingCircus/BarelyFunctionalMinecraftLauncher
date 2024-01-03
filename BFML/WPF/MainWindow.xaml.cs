@@ -45,7 +45,11 @@ public partial class MainWindow
     {
         PlayButton.IsEnabled = false;
         
-        MVersion vanilla = await _game.Versions.GetVersionAsync("1.18.2");
+        
+        var d = await _repo.LoadForgeList();
+        bool isInstalled = await _repo.ValidateForgeInstalled(d.First(), _repo.LocalPrefs.FileValidationMode);
+        MVersion vanilla = await _game.Versions.GetVersionAsync("1.18.2-forge-40.2.0");
+        
         await _game.Launch(_repo.LocalPrefs.Nickname, vanilla, false);
         
         await Task.Delay(10000);

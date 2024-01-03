@@ -32,6 +32,13 @@ internal abstract class Repo
             .ToArray();
     }
 
+    internal async Task<bool> ValidateForgeInstalled(Forge forge, FileValidation validationMode)
+    {
+        bool wasInstalled = await RepoIo.Forge.IsInstalled(forge, validationMode);
+
+        return await RepoIo.Forge.Install(forge);
+    }
+
     protected abstract bool ModPackFilter(ModPack modPack);
 
     internal async Task<ModPack[]> LoadModPackList()
