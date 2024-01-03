@@ -83,16 +83,10 @@
       <Content Include="bin\Debug\net6.0-windows\Repo\Configs\LocalPrefs.xml">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </Content>
-      <Content Include="bin\Debug\net6.0-windows\Repo\Forge\1.18.2-forge-40.2.0.zip">
-        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      </Content>
-      <Content Include="bin\Debug\net6.0-windows\Repo\ModPacks\TestModPack\Manifest.xml">
-        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      </Content>
-      <Content Include="bin\Debug\net6.0-windows\Repo\ModPacks\TestModPack\Mods.zip">
-        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      </Content>
-      <Content Include="bin\Debug\net6.0-windows\Repo\ModPacks\TestModPack\Mods\emeraldequipment-forge-1.18.2-v1.0.1.jar" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Folder Include="bin\Debug\net6.0-windows\Repo\Forge\" />
     </ItemGroup>
 
 </Project>

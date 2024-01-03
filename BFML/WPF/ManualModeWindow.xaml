@@ -6,7 +6,6 @@
     xmlns:glWpfControl="clr-namespace:OpenTK.Wpf;assembly=GLWpfControl"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:xrpb="http://XamlRadialProgressBar/DotNet"
-    xmlns:wpf="clr-namespace:BFML.WPF"
     Width="1200"
     Height="800"
     AllowsTransparency="True"
@@ -15,8 +14,6 @@
     ResizeMode="NoResize"
     WindowStyle="None"
     mc:Ignorable="d">
-
-    <Window.Resources />
 
     <Border 
         Background="#383838"
@@ -45,8 +42,9 @@
                             Grid.Column="0"
                             Width="375"
                             Height="50"
+                            Margin="0, 10, 0, 0"
                             HorizontalAlignment="Center"
-                            VerticalAlignment="Center"
+                            VerticalAlignment="Top"
                             Fill="#454545"
                             RadiusX="5"
                             RadiusY="5" />
@@ -68,7 +66,7 @@
                             HorizontalAlignment="Left"
                             VerticalAlignment="Center"
                             FontFamily="Minecraft"
-                            FontSize="32"
+                            FontSize="24"
                             Background="Transparent"
                             BorderThickness="0"
                             Foreground="#dcdcdc"
@@ -176,7 +174,7 @@
                                 <ToggleButton
                                     Grid.Column="1"
                                     x:Name="LauncherMode"
-                                    Margin="25, 12.5"
+                                    Margin="12.5, 12.5"
                                     Cursor="Hand"
                                     Template="{DynamicResource ToggleTemplate1}" />
                                 <TextBlock
@@ -223,7 +221,7 @@
                                     <ToggleButton
                                         Grid.Column="1"
                                         x:Name="IsModded"
-                                        Margin="25, 12.5"
+                                        Margin="12.5, 12.5"
                                         Cursor="Hand"
                                         Template="{DynamicResource ToggleTemplate1}" />
                                     <TextBlock
@@ -298,7 +296,7 @@
                         
                         <Grid
                             Grid.Row="3"
-                            Width="350"
+                            Width="375"
                             Margin="0,10,0,10">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="275" />
@@ -311,6 +309,7 @@
                                 Height="100"
                                 Content="Play"
                                 Cursor="Hand"
+                                Margin="37.5, 0, 0, 0"
                                 Background="#ff9a3c"
                                 FontFamily="Minecraft"
                                 FontSize="60"
@@ -320,7 +319,10 @@
                             
                             <Grid
                                 Grid.Column="1"
-                                Height="100">
+                                Width="50"
+                                Height="100"
+                                Margin="0, 0, 35, 0"
+                                HorizontalAlignment="Right">
                                 <Grid.RowDefinitions>
                                     <RowDefinition Height="50" />
                                     <RowDefinition Height="50" />
