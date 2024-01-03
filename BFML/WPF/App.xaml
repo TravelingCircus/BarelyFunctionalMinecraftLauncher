@@ -11,6 +11,7 @@
                 <ResourceDictionary Source="Styles/PlayButtonDictionary.xaml" />
                 <ResourceDictionary Source="Styles/ToggleSwitchDictionary.xaml" />
                 <ResourceDictionary Source="Styles/DefaultButtonDictionary.xaml" />
+                <ResourceDictionary Source="Styles/TabControlDictionary.xaml" />
                 <ResourceDictionary Source="Styles/TitleButton.xaml" />
                 <ResourceDictionary Source="Styles/SliderDictionary.xaml" />
                 <ResourceDictionary Source="Styles/Transparent.xaml" />

@@ -15,14 +15,14 @@ using Utils.Async;
 
 namespace BFML.WPF;
 
-public partial class MainWindow
+public partial class ManualModeWindow
 {
     private readonly ManualModeRepo _repo;
     private readonly LoadingScreen _loadingScreen;
     private readonly Game _game;
     private SkinPreviewRenderer _skinPreviewRenderer;
 
-    internal MainWindow(ManualModeRepo repo)
+    internal ManualModeWindow(ManualModeRepo repo)
     {
         _repo = repo;
         _game = new Game(_repo);

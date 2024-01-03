@@ -1,0 +1,911 @@
+﻿<Window
+    x:Class="BFML.WPF.ManualModeWindow"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:glWpfControl="clr-namespace:OpenTK.Wpf;assembly=GLWpfControl"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:xrpb="http://XamlRadialProgressBar/DotNet"
+    Width="1200"
+    Height="700"
+    Title="BFML"
+    AllowsTransparency="True"
+    Background="Transparent"
+    MouseDown="MoveWindow"
+    ResizeMode="NoResize"
+    WindowStyle="None"
+    mc:Ignorable="d">
+
+    <Border 
+        Background="#383838"
+        CornerRadius="8">
+        
+        <Grid>
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="400" />
+                    <ColumnDefinition Width="400" />
+                    <ColumnDefinition Width="400" />
+                </Grid.ColumnDefinitions>
+                
+                <Grid Grid.Column="0">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="75" />
+                        <RowDefinition Height="550" />
+                        <RowDefinition Height="75" />
+                    </Grid.RowDefinitions>
+                    
+                    <Grid
+                        Grid.Row="0"
+                        Width="350" >
+                        
+                        <Rectangle
+                            Grid.Column="0"
+                            Width="350"
+                            Height="50"
+                            Margin="0, 10, 0, 0"
+                            HorizontalAlignment="Center"
+                            VerticalAlignment="Top"
+                            Fill="#454545"
+                            RadiusX="5"
+                            RadiusY="5" />
+                        <Rectangle
+                            Grid.Column="0"
+                            Width="350"
+                            Height="5"
+                            Margin="0,0,0,15"
+                            HorizontalAlignment="Center"
+                            VerticalAlignment="Bottom"
+                            Fill="#ff9a3c"
+                            RadiusX="3"
+                            RadiusY="3"
+                            Style="{DynamicResource GlowingRectangle}" />
+                        <TextBox
+                            Grid.Column="0"
+                            x:Name="Nickname"
+                            Margin="10, 0, 0, 10"
+                            HorizontalAlignment="Left"
+                            VerticalAlignment="Center"
+                            FontFamily="Minecraft"
+                            FontSize="22"
+                            Background="Transparent"
+                            BorderThickness="0"
+                            Foreground="#dcdcdc"
+                            Text="IDI NAHUI" />
+                    </Grid>
+                    
+                    <glWpfControl:GLWpfControl 
+                        Grid.Row="1" 
+                        x:Name="OpenTkControl"
+                        Render="SkinPreviewOnRender"
+                        Height="550"
+                        Width="350"
+                        Margin="0,0,0,0"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Center" />
+                    
+                    <Slider 
+                        Grid.Row="2" 
+                        x:Name="SkinSlider"
+                        Width="350"
+                        Height="25"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Center"
+                        Margin="0,0,0,0"
+                        Style="{DynamicResource Horizontal_Slider}"
+                        Template="{DynamicResource Slider2}" />
+                </Grid>
+                
+                <Border 
+                    Grid.Column="1"
+                    Width="400"
+                    Height="680"
+                    VerticalAlignment="Center"
+                    Background="#434343"
+                    CornerRadius="5">
+                    
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="300" />
+                            <RowDefinition Height="55" />
+                            <RowDefinition Height="200" />
+                            <RowDefinition Height="125" />
+                        </Grid.RowDefinitions>
+                        
+                        <Border
+                            Grid.Row="0"
+                            Width="275"
+                            Height="275"
+                            Margin="0,12.5,0, 12.5"
+                            Background="#383838"
+                            CornerRadius="5">
+                                
+                            <StackPanel Orientation="Horizontal">
+                                
+                                <TextBlock
+                                    Width="75"
+                                    VerticalAlignment="Center"
+                                    FontFamily="Minecraft"
+                                    FontSize="60"
+                                    Foreground="#ff9a3c"
+                                    LineHeight="60"
+                                    LineStackingStrategy="BlockLineHeight"
+                                    Style="{DynamicResource GlowText}"
+                                    Text="BFML"
+                                    TextAlignment="Center"
+                                    TextWrapping="Wrap" />
+
+                                <TextBlock
+                                    Width="210"
+                                    Margin="-15,25,0,0"
+                                    VerticalAlignment="Center"
+                                    FontFamily="Minecraft"
+                                    FontSize="36"
+                                    Foreground="#dcdcdc"
+                                    LineHeight="60"
+                                    Text="arely unctional inecraft auncher"
+                                    TextWrapping="Wrap" />
+                            </StackPanel>
+                        </Border>
+                        
+                        <Border
+                            Grid.Row="1"
+                            Width="350"
+                            Height="50"
+                            VerticalAlignment="Top"
+                            Background="#383838"
+                            CornerRadius="5">
+                                
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="125"/>
+                                    <ColumnDefinition Width="100"/>
+                                    <ColumnDefinition Width="125"/>
+                                </Grid.ColumnDefinitions>
+                                
+                                <TextBlock
+                                    Grid.Column="0"
+                                    Margin="12.5"
+                                    FontSize="20"
+                                    FontFamily="Minecraft"
+                                    Foreground="#dcdcdc"
+                                    Text="MANUAL"
+                                    TextAlignment="Left" />
+                                <ToggleButton
+                                    Grid.Column="1"
+                                    x:Name="LauncherMode"
+                                    Margin="12.5, 12.5"
+                                    Cursor="Hand"
+                                    Template="{DynamicResource ToggleTemplate1}" />
+                                <TextBlock
+                                    Grid.Column="2"
+                                    Margin="12.5"
+                                    FontSize="20"
+                                    FontFamily="Minecraft"
+                                    Foreground="#dcdcdc"
+                                    Text="SERVER"
+                                    TextAlignment="Right" />
+                            </Grid>
+                        </Border>
+                        
+                        <Border
+                            Grid.Row="2"
+                            Width="350"
+                            Background="#383838"
+                            CornerRadius="5">
+                            
+                            <Grid>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="50" />
+                                    <RowDefinition Height="50" />
+                                    <RowDefinition Height="50" />
+                                    <RowDefinition Height="50" />
+                                </Grid.RowDefinitions>
+                            
+                                <Grid Grid.Row="0">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="125"/>
+                                        <ColumnDefinition Width="100"/>
+                                        <ColumnDefinition Width="125"/>
+                                    </Grid.ColumnDefinitions>
+                                    
+                                    <TextBlock
+                                        Grid.Column="0"
+                                        Width="100"
+                                        Margin="12.5"
+                                        FontSize="20"
+                                        FontFamily="Minecraft"
+                                        Foreground="#dcdcdc"
+                                        Text="Vanilla"
+                                        TextAlignment="Left" />
+                                    <ToggleButton
+                                        Grid.Column="1"
+                                        x:Name="IsModded"
+                                        Margin="12.5, 12.5"
+                                        Cursor="Hand"
+                                        Template="{DynamicResource ToggleTemplate1}" />
+                                    <TextBlock
+                                        Grid.Column="2"
+                                        Width="100"
+                                        Margin="12.5"
+                                        FontSize="20"
+                                        FontFamily="Minecraft"
+                                        Foreground="#dcdcdc"
+                                        Text="Modded"
+                                        TextAlignment="Right" />
+                                </Grid>
+                                
+                                <StackPanel 
+                                    Grid.Row="1" 
+                                    Orientation="Horizontal">
+                                    <TextBlock
+                                        Width="120"
+                                        Margin="12.5, 12.5, 7.5, 12.5"
+                                        FontSize="20"
+                                        FontFamily="Minecraft"
+                                        Foreground="#dcdcdc"
+                                        Text="Minecraft"
+                                        TextAlignment="Left" />
+                                    <ComboBox
+                                        x:Name="MinecraftVersion"
+                                        Width="197.5"
+                                        Margin="0, 12.5, 0, 12.5"
+                                        FontSize="20"
+                                        FontFamily="Minecraft"
+                                        Foreground="#dcdcdc" />
+                                </StackPanel>
+                                
+                                <StackPanel 
+                                    Grid.Row="2" 
+                                    Orientation="Horizontal">
+                                    <TextBlock
+                                        Width="120"
+                                        Margin="12.5, 12.5, 7.5, 12.5"
+                                        FontSize="20"
+                                        FontFamily="Minecraft"
+                                        Foreground="#dcdcdc"
+                                        Text="Forge"
+                                        TextAlignment="Left" />
+                                    <ComboBox
+                                        x:Name="ForgeVersion"
+                                        Width="197.5"
+                                        Margin="0, 12.5, 0, 12.5"
+                                        FontSize="20"
+                                        FontFamily="Minecraft"
+                                        Foreground="#dcdcdc" />
+                                </StackPanel>
+                                
+                                <StackPanel 
+                                    Grid.Row="3" 
+                                    Orientation="Horizontal">
+                                    <TextBlock
+                                        Width="120"
+                                        Margin="12.5, 12.5, 7.5, 12.5"
+                                        FontSize="20"
+                                        FontFamily="Minecraft"
+                                        Foreground="#dcdcdc"
+                                        Text="ModPack"
+                                        TextAlignment="Left" />
+                                    <ComboBox
+                                        x:Name="ModPack"
+                                        Width="197.5"
+                                        Margin="0, 12.5, 0, 12.5"
+                                        FontSize="20"
+                                        FontFamily="Minecraft"
+                                        Foreground="#dcdcdc" />
+                                </StackPanel>
+                            </Grid>
+                        </Border>
+                        
+                        <Grid
+                            Grid.Row="3"
+                            Width="375"
+                            VerticalAlignment="Center">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="275" />
+                                <ColumnDefinition Width="100" />
+                            </Grid.ColumnDefinitions>
+                            
+                            <Button
+                                Grid.Column="0"
+                                x:Name="PlayButton"
+                                Height="100"
+                                Content="Play"
+                                Cursor="Hand"
+                                Margin="37.5, 0, 0, 0"
+                                Background="#ff9a3c"
+                                FontFamily="Minecraft"
+                                FontSize="60"
+                                Foreground="#383838"
+                                Style="{DynamicResource PlayButton}"
+                                Click="OnPlayButton" />
+                            
+                            <Grid
+                                Grid.Column="1"
+                                Width="50"
+                                Height="100"
+                                Margin="0, 0, 35, 0"
+                                HorizontalAlignment="Right">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="50" />
+                                    <RowDefinition Height="50" />
+                                </Grid.RowDefinitions>
+                            
+                                <Button
+                                    Grid.Row="0"
+                                    Height="45"
+                                    Width="45"
+                                    HorizontalAlignment="Center"
+                                    VerticalAlignment="Center"
+                                    Background="#383838"
+                                    Cursor="Hand"
+                                    Style="{DynamicResource DefaultButton}"
+                                    Click="OnOpenFolderButton" />
+                                <Image
+                                    Grid.Row="0"
+                                    Height="35"
+                                    Width="35"
+                                    HorizontalAlignment="Center"
+                                    VerticalAlignment="Center"
+                                    IsHitTestVisible="False"
+                                    Source="/WPF/Images/FolderIcon.png"
+                                    Stretch="Fill" />
+                                
+                                <Button
+                                    Grid.Row="1"
+                                    Height="45"
+                                    Width="45"
+                                    HorizontalAlignment="Center"
+                                    VerticalAlignment="Center"
+                                    Background="#383838"
+                                    Cursor="Hand"
+                                    Style="{DynamicResource DefaultButton}"
+                                    Click="OnReloadFiles" />
+                                <Image
+                                    Grid.Row="1"
+                                    Height="35"
+                                    Width="35"
+                                    HorizontalAlignment="Center"
+                                    VerticalAlignment="Center"
+                                    IsHitTestVisible="False"
+                                    Source="/WPF/Images/RecycleIcon.png"
+                                    Stretch="Fill" />
+                            </Grid>
+                        </Grid>
+                    </Grid>
+                </Border>
+                
+                <Grid 
+                    Grid.Column="2"
+                    Width="375">
+                    
+                    <TabControl
+                        Height="684"
+                        Background="Transparent"
+                        HorizontalContentAlignment="Center"
+                        BorderThickness="0">
+
+                        <TabItem 
+                            Header="ChangeLog"
+                            Template="{DynamicResource LeftTabItem}">
+                            <Grid>
+                                <Border
+                                    Grid.Column="0"
+                                    Height="620">
+                                    
+                                    <ScrollViewer
+                                        Margin="0, 0, 17.5, 0">
+                                        <Grid Height="5000">
+                                            <TextBlock
+                                                x:Name="ChangeLog"
+                                                Margin="0,0,10,0"
+                                                FontFamily="Minecraft"
+                                                FontSize="18"
+                                                Foreground="#dcdcdc"
+                                                Text="Alif-Lam-Ra. Dies ist ein Buch, das Wir zu dir hinabgesandt haben, damit du die Menschen mit der Erlaubnis ihres Herrn aus den Finsternissen hinaus ins Licht bringst, auf den Weg des Allmächtigen und Lobenswürdigen, Aliflamra kitabun anzalnahu ilayka litukhrija annasa mina aththulumati ila annoori biithni rabbihim ila sirati alAAazeezi alhameed (den Weg) Allahs, Dessen ist, was in den Himmeln und was auf der Erde. Und wehe den Ungläubigen vor einer strengen Strafe! Allahi allathee lahu ma fee assamawati wama fee alardi wawaylun lilkafireena min AAathabin shadeed Diejenigen, die das diesseitige Leben mehr lieben als das Jenseits und von Allahs Weg abhalten und danach trachten, ihn krumm zu machen; sie befinden sich in weit(reichend)em Irrtum. Allatheena yastahibboona alhayata addunya AAala alakhirati wayasuddoona AAan sabeeli Allahi wayabghoonaha AAiwajan olaika fee dalalin baAAeed Und Wir haben keinen Gesandten gesandt, außer in der Sprache seines Volkes, damit er ihnen (die Botschaft) klar macht. Allah läßt dann in die Irre gehen, wen Er will, und leitet recht, wen Er will. Und Er ist der Allmächtige und Allweise. Wama arsalna min rasoolin illa bilisani qawmihi liyubayyina lahum fayudillu Allahu man yashao wayahdee man yashao wahuwa alAAazeezu alhakeem Und Wir sandten ja bereits Musa mit Unseren Zeichen: Bringe dein Volk aus den Finsternissen hinaus ins Licht, und erinnere sie an die Tage Allahs. Darin sind wahrlich Zeichen für jeden sehr Standhaften und sehr Dankbaren. Walaqad arsalna moosa biayatina an akhrij qawmaka mina aththulumati ila annoori wathakkirhum biayyami Allahi inna fee thalika laayatin likulli sabbarin shakoor وَمَآ أَرۡسَلۡنَا مِن رَّسُولٍ إِلَّا بِلِسَانِ قَوۡمِهِۦ لِيُبَيِّنَ لَهُمۡۖ فَيُضِلُّ ٱللَّهُ مَن يَشَآءُ وَيَهۡدِي مَن يَشَآءُۚ وَهُوَ ٱلۡعَزِيزُ ٱلۡحَكِي"
+                                                TextWrapping="Wrap" />
+                                        </Grid>
+                                    </ScrollViewer>
+                                </Border>
+                            </Grid>
+                        </TabItem>
+                        
+                        <TabItem
+                            Header="Setting"
+                            Template="{DynamicResource CentralTabItem}">
+                            <StackPanel>
+                                
+                                <Border
+                                    Height="50"
+                                    Margin="0, 5"
+                                    Background="#434343"
+                                    CornerRadius="5">
+                                    
+                                    <StackPanel 
+                                        Orientation="Horizontal">
+                                        
+                                        <TextBlock
+                                            Width="175"
+                                            Margin="12.5"
+                                            FontSize="20"
+                                            FontFamily="Minecraft"
+                                            Foreground="#dcdcdc"
+                                            Text="Minecraft path"
+                                            TextAlignment="Left" />
+                                    </StackPanel>
+                                </Border>
+                                
+                                <Border
+                                    Height="50"
+                                    Margin="0, 5"
+                                    Background="#434343"
+                                    CornerRadius="5">
+                                    
+                                    <StackPanel 
+                                        Orientation="Horizontal">
+                                        
+                                        <TextBlock
+                                            Width="175"
+                                            Margin="12.5"
+                                            FontSize="20"
+                                            FontFamily="Minecraft"
+                                            Foreground="#dcdcdc"
+                                            Text="Files validate"
+                                            TextAlignment="Left" />
+                                        <ComboBox
+                                            x:Name="FilesValidateMode"
+                                            Width="150"
+                                            Margin="0, 12.5"
+                                            FontSize="20"
+                                            FontFamily="Minecraft"
+                                            Foreground="#dcdcdc" />
+                                    </StackPanel>
+                                </Border>
+                                
+                                <Border
+                                    Height="75"
+                                    Margin="0, 5"
+                                    Background="#434343"
+                                    CornerRadius="5">
+                                    
+                                    <Grid>
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="37.5"/>
+                                            <RowDefinition Height="37.5"/>
+                                        </Grid.RowDefinitions>
+                                        
+                                        <StackPanel
+                                            Grid.Row="0"
+                                            Orientation="Horizontal">
+                                            
+                                            <TextBlock
+                                                Width="175"
+                                                Margin="12.5, 6.25"
+                                                FontSize="20"
+                                                FontFamily="Minecraft"
+                                                Foreground="#dcdcdc"
+                                                Text="Allocated Ram"
+                                                TextAlignment="Left" />
+                                            
+                                            <TextBlock
+                                                Width="75"
+                                                Margin="12.5, 6.25"
+                                                FontSize="20"
+                                                FontFamily="Minecraft"
+                                                Foreground="#dcdcdc"
+                                                Text="{Binding ElementName=RamSlider, Path=Value}"
+                                                TextAlignment="Center" />
+                                            
+                                            <TextBlock
+                                                Width="30"
+                                                Margin="0, 6.25"
+                                                FontSize="20"
+                                                FontFamily="Minecraft"
+                                                Foreground="#dcdcdc"
+                                                Text="MB"
+                                                TextAlignment="Center" />
+                                        </StackPanel>
+                                        
+                                        <Slider
+                                            x:Name="RamSlider"
+                                            Grid.Row="1"
+                                            Width="350"
+                                            Height="20"
+                                            Margin="0"
+                                            AutoToolTipPlacement="TopLeft"
+                                            Cursor="Hand"
+                                            IsSnapToTickEnabled="True"
+                                            Maximum="16384"
+                                            Style="{DynamicResource Horizontal_Slider}"
+                                            Template="{DynamicResource Slider}"
+                                            TickFrequency="512">
+                                            <Slider.Resources>
+                                                <Style TargetType="ToolTip">
+                                                    <Setter Property="OverridesDefaultStyle" Value="True" />
+                                                    <Setter Property="SnapsToDevicePixels" Value="True" />
+                                                    <Setter Property="Foreground" Value="#dcdcdc" />
+                                                    <Setter Property="FontFamily" Value="Minecraft" />
+                                                    <Setter Property="FontSize" Value="15" />
+
+                                                    <Setter Property="Template">
+                                                        <Setter.Value>
+                                                            <ControlTemplate TargetType="ToolTip">
+                                                                <ContentPresenter />
+                                                            </ControlTemplate>
+                                                        </Setter.Value>
+                                                    </Setter>
+                                                </Style>
+                                            </Slider.Resources>
+                                        </Slider>
+                                    </Grid>
+                                </Border>
+                                
+                                <Border
+                                    Height="50"
+                                    Margin="0, 5"
+                                    Background="#434343"
+                                    CornerRadius="5">
+                                    
+                                    <StackPanel 
+                                        Orientation="Horizontal">
+                                        
+                                        <TextBlock
+                                            Width="175"
+                                            Margin="12.5"
+                                            FontSize="20"
+                                            FontFamily="Minecraft"
+                                            Foreground="#dcdcdc"
+                                            Text="Fullscreen?"
+                                            TextAlignment="Left" />
+                                        <ToggleButton
+                                            x:Name="Fullscreen"
+                                            Width="75"
+                                            Margin="50, 12.5"
+                                            Cursor="Hand"
+                                            Template="{DynamicResource ToggleTemplate1}" />
+                                    </StackPanel>
+                                </Border>
+                                
+                                <Border
+                                    Height="50"
+                                    Margin="0, 5"
+                                    Background="#434343"
+                                    CornerRadius="5">
+                                    
+                                    <StackPanel 
+                                        Orientation="Horizontal">
+                                        
+                                        <TextBlock
+                                            Width="175"
+                                            Margin="12.5"
+                                            FontSize="20"
+                                            FontFamily="Minecraft"
+                                            Foreground="#dcdcdc"
+                                            Text="Snapshots?"
+                                            TextAlignment="Left" />
+                                        <ToggleButton
+                                            x:Name="Snapshots"
+                                            Width="75"
+                                            Margin="50, 12.5"
+                                            Cursor="Hand"
+                                            Template="{DynamicResource ToggleTemplate1}" />
+                                    </StackPanel>
+                                </Border>
+                                
+                                <Border
+                                    Height="125"
+                                    Margin="0, 5"
+                                    Background="#434343"
+                                    CornerRadius="5">
+                                    
+                                    <Grid>
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="25"/>
+                                            <RowDefinition Height="50"/>
+                                            <RowDefinition Height="50"/>
+                                        </Grid.RowDefinitions>
+                                        
+                                        <TextBlock
+                                            Grid.Row="0"
+                                            Width="175"
+                                            VerticalAlignment="Center"
+                                            FontSize="20"
+                                            FontFamily="Minecraft"
+                                            Foreground="#dcdcdc"
+                                            Text="Config server"
+                                            TextAlignment="Center" />
+                                        
+                                        <StackPanel 
+                                            Grid.Row="1"
+                                            VerticalAlignment="Center"
+                                            Orientation="Horizontal">
+                                        
+                                            <TextBlock
+                                                Width="125"
+                                                Margin="12.5, 0"
+                                                FontSize="20"
+                                                FontFamily="Minecraft"
+                                                Foreground="#dcdcdc"
+                                                Text="IPv4:"
+                                                TextAlignment="Left" />
+                                            <TextBox
+                                                x:Name="ServerIp"
+                                                Width="200"
+                                                FontSize="20"
+                                                FontFamily="Minecraft"
+                                                Foreground="#dcdcdc" 
+                                                Background="#595959"
+                                                BorderThickness="0"
+                                                TextAlignment="Center"
+                                                Text="255.255.255.255" />
+                                        </StackPanel>
+                                        
+                                        <StackPanel 
+                                            Grid.Row="2"
+                                            VerticalAlignment="Center"
+                                            Orientation="Horizontal">
+                                        
+                                            <TextBlock
+                                                Width="125"
+                                                Margin="12.5, 0"
+                                                FontSize="20"
+                                                FontFamily="Minecraft"
+                                                Foreground="#dcdcdc"
+                                                Text="Port:"
+                                                TextAlignment="Left" />
+                                            <TextBox
+                                                x:Name="ServerPort"
+                                                Width="200"
+                                                FontSize="20"
+                                                FontFamily="Minecraft"
+                                                Foreground="#dcdcdc" 
+                                                Background="#595959"
+                                                BorderThickness="0"
+                                                TextAlignment="Center"
+                                                Text="65568" />
+                                        </StackPanel>
+                                    </Grid>
+                                </Border>
+                            </StackPanel>
+                        </TabItem>
+
+                        <TabItem Header="ModPack" Template="{DynamicResource RightTabItem}" />
+                    </TabControl>
+                    
+                    <!--<TextBlock
+                        Grid.Row="0"
+                        Height="40"
+                        Margin="0,0,0,0"
+                        FontFamily="Minecraft"
+                        FontSize="30"
+                        Foreground="#dcdcdc"
+                        Text="Changelog" />
+
+                    <Rectangle
+                        Grid.Row="0"
+                        Height="3"
+                        Margin="0"
+                        Fill="#dcdcdc"
+                        RadiusX="5"
+                        RadiusY="5" />
+                    
+                    <Rectangle
+                        Grid.Row="0"
+                        Margin="346,9,0,674"
+                        Fill="#434343" />
+                    <Rectangle
+                        Grid.Row="0"
+                        Margin="322,0,14,682"
+                        Fill="#434343" />
+
+                    <Button
+                        Grid.Row="0"
+                        Width="39"
+                        Height="26"
+                        Margin="361,0,0,674"
+                        Background="#434343"
+                        Click="ShutDown"
+                        Cursor="Hand"
+                        Style="{DynamicResource TitleButton}" />
+                    <Button
+                        Grid.Row="0"
+                        Width="39"
+                        Height="26"
+                        Margin="322,0,39,674"
+                        Background="#434343"
+                        Click="Minimize"
+                        Cursor="Hand"
+                        Style="{DynamicResource TitleButton}" />
+
+                    <StackPanel
+                        Grid.Row="0"
+                        Width="39"
+                        Height="26"
+                        Margin="361,0,0,674">
+                        <Rectangle
+                            Width="18"
+                            Height="2"
+                            Margin="0,12,0,0"
+                            Fill="#dcdcdc"
+                            IsHitTestVisible="False"
+                            RadiusX="1"
+                            RadiusY="1"
+                            RenderTransformOrigin="0.5,0.5">
+                            <Rectangle.RenderTransform>
+                                <TransformGroup>
+                                    <ScaleTransform />
+                                    <SkewTransform />
+                                    <RotateTransform Angle="45" />
+                                    <TranslateTransform />
+                                </TransformGroup>
+                            </Rectangle.RenderTransform>
+                        </Rectangle>
+                        <Rectangle
+                            Width="18"
+                            Height="2"
+                            Margin="0,-2,0,0"
+                            Fill="#dcdcdc"
+                            IsHitTestVisible="False"
+                            RadiusX="1"
+                            RadiusY="1"
+                            RenderTransformOrigin="0.5,0.5">
+                            <Rectangle.RenderTransform>
+                                <TransformGroup>
+                                    <ScaleTransform />
+                                    <SkewTransform />
+                                    <RotateTransform Angle="-45" />
+                                    <TranslateTransform />
+                                </TransformGroup>
+                            </Rectangle.RenderTransform>
+                        </Rectangle>
+                    </StackPanel>
+                    <StackPanel
+                        Grid.Row="0"
+                        Width="39"
+                        Height="26"
+                        Margin="322,0,39,674">
+                        <Rectangle
+                            Width="14"
+                            Height="2"
+                            Margin="0,12,0,0"
+                            Fill="#dcdcdc"
+                            IsHitTestVisible="False"
+                            RadiusX="1"
+                            RadiusY="1" />
+                    </StackPanel>
+
+                    <Rectangle
+                        Grid.Row="1"
+                        Width="304"
+                        Height="564"
+                        Margin="32,98,64,38"
+                        Fill="#434343"
+                        RadiusX="4"
+                        RadiusY="4" />
+                    <Rectangle
+                        Grid.Row="1"
+                        Width="9"
+                        Height="564"
+                        Margin="352,98,37,38"
+                        Fill="#595959"
+                        RadiusX="2"
+                        RadiusY="2" />
+                    <ScrollViewer
+                        Grid.Row="1"
+                        Margin="32,98,34,38"
+                        Style="{DynamicResource Scroll}">
+                        <Grid Height="5000">
+                            <TextBlock
+                                x:Name="ChangeLog"
+                                Margin="10,10,23,0"
+                                FontFamily="Minecraft"
+                                FontSize="18"
+                                Foreground="#dcdcdc"
+                                Text="Alif-Lam-Ra. Dies ist ein Buch, das Wir zu dir hinabgesandt haben, damit du die Menschen mit der Erlaubnis ihres Herrn aus den Finsternissen hinaus ins Licht bringst, auf den Weg des Allmächtigen und Lobenswürdigen, Aliflamra kitabun anzalnahu ilayka litukhrija annasa mina aththulumati ila annoori biithni rabbihim ila sirati alAAazeezi alhameed (den Weg) Allahs, Dessen ist, was in den Himmeln und was auf der Erde. Und wehe den Ungläubigen vor einer strengen Strafe! Allahi allathee lahu ma fee assamawati wama fee alardi wawaylun lilkafireena min AAathabin shadeed Diejenigen, die das diesseitige Leben mehr lieben als das Jenseits und von Allahs Weg abhalten und danach trachten, ihn krumm zu machen; sie befinden sich in weit(reichend)em Irrtum. Allatheena yastahibboona alhayata addunya AAala alakhirati wayasuddoona AAan sabeeli Allahi wayabghoonaha AAiwajan olaika fee dalalin baAAeed Und Wir haben keinen Gesandten gesandt, außer in der Sprache seines Volkes, damit er ihnen (die Botschaft) klar macht. Allah läßt dann in die Irre gehen, wen Er will, und leitet recht, wen Er will. Und Er ist der Allmächtige und Allweise. Wama arsalna min rasoolin illa bilisani qawmihi liyubayyina lahum fayudillu Allahu man yashao wayahdee man yashao wahuwa alAAazeezu alhakeem Und Wir sandten ja bereits Musa mit Unseren Zeichen: Bringe dein Volk aus den Finsternissen hinaus ins Licht, und erinnere sie an die Tage Allahs. Darin sind wahrlich Zeichen für jeden sehr Standhaften und sehr Dankbaren. Walaqad arsalna moosa biayatina an akhrij qawmaka mina aththulumati ila annoori wathakkirhum biayyami Allahi inna fee thalika laayatin likulli sabbarin shakoor وَمَآ أَرۡسَلۡنَا مِن رَّسُولٍ إِلَّا بِلِسَانِ قَوۡمِهِۦ لِيُبَيِّنَ لَهُمۡۖ فَيُضِلُّ ٱللَّهُ مَن يَشَآءُ وَيَهۡدِي مَن يَشَآءُۚ وَهُوَ ٱلۡعَزِيزُ ٱلۡحَكِي"
+                                TextWrapping="Wrap" />
+
+                        </Grid>
+                    </ScrollViewer>-->
+                </Grid>
+            </Grid>
+            <Border
+                Background="#383838" 
+                CornerRadius="8" 
+                Visibility="Collapsed"
+                x:Name="Loading">
+                
+                <Grid
+                    Width="400"
+                    Height="400"
+                    Margin="0,0,0,0"
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Center">
+
+                    <Ellipse
+                        Width="210"
+                        Height="210"
+                        Margin="6,0,0,50"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Center"
+                        Stroke="#505050"
+                        StrokeThickness="10" />
+
+                    <xrpb:RadialProgressBar
+                        x:Name="ProgressBar"
+                        Value="69"
+                        Width="228"
+                        Height="228"
+                        Margin="6,0,0,50"
+                        Foreground="#ff9a3c"
+                        ArcWidth="18">
+                        <xrpb:RadialProgressBar.Effect>
+                            <DropShadowEffect
+                                BlurRadius="35"
+                                Direction="-90"
+                                Opacity="1"
+                                ShadowDepth="0"
+                                Color="#ff9a3c" />
+                        </xrpb:RadialProgressBar.Effect>
+                    </xrpb:RadialProgressBar>
+
+                    <TextBlock
+                        x:Name="ProgressText"
+                        Width="76"
+                        Height="70"
+                        Margin="6,0,0,85"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Center"
+                        FontFamily="Minecraft"
+                        FontSize="50"
+                        Foreground="#ff9a3c"
+                        Text="69"
+                        TextAlignment="Center">
+
+                        <TextBlock.Effect>
+                            <DropShadowEffect
+                                BlurRadius="35"
+                                Direction="-90"
+                                Opacity="1"
+                                ShadowDepth="0"
+                                Color="#ff9a3c" />
+                        </TextBlock.Effect>
+                    </TextBlock>
+
+                    <TextBlock
+                        Width="210"
+                        Height="26"
+                        Margin="0,25,0,0"
+                        HorizontalAlignment="Center"
+                        FontFamily="Minecraft"
+                        FontSize="18"
+                        Foreground="#dcdcdc"
+                        Text="LOADING"
+                        TextAlignment="Center" />
+
+                    <TextBlock
+                        Width="200"
+                        Height="26"
+                        Margin="0,280,0 ,0"
+                        HorizontalAlignment="Center"
+                        FontFamily="Minecraft"
+                        FontSize="16"
+                        Foreground="#dcdcdc"
+                        Text="Please be patient"
+                        TextWrapping="Wrap"
+                        TextAlignment="Center" />
+
+                    <TextBlock
+                        Width="400"
+                        Height="26"
+                        Margin="0,330,0 ,0"
+                        HorizontalAlignment="Center"
+                        FontFamily="Minecraft"
+                        FontSize="16"
+                        Foreground="#dcdcdc"
+                        Text="I'm just barely functional"
+                        TextAlignment="Center" />
+                </Grid>
+            </Border>
+        </Grid>
+    </Border>
+</Window>
