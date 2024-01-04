@@ -33,8 +33,9 @@ internal sealed class ConfigAdapter : RepoAdapter
     {
         FileInfo prefsFile = LocalPrefsFile;
         if (prefsFile.Exists) prefsFile.Delete();
-        
-        using FileStream fileStream = prefsFile.OpenWrite();
+
+        Directory.CreateDirectory(prefsFile.Directory.FullName);
+        using FileStream fileStream = prefsFile.Create();
         XmlSerializer xml = new XmlSerializer(typeof(LocalPrefs));
         xml.Serialize(fileStream, prefs);
         return Task.FromResult(true);
