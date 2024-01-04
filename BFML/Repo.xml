@@ -1,0 +1,19 @@
+<Repo>
+    <Resources>
+        <Png>DefaultSkin</Png>
+        <Png>Perfection</Png>
+        <Png>Shadow</Png>
+        <Ttf>MinecraftFont</Ttf>
+    </Resources>
+    <Configs>
+        <Xml>LocalPrefs</Xml>
+    </Configs>
+    <Forge>
+        <CentralizedModeForge>
+        </CentralizedModeForge>
+    </Forge>
+    <ModPacks>
+        <CentralizedModeModPack>
+        </CentralizedModeModPack>
+    </ModPacks>
+</Repo>
