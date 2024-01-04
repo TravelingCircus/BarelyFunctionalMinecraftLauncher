@@ -5,18 +5,18 @@ public readonly struct Option<T>
     public static Option<T> None => default;
     public static Option<T> Some(T value) => new Option<T>(value);
 
-    readonly bool isSome;
-    readonly T value;
+    public readonly bool IsSome;
+    public readonly T Value;
 
-    Option(T value)
+    private Option(T value)
     {
-        this.value = value;
-        isSome = this.value is { };
+        Value = value;
+        IsSome = Value is { };
     }
 
-    public bool IsSome(out T value)
+    public bool IfSome(out T value)
     {
-        value = this.value;
-        return isSome;
+        value = Value;
+        return IsSome;
     }
 }

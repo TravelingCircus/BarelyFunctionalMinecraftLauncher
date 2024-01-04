@@ -9,7 +9,6 @@ using OpenTK.Wpf;
 using System.Windows.Input;
 using BFML.Core;
 using BFML.Repository;
-using CmlLib.Core.Version;
 using Common;
 using Utils.Async;
 
@@ -19,6 +18,7 @@ public partial class ManualModeWindow
 {
     private readonly ManualModeRepo _repo;
     private readonly LoadingScreen _loadingScreen;
+    private readonly VersionConfigurationBlock _versionBlock;
     private readonly Game _game;
     private SkinPreviewRenderer _skinPreviewRenderer;
 
@@ -29,7 +29,9 @@ public partial class ManualModeWindow
         
         InitializeComponent();
         _loadingScreen = new LoadingScreen(Loading, ProgressBar, ProgressText);
-
+        _versionBlock = new VersionConfigurationBlock(IsModded, MinecraftVersion, ForgeVersion, 
+            ModPack, ForgeVersionLine, ModPackSelectionLine, _game, _repo);
+        
         //SetUpSkinRenderer();
         Loaded += OnWindowLoaded;
     }
@@ -37,6 +39,8 @@ public partial class ManualModeWindow
     private void OnWindowLoaded(object sender, RoutedEventArgs args)
     {
         Loaded -= OnWindowLoaded;
+        _versionBlock.Start();
+        
         //ApplyLocalPrefs();
         //_skinPreviewRenderer.ChangeSkin(_repo.DefaultSkin);
     }
@@ -45,13 +49,12 @@ public partial class ManualModeWindow
     {
         PlayButton.IsEnabled = false;
         
-        
-        var d = await _repo.LoadForgeList();
-        bool isInstalled = await _repo.ValidateForgeInstalled(d.First(), _repo.LocalPrefs.FileValidationMode);
-        MVersion vanilla = await _game.Versions.GetVersionAsync("1.18.2-forge-40.2.0");
-        
-        await _game.Launch(_repo.LocalPrefs.Nickname, vanilla, false);
-        
+        await _game.Launch(
+            _repo.LocalPrefs.Nickname, 
+            _versionBlock.VanillaVersion.Value, 
+            _versionBlock.IsModded, 
+            _versionBlock.Forge.Value, 
+            _versionBlock.ModPack);
         await Task.Delay(10000);
         Close();
     }

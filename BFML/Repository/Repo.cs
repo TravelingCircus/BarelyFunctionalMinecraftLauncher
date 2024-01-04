@@ -24,8 +24,16 @@ internal abstract class Repo
     }
 
     protected abstract bool ForgeFilter(Forge forge);
+
+    internal async Task<Forge[]> LoadForgeVersions(Version vanillaVersion)
+    {
+        return (await RepoIo.Forge.LoadAllVersions())
+            .Where(ForgeFilter)
+            .Where(forge => forge.TargetVanillaVersion.ToString() == vanillaVersion.ToString())
+            .ToArray();
+    }
     
-    internal async Task<Forge[]> LoadForgeList()
+    internal async Task<Forge[]> LoadAllForgeVersions()
     {
         return (await RepoIo.Forge.LoadAllVersions())
             .Where(ForgeFilter)

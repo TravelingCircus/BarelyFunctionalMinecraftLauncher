@@ -1,16 +1,19 @@
-﻿using System.Diagnostics;
+﻿using System;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using BFML.Repository;
 using CmlLib.Core;
 using CmlLib.Core.Auth;
 using CmlLib.Core.Version;
+using CmlLib.Core.VersionLoader;
+using Version = Utils.Version;
 
 namespace BFML.Core;
 
 internal sealed class Game
 {
-    internal MVersionCollection Versions => _launcher.GetAllVersions();
+    internal IVersionLoader Versions => _launcher.VersionLoader;
     private readonly Repo _repo;
     private readonly CMLauncher _launcher;
 
@@ -26,20 +29,23 @@ internal sealed class Game
         return true; //TODO
     }
 
-    public Task Launch(string nickname, MVersion vanilla, bool isModded, Forge forge = null, ModPack modPack = null)
+    public async Task Launch(string nickname, Version vanilla, bool isModded, Forge forge, ModPack modPack)
     {
+        MVersion version = isModded
+            ? await _launcher.GetVersionAsync(forge.Name)
+            : await _launcher.GetVersionAsync(vanilla.ToString());
         LaunchConfiguration launchConfig = new LaunchConfiguration()
         {
             Nickname = nickname,
             IsModded = isModded,
-            VanillaVersion = vanilla,
+            VanillaVersion = version,
             ForgeVersion = forge,
             ModPack = modPack,
             DedicatedRam = _repo.LocalPrefs.DedicatedRam,
             FullScreen = _repo.LocalPrefs.IsFullscreen,
             Validation = _repo.LocalPrefs.FileValidationMode
         };
-        return StartGameProcess(launchConfig);
+        await StartGameProcess(launchConfig);
     }
 
     private async Task StartGameProcess(LaunchConfiguration launchConfig)

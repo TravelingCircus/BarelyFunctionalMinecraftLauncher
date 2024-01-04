@@ -9,8 +9,8 @@ internal readonly struct VersionRange
     
     internal bool Contains(Version version)
     {
-        if (Min.IsSome(out Version min) && version < min) return false;
-        if (Max.IsSome(out Version max) && version > max) return false;
+        if (Min.IfSome(out Version min) && version < min) return false;
+        if (Max.IfSome(out Version max) && version > max) return false;
         return true;
     }
     
