@@ -2,8 +2,8 @@
 using System.IO;
 using BFML.Repository;
 using CmlLib.Core.Version;
-using Common.Misc;
 using Utils;
+using Version = Utils.Version;
 
 namespace BFML.Core;
 
@@ -24,20 +24,21 @@ internal struct LaunchConfiguration
     public Result<bool> IsValid()
     {
         if (DedicatedRam < 1024) return Result<bool>.Err(new InvalidDataException("Can't launch with less than 1GB of RAM"));
-        if (String.IsNullOrEmpty(Nickname)) return Result<bool>.Err(new InvalidDataException("Can't launch with empty nickname"));
+        if (string.IsNullOrEmpty(Nickname)) return Result<bool>.Err(new InvalidDataException("Can't launch with empty nickname"));
 
         if (!IsModded) return Result<bool>.Ok(true);
 
-        if (ForgeVersion.TargetVanillaVersion.ToString() != VanillaVersion.ToString())
+        Version vanillaVersion = new Version(VanillaVersion.ToString());
+        if (ForgeVersion.TargetVanillaVersion != vanillaVersion)
         {
             return Result<bool>.Err(new InvalidDataException(
-                $"Forge version mismatch. Forge:{ForgeVersion.SubVersion} | Vanilla:{VanillaVersion.Id}"));
+                $"Forge version mismatch. Forge:{ForgeVersion.SubVersion} | Vanilla:{vanillaVersion}"));
         }
         
-        if (ModPack.VanillaVersion.ToString() != VanillaVersion.Id)
+        if (ModPack.VanillaVersion != vanillaVersion)
         {
             return Result<bool>.Err(new InvalidDataException(
-                $"ModPack version mismatch. ModPack:{ModPack.VanillaVersion} | Vanilla:{VanillaVersion.Id}"));
+                $"ModPack version mismatch. ModPack:{ModPack.VanillaVersion} | Vanilla:{vanillaVersion}"));
         }
         
         return Result<bool>.Ok(true);

@@ -1,9 +1,5 @@
-﻿using System;
-using System.IO;
-using System.Linq;
+﻿using System.Linq;
 using System.Threading.Tasks;
-using System.Windows;
-using System.Xml;
 using BFML.Core;
 using Common;
 using Utils;
@@ -34,7 +30,7 @@ internal abstract class Repo
     {
         return (await RepoIo.Forge.LoadAllVersions())
             .Where(ForgeFilter)
-            .Where(forge => forge.TargetVanillaVersion.ToString() == vanillaVersion.ToString())
+            .Where(forge => forge.TargetVanillaVersion == vanillaVersion)
             .ToArray();
     }
 

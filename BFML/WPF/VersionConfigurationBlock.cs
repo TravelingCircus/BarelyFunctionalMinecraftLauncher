@@ -5,7 +5,6 @@ using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
 using BFML.Core;
 using BFML.Repository;
-using CmlLib.Core;
 using CmlLib.Core.Version;
 using CmlLib.Core.VersionLoader;
 using CmlLib.Core.VersionMetadata;
@@ -19,14 +18,14 @@ internal sealed class VersionConfigurationBlock
     public event Action Changed;
     public bool IsModded => _isModdedToggle.IsChecked!.Value;
 
-    public Option<Version> VanillaVersion => String.IsNullOrEmpty(_vanillaVersions.Text)
+    public Option<Version> VanillaVersion => string.IsNullOrEmpty(_vanillaVersions.Text)
         ? Option<Version>.None
         : Option<Version>.Some(new Version(_vanillaVersions.Text));
 
-    public Option<Forge> Forge => !IsModded || String.IsNullOrEmpty(_forgeVersions.Text)
+    public Option<Forge> Forge => !IsModded || string.IsNullOrEmpty(_forgeVersions.Text)
         ? Option<Forge>.None
         : Option<Forge>.Some(_repo.LoadForgeVersions(VanillaVersion.Value).Result
-            .First(forge => forge.SubVersion.ToString() == _forgeVersions.Text));
+            .First(forge => forge.SubVersion == new Version(_forgeVersions.Text)));
         
     public ModPack ModPack { get; set; }
 
