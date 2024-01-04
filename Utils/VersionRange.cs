@@ -19,28 +19,18 @@ public readonly struct VersionRange
     
     public static VersionRange From(Version min, bool isMinInclusive = true) 
     {
-        return new VersionRange(min, Version.Empty, isMinInclusive, true);
+        return new VersionRange(min, Version.None, isMinInclusive, true);
     }
     
     public static VersionRange To(Version max, bool isMaxInclusive = true) 
     {
-        return new VersionRange(Version.Empty, max, true, isMaxInclusive);
+        return new VersionRange(Version.None, max, true, isMaxInclusive);
     }
 
     public static VersionRange Between(string range)
     {
-        bool isMinInclusive = range[0] switch
-        {
-            '(' => false,
-            '[' => true,
-            _ => throw new ArgumentOutOfRangeException()
-        };
-        bool isMaxInclusive = range[^1] switch
-        {
-            ')' => false,
-            ']' => true,
-            _ => throw new ArgumentOutOfRangeException()
-        };
+        bool isMinInclusive = IsBracketInclusive(range[0]);
+        bool isMaxInclusive = IsBracketInclusive(range[^1]);
 
         string[] versionStrings = range.Substring(1, range.Length - 2).Split(',');
         Version min = new Version(versionStrings[0]);
@@ -51,12 +41,7 @@ public readonly struct VersionRange
     
     public static VersionRange From(string range)
     {
-        bool isMinInclusive = range[0] switch
-        {
-            '(' => false,
-            '[' => true,
-            _ => throw new ArgumentOutOfRangeException()
-        };
+        bool isMinInclusive = IsBracketInclusive(range[0]);
 
         string[] versionStrings = range.Substring(1, range.Length - 2).Split(',');
         Version min = new Version(versionStrings[0]);
@@ -66,20 +51,15 @@ public readonly struct VersionRange
     
     public static VersionRange To(string range)
     {
-        bool isMaxInclusive = range[^1] switch
-        {
-            ')' => false,
-            ']' => true,
-            _ => throw new ArgumentOutOfRangeException()
-        };
-
+        bool isMaxInclusive = IsBracketInclusive(range[^1]);
+        
         string[] versionStrings = range.Substring(1, range.Length - 2).Split(',');
         Version max = new Version(versionStrings[1]);
 
         return To(max, isMaxInclusive);
     }
 
-    internal bool Contains(Version version)
+    public bool Contains(Version version)
     {
         bool minConditionPassed = !Min.IsLimited 
                                   || (Min.IsInclusive 
@@ -93,6 +73,31 @@ public readonly struct VersionRange
         return minConditionPassed && maxConditionPassed;
     }
     
+    public override string ToString()
+    {
+        char minBracket = Min.IsLimited 
+            ? Min.IsInclusive ? '[' : '('
+            : '(';
+        char maxBracket = Max.IsLimited 
+            ? Max.IsInclusive ? ']' : ')'
+            : ')';
+        return minBracket + Min.ToString() + ',' + Max + maxBracket;
+    }
+
+    private static bool IsBracketInclusive(char bracket)
+    {
+        return bracket switch
+        {
+            '(' or ')' => false,
+            '[' or ']' => true,
+            _ => throw new ArgumentOutOfRangeException(
+                bracket.ToString(), 
+                "Bracket required:"
+                + "\nExclusive: '(' or ')';"
+                + "\nInclusive: '[' or ']'.")
+        };
+    }
+
     public readonly struct VersionBound
     {
         public readonly bool IsLimited;
@@ -103,7 +108,16 @@ public readonly struct VersionRange
         {
             Version = version;
             IsInclusive = isInclusive;
-            IsLimited = version != Version.Empty;
+            IsLimited = IsVersionZero(version) || version != Version.None;
         }
+
+        public override string ToString()
+        {
+            return IsLimited 
+                ? Version.ToString() 
+                : string.Empty;
+        }
+
+        private static bool IsVersionZero(Version version) => version.Parts.Count == 1 && version.Parts[0] == 0;
     }
 }

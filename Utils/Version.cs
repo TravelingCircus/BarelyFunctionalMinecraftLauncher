@@ -2,7 +2,7 @@
 
 public readonly struct Version : IEquatable<Version>, IComparable<Version>
 {
-    public static readonly Version Empty = new Version();
+    public static readonly Version None = new Version();
     
     public IReadOnlyList<byte> Parts => _parts;
     private readonly byte[] _parts;
@@ -23,9 +23,9 @@ public readonly struct Version : IEquatable<Version>, IComparable<Version>
         _parts = partsText.Select(byte.Parse).ToArray();
     }
     
-    public static bool operator >= (Version a, Version b) => a > b || a == b;
+    public static bool operator >= (Version a, Version b) => a.CompareTo(b) >= 0;
 
-    public static bool operator <= (Version a, Version b) => a < b || a == b;
+    public static bool operator <= (Version a, Version b) => a.CompareTo(b) <= 0;
     
     public static bool operator > (Version a, Version b) => a.CompareTo(b) > 0;
 
@@ -39,9 +39,12 @@ public readonly struct Version : IEquatable<Version>, IComparable<Version>
 
     public override int GetHashCode() => _parts.GetHashCode();
 
-    public override string ToString() => _parts is null 
-        ? string.Empty 
-        : string.Join('.', Parts);
+    public override string ToString()
+    {
+        return _parts is null
+            ? string.Empty
+            : string.Join('.', Parts);
+    }
 
     public bool Equals(Version other) => CompareTo(other) == 0;
 
