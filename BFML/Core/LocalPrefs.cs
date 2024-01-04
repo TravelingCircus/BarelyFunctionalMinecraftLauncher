@@ -4,6 +4,8 @@ using System.Xml;
 using System.Xml.Schema;
 using System.Xml.Serialization;
 using BFML.Repository;
+using CmlLib.Core;
+using CmlLib.Core.Version;
 
 namespace BFML.Core;
 
@@ -26,7 +28,8 @@ public sealed class LocalPrefs : IXmlSerializable
     internal LocalPrefs() : this(
         string.Empty, string.Empty,
         2048, false, string.Empty, 
-        string.Empty, string.Empty, LauncherMode.Manual, null) { }
+        string.Empty, string.Empty, 
+        LauncherMode.Manual, new DirectoryInfo(MinecraftPath.WindowsDefaultPath)) { }
 
     internal LocalPrefs(
         string nickname, string passwordHash, int dedicatedRam, 
@@ -41,6 +44,7 @@ public sealed class LocalPrefs : IXmlSerializable
         LastForgeVersion = lastForgeVersion;
         LastVanillaVersion = lastVanillaVersion;
         LauncherMode = launcherMode;
+        GameDirectory = gameDirectory;
     }
 
     public XmlSchema GetSchema() => null;
@@ -62,15 +66,15 @@ public sealed class LocalPrefs : IXmlSerializable
 
     public void WriteXml(XmlWriter writer)
     {
-        writer.WriteAttributeString("Nickname", Nickname);
-        writer.WriteAttributeString("PasswordHash", PasswordHash);
-        writer.WriteAttributeString("DedicatedRam", DedicatedRam.ToString());
-        writer.WriteAttributeString("IsFullscreen", IsFullscreen.ToString());
-        writer.WriteAttributeString("LauncherMode", LauncherMode.ToString());
-        writer.WriteAttributeString("LastVanillaVersion", LastVanillaVersion);
-        writer.WriteAttributeString("LastForgeVersion", LastForgeVersion);
-        writer.WriteAttributeString("LastModPackGuid", LastModPackGuid);
-        writer.WriteAttributeString("GameDirectory", GameDirectory.FullName);
-        writer.WriteAttributeString("FileValidationMode", FileValidationMode.ToString());
+        writer.WriteElementString("Nickname", Nickname);
+        writer.WriteElementString("PasswordHash", PasswordHash);
+        writer.WriteElementString("DedicatedRam", DedicatedRam.ToString());
+        writer.WriteElementString("IsFullscreen", IsFullscreen.ToString());
+        writer.WriteElementString("LauncherMode", LauncherMode.ToString());
+        writer.WriteElementString("LastVanillaVersion", LastVanillaVersion);
+        writer.WriteElementString("LastForgeVersion", LastForgeVersion);
+        writer.WriteElementString("LastModPackGuid", LastModPackGuid);
+        writer.WriteElementString("GameDirectory", GameDirectory.FullName);
+        writer.WriteElementString("FileValidationMode", FileValidationMode.ToString());
     }
 }
