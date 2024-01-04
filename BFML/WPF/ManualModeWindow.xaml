@@ -236,6 +236,7 @@
                                 </Grid>
                                 
                                 <StackPanel 
+                                    x:Name="MinecraftVersionLine"
                                     Grid.Row="1" 
                                     Orientation="Horizontal">
                                     <TextBlock
@@ -256,6 +257,7 @@
                                 </StackPanel>
                                 
                                 <StackPanel 
+                                    x:Name="ForgeVersionLine"
                                     Grid.Row="2" 
                                     Orientation="Horizontal">
                                     <TextBlock
@@ -276,6 +278,7 @@
                                 </StackPanel>
                                 
                                 <StackPanel 
+                                    x:Name="ModPackSelectionLine"
                                     Grid.Row="3" 
                                     Orientation="Horizontal">
                                     <TextBlock
