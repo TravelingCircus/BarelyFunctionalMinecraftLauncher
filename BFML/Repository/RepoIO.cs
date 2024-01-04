@@ -1,4 +1,5 @@
 ﻿using System.IO;
+using System.Xml;
 using Common.Misc;
 using BFML.Repository.RepoIOAdapters;
 using Utils;
@@ -7,6 +8,7 @@ namespace BFML.Repository;
 
 internal sealed class RepoIO
 {
+    public DirectoryInfo Root => _repoInfo; 
     private DirectoryInfo ForgeDirectory => new DirectoryInfo(_repoInfo.FullName + "\\Forge");
     private DirectoryInfo ConfigsDirectory => new DirectoryInfo(_repoInfo.FullName + "\\Configs");
     private DirectoryInfo ModPacksDirectory => new DirectoryInfo(_repoInfo.FullName + "\\ModPacks");
@@ -26,13 +28,11 @@ internal sealed class RepoIO
         ModPacks = new ModPackAdapter(ModPacksDirectory, this);
         Resources = new ResourceAdapter(ResourcesDirectory, this);
     }
-    
-    internal Result<bool, InvalidDataException> Validate()
+
+    internal XmlDocument ReadRepoStructure()
     {
-        return _repoInfo.Exists 
-               && ForgeDirectory.Exists 
-               && ConfigsDirectory.Exists 
-               && ModPacksDirectory.Exists 
-               && ResourcesDirectory.Exists;
+        XmlDocument document = new XmlDocument();
+        document.Load(_repoInfo.Parent + "\\Repo.xml");
+        return document;
     }
 }

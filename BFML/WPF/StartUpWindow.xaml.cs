@@ -28,10 +28,6 @@ public partial class StartUpWindow
         FontInstaller.InstallFont(new FileInfo(Environment.CurrentDirectory + "\\Repo\\Resources\\MinecraftFont.ttf"));
 
         RepoIO repoIo = new RepoIO(new DirectoryInfo(Directory.GetCurrentDirectory()+"\\Repo"));
-        repoIo.Validate().Match(
-            _ => { }, 
-            err => throw err);
-
         LauncherMode startLauncherMode = (await repoIo.Configs.LoadLocalPrefs()).LauncherMode;
 
         if (startLauncherMode == LauncherMode.Manual) await StartManualMode(repoIo);
@@ -44,7 +40,7 @@ public partial class StartUpWindow
     private async Task StartManualMode(RepoIO repoIo)
     {
         ManualModeRepo repo = new ManualModeRepo(repoIo);
-        await repo.TryInit();
+        if (await repo.TryInit()) MessageBox.Show("Failed to validate repository structure");
         ManualModeWindow mainWindow = new ManualModeWindow(repo)
         {
             Top = Top,
