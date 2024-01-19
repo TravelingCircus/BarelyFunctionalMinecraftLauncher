@@ -65,5 +65,17 @@
       <Resource Include="WPF\Images\FolderIcon.png">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </Resource>
+      <None Remove="WPF\Images\ForgeVersion.png" />
+      <Resource Include="WPF\Images\ForgeVersion.png">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </Resource>
+      <None Remove="WPF\Images\MinecraftVersion.png" />
+      <Resource Include="WPF\Images\MinecraftVersion.png">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </Resource>
+      <None Remove="WPF\Images\Modpack.png" />
+      <Resource Include="WPF\Images\Modpack.png">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </Resource>
     </ItemGroup>
 </Project>
