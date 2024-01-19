@@ -295,8 +295,25 @@
                                         HorizontalAlignment="Left"
                                         VerticalAlignment="Center"
                                         Background="#434343"
-                                        BorderThickness="0"
-                                        Margin="10, 0, 0, 0" />
+                                        Margin="10, 0, 0, 0"
+                                        Style="{DynamicResource DefaultButton}" >
+                                        <Grid>
+                                            <Rectangle
+                                                Width="20"
+                                                Height="3"
+                                                Fill="#dcdcdc"
+                                                IsHitTestVisible="False"
+                                                RadiusX="1"
+                                                RadiusY="1" />
+                                            <Rectangle
+                                                Width="3"
+                                                Height="20"
+                                                Fill="#dcdcdc"
+                                                IsHitTestVisible="False"
+                                                RadiusX="1"
+                                                RadiusY="1" />
+                                        </Grid>
+                                    </Button>
                                     <Button
                                         x:Name="ForgeRemoveButton"
                                         Grid.Column="2"
@@ -305,8 +322,16 @@
                                         HorizontalAlignment="Right"
                                         VerticalAlignment="Center"
                                         Background="#434343"
-                                        BorderThickness="0"
-                                        Margin="0, 0, 10, 0" />
+                                        Margin="0, 0, 10, 0"
+                                        Style="{DynamicResource DefaultButton}" >
+                                        <Rectangle
+                                            Width="20"
+                                            Height="3"
+                                            Fill="#dcdcdc"
+                                            IsHitTestVisible="False"
+                                            RadiusX="1"
+                                            RadiusY="1" />
+                                    </Button>
                                 </Grid>
                                 
                                 <Grid 
@@ -341,8 +366,25 @@
                                         HorizontalAlignment="Left"
                                         VerticalAlignment="Center"
                                         Background="#434343"
-                                        BorderThickness="0"
-                                        Margin="10, 0, 0, 0" />
+                                        Margin="10, 0, 0, 0"
+                                        Style="{DynamicResource DefaultButton}" >
+                                        <Grid>
+                                            <Rectangle
+                                                Width="20"
+                                                Height="3"
+                                                Fill="#dcdcdc"
+                                                IsHitTestVisible="False"
+                                                RadiusX="1"
+                                                RadiusY="1" />
+                                            <Rectangle
+                                                Width="3"
+                                                Height="20"
+                                                Fill="#dcdcdc"
+                                                IsHitTestVisible="False"
+                                                RadiusX="1"
+                                                RadiusY="1" />
+                                        </Grid>
+                                    </Button>
                                     <Button
                                         x:Name="ModPackRemoveButton"
                                         Grid.Column="2"
@@ -351,8 +393,16 @@
                                         HorizontalAlignment="Right"
                                         VerticalAlignment="Center"
                                         Background="#434343"
-                                        BorderThickness="0"
-                                        Margin="0, 0, 10, 0" />
+                                        Margin="0, 0, 10, 0"
+                                        Style="{DynamicResource DefaultButton}" >
+                                        <Rectangle
+                                            Width="20"
+                                            Height="3"
+                                            Fill="#dcdcdc"
+                                            IsHitTestVisible="False"
+                                            RadiusX="1"
+                                            RadiusY="1" />
+                                    </Button>
                                 </Grid>
                             </Grid>
                         </Border>
