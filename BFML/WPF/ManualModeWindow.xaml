@@ -174,6 +174,7 @@
                                 <ToggleButton
                                     Grid.Column="1"
                                     x:Name="LauncherMode"
+                                    IsEnabled="False"
                                     Margin="12.5, 12.5"
                                     Cursor="Hand"
                                     Template="{DynamicResource ToggleTemplate1}" />
@@ -235,68 +236,174 @@
                                         TextAlignment="Right" />
                                 </Grid>
                                 
-                                <StackPanel 
+                                <Grid 
                                     x:Name="MinecraftVersionLine"
-                                    Grid.Row="1" 
-                                    Orientation="Horizontal">
-                                    <TextBlock
-                                        Width="120"
-                                        Margin="12.5, 12.5, 7.5, 12.5"
-                                        FontSize="20"
-                                        FontFamily="Minecraft"
-                                        Foreground="#dcdcdc"
-                                        Text="Minecraft"
-                                        TextAlignment="Left" />
+                                    Grid.Row="1" >
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="60"/>
+                                        <ColumnDefinition Width="290"/>
+                                    </Grid.ColumnDefinitions>
+                                    <Image
+                                        Grid.Column="0"
+                                        Width="40"
+                                        Height="40"
+                                        HorizontalAlignment="Center"
+                                        VerticalAlignment="Center"
+                                        Source="Images/MinecraftVersion.png" />
                                     <ComboBox
                                         x:Name="MinecraftVersion"
-                                        Width="197.5"
-                                        Margin="0, 12.5, 0, 12.5"
-                                        FontSize="20"
+                                        Grid.Column="1"
+                                        Width="280"
+                                        Height="30"
+                                        HorizontalAlignment="Left"
+                                        VerticalAlignment="Center"
+                                        FontSize="18"
                                         FontFamily="Minecraft"
-                                        Foreground="#dcdcdc" />
-                                </StackPanel>
+                                        Foreground="#ff9a3c"
+                                        Template="{DynamicResource ComboBoxTemplate1}" />
+                                </Grid>
                                 
-                                <StackPanel 
+                                <Grid 
                                     x:Name="ForgeVersionLine"
-                                    Grid.Row="2" 
-                                    Orientation="Horizontal">
-                                    <TextBlock
-                                        Width="120"
-                                        Margin="12.5, 12.5, 7.5, 12.5"
-                                        FontSize="20"
-                                        FontFamily="Minecraft"
-                                        Foreground="#dcdcdc"
-                                        Text="Forge"
-                                        TextAlignment="Left" />
+                                    Grid.Row="2" >
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="60"/>
+                                        <ColumnDefinition Width="200"/>
+                                        <ColumnDefinition Width="90"/>
+                                    </Grid.ColumnDefinitions>
+                                    <Image
+                                        Grid.Column="0"
+                                        Width="40"
+                                        Height="40"
+                                        HorizontalAlignment="Center"
+                                        VerticalAlignment="Center"
+                                        Source="Images/ForgeVersion.png" />
                                     <ComboBox
                                         x:Name="ForgeVersion"
-                                        Width="197.5"
-                                        Margin="0, 12.5, 0, 12.5"
-                                        FontSize="20"
+                                        Grid.Column="1"
+                                        Height="30"
+                                        VerticalAlignment="Center"
+                                        FontSize="18"
                                         FontFamily="Minecraft"
-                                        Foreground="#dcdcdc" />
-                                </StackPanel>
+                                        Foreground="#ff9a3c"
+                                        Template="{DynamicResource ComboBoxTemplate1}" />
+                                    <Button
+                                        x:Name="ForgeAddButton"
+                                        Grid.Column="2"
+                                        Width="30"
+                                        Height="30"
+                                        HorizontalAlignment="Left"
+                                        VerticalAlignment="Center"
+                                        Background="#434343"
+                                        Margin="10, 0, 0, 0"
+                                        Style="{DynamicResource DefaultButton}" >
+                                        <Grid>
+                                            <Rectangle
+                                                Width="20"
+                                                Height="3"
+                                                Fill="#dcdcdc"
+                                                IsHitTestVisible="False"
+                                                RadiusX="1"
+                                                RadiusY="1" />
+                                            <Rectangle
+                                                Width="3"
+                                                Height="20"
+                                                Fill="#dcdcdc"
+                                                IsHitTestVisible="False"
+                                                RadiusX="1"
+                                                RadiusY="1" />
+                                        </Grid>
+                                    </Button>
+                                    <Button
+                                        x:Name="ForgeRemoveButton"
+                                        Grid.Column="2"
+                                        Width="30"
+                                        Height="30"
+                                        HorizontalAlignment="Right"
+                                        VerticalAlignment="Center"
+                                        Background="#434343"
+                                        Margin="0, 0, 10, 0"
+                                        Style="{DynamicResource DefaultButton}" >
+                                        <Rectangle
+                                            Width="20"
+                                            Height="3"
+                                            Fill="#dcdcdc"
+                                            IsHitTestVisible="False"
+                                            RadiusX="1"
+                                            RadiusY="1" />
+                                    </Button>
+                                </Grid>
                                 
-                                <StackPanel 
+                                <Grid 
                                     x:Name="ModPackSelectionLine"
-                                    Grid.Row="3" 
-                                    Orientation="Horizontal">
-                                    <TextBlock
-                                        Width="120"
-                                        Margin="12.5, 12.5, 7.5, 12.5"
-                                        FontSize="20"
-                                        FontFamily="Minecraft"
-                                        Foreground="#dcdcdc"
-                                        Text="ModPack"
-                                        TextAlignment="Left" />
+                                    Grid.Row="3" >
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="60"/>
+                                        <ColumnDefinition Width="200"/>
+                                        <ColumnDefinition Width="90"/>
+                                    </Grid.ColumnDefinitions>
+                                    <Image
+                                        Grid.Column="0"
+                                        Width="40"
+                                        Height="40"
+                                        HorizontalAlignment="Center"
+                                        VerticalAlignment="Center"
+                                        Source="Images/Modpack.png" />
                                     <ComboBox
                                         x:Name="ModPack"
-                                        Width="197.5"
-                                        Margin="0, 12.5, 0, 12.5"
-                                        FontSize="20"
+                                        Grid.Column="1"
+                                        Height="30"
+                                        VerticalAlignment="Center"
+                                        FontSize="18"
                                         FontFamily="Minecraft"
-                                        Foreground="#dcdcdc" />
-                                </StackPanel>
+                                        Foreground="#ff9a3c"
+                                        Template="{DynamicResource ComboBoxTemplate1}" />
+                                    <Button
+                                        x:Name="ModPackAddButton"
+                                        Grid.Column="2"
+                                        Width="30"
+                                        Height="30"
+                                        HorizontalAlignment="Left"
+                                        VerticalAlignment="Center"
+                                        Background="#434343"
+                                        Margin="10, 0, 0, 0"
+                                        Style="{DynamicResource DefaultButton}" >
+                                        <Grid>
+                                            <Rectangle
+                                                Width="20"
+                                                Height="3"
+                                                Fill="#dcdcdc"
+                                                IsHitTestVisible="False"
+                                                RadiusX="1"
+                                                RadiusY="1" />
+                                            <Rectangle
+                                                Width="3"
+                                                Height="20"
+                                                Fill="#dcdcdc"
+                                                IsHitTestVisible="False"
+                                                RadiusX="1"
+                                                RadiusY="1" />
+                                        </Grid>
+                                    </Button>
+                                    <Button
+                                        x:Name="ModPackRemoveButton"
+                                        Grid.Column="2"
+                                        Width="30"
+                                        Height="30"
+                                        HorizontalAlignment="Right"
+                                        VerticalAlignment="Center"
+                                        Background="#434343"
+                                        Margin="0, 0, 10, 0"
+                                        Style="{DynamicResource DefaultButton}" >
+                                        <Rectangle
+                                            Width="20"
+                                            Height="3"
+                                            Fill="#dcdcdc"
+                                            IsHitTestVisible="False"
+                                            RadiusX="1"
+                                            RadiusY="1" />
+                                    </Button>
+                                </Grid>
                             </Grid>
                         </Border>
                         
@@ -389,7 +496,7 @@
                         BorderThickness="0">
 
                         <TabItem 
-                            Header="ChangeLog"
+                            Header="Changelog"
                             Template="{DynamicResource LeftTabItem}">
                             <Grid>
                                 <Border
@@ -400,7 +507,7 @@
                                         Margin="0, 0, 17.5, 0">
                                         <Grid Height="5000">
                                             <TextBlock
-                                                x:Name="ChangeLog"
+                                                x:Name="Changelog"
                                                 Margin="0,0,10,0"
                                                 FontFamily="Minecraft"
                                                 FontSize="18"
@@ -458,11 +565,13 @@
                                             TextAlignment="Left" />
                                         <ComboBox
                                             x:Name="FilesValidateMode"
+                                            ItemsSource=""
                                             Width="150"
                                             Margin="0, 12.5"
-                                            FontSize="20"
+                                            FontSize="18"
                                             FontFamily="Minecraft"
-                                            Foreground="#dcdcdc" />
+                                            Foreground="#ff9a3c"
+                                            Template="{DynamicResource ComboBoxTemplate1}" />
                                     </StackPanel>
                                 </Border>
                                 
@@ -515,7 +624,6 @@
                                             Grid.Row="1"
                                             Width="350"
                                             Height="20"
-                                            Margin="0"
                                             AutoToolTipPlacement="TopLeft"
                                             Cursor="Hand"
                                             IsSnapToTickEnabled="True"
@@ -673,143 +781,133 @@
                             </StackPanel>
                         </TabItem>
 
-                        <TabItem Header="ModPack" Template="{DynamicResource RightTabItem}" />
+                        <TabItem Header="ModPack" Template="{DynamicResource RightTabItem}" IsEnabled="False" />
                     </TabControl>
-                    
-                    <!--<TextBlock
-                        Grid.Row="0"
-                        Height="40"
-                        Margin="0,0,0,0"
-                        FontFamily="Minecraft"
-                        FontSize="30"
-                        Foreground="#dcdcdc"
-                        Text="Changelog" />
-
-                    <Rectangle
-                        Grid.Row="0"
-                        Height="3"
-                        Margin="0"
-                        Fill="#dcdcdc"
-                        RadiusX="5"
-                        RadiusY="5" />
-                    
-                    <Rectangle
-                        Grid.Row="0"
-                        Margin="346,9,0,674"
-                        Fill="#434343" />
-                    <Rectangle
-                        Grid.Row="0"
-                        Margin="322,0,14,682"
-                        Fill="#434343" />
-
-                    <Button
-                        Grid.Row="0"
-                        Width="39"
-                        Height="26"
-                        Margin="361,0,0,674"
-                        Background="#434343"
-                        Click="ShutDown"
-                        Cursor="Hand"
-                        Style="{DynamicResource TitleButton}" />
-                    <Button
-                        Grid.Row="0"
-                        Width="39"
-                        Height="26"
-                        Margin="322,0,39,674"
-                        Background="#434343"
-                        Click="Minimize"
-                        Cursor="Hand"
-                        Style="{DynamicResource TitleButton}" />
-
+                </Grid>
+                
+                <Grid
+                    Grid.Column="2"
+                    Width="50"
+                    Height="25"
+                    HorizontalAlignment="Right"
+                    VerticalAlignment="Top">
+                    <Border
+                        CornerRadius="0, 7.5, 0, 5"
+                        Background="#434343">
+                        <StackPanel
+                            Orientation="Horizontal">
+                            <Button
+                                Width="25"
+                                Height="25"
+                                VerticalAlignment="Center"
+                                Background="Transparent"
+                                Click="Minimize"
+                                Cursor="Hand"
+                                Style="{DynamicResource TitleButton}">
+                                <Rectangle
+                                    Width="15"
+                                    Height="2"
+                                    Fill="#dcdcdc"
+                                    IsHitTestVisible="False"
+                                    RadiusX="1"
+                                    RadiusY="1" />
+                            </Button>
+                            <Button
+                                Width="25"
+                                Height="25"
+                                VerticalAlignment="Center"
+                                Background="Transparent"
+                                Click="ShutDown"
+                                Cursor="Hand"
+                                Style="{DynamicResource TitleButton}">
+                                <StackPanel
+                                    Grid.Row="0">
+                                    <Rectangle
+                                        Width="18"
+                                        Height="2"
+                                        Margin="0,0,0,0"
+                                        Fill="#dcdcdc"
+                                        IsHitTestVisible="False"
+                                        RadiusX="1"
+                                        RadiusY="1"
+                                        RenderTransformOrigin="0.5,0.5">
+                                        <Rectangle.RenderTransform>
+                                            <TransformGroup>
+                                                <ScaleTransform />
+                                                <SkewTransform />
+                                                <RotateTransform Angle="45" />
+                                                <TranslateTransform />
+                                            </TransformGroup>
+                                        </Rectangle.RenderTransform>
+                                    </Rectangle>
+                                    <Rectangle
+                                        Width="18"
+                                        Height="2"
+                                        Fill="#dcdcdc"
+                                        IsHitTestVisible="False"
+                                        RadiusX="1"
+                                        RadiusY="1"
+                                        RenderTransformOrigin="0.5,0.5">
+                                        <Rectangle.RenderTransform>
+                                            <TransformGroup>
+                                                <ScaleTransform />
+                                                <SkewTransform />
+                                                <RotateTransform Angle="-45" />
+                                                <TranslateTransform />
+                                            </TransformGroup>
+                                        </Rectangle.RenderTransform>
+                                    </Rectangle>
+                                </StackPanel>
+                            </Button>
+                        </StackPanel>
+                    </Border>
                     <StackPanel
-                        Grid.Row="0"
-                        Width="39"
-                        Height="26"
-                        Margin="361,0,0,674">
+                        Orientation="Horizontal">
                         <Rectangle
-                            Width="18"
-                            Height="2"
-                            Margin="0,12,0,0"
-                            Fill="#dcdcdc"
-                            IsHitTestVisible="False"
-                            RadiusX="1"
-                            RadiusY="1"
-                            RenderTransformOrigin="0.5,0.5">
-                            <Rectangle.RenderTransform>
-                                <TransformGroup>
-                                    <ScaleTransform />
-                                    <SkewTransform />
-                                    <RotateTransform Angle="45" />
-                                    <TranslateTransform />
-                                </TransformGroup>
-                            </Rectangle.RenderTransform>
-                        </Rectangle>
-                        <Rectangle
-                            Width="18"
-                            Height="2"
-                            Margin="0,-2,0,0"
-                            Fill="#dcdcdc"
-                            IsHitTestVisible="False"
-                            RadiusX="1"
-                            RadiusY="1"
-                            RenderTransformOrigin="0.5,0.5">
-                            <Rectangle.RenderTransform>
-                                <TransformGroup>
-                                    <ScaleTransform />
-                                    <SkewTransform />
-                                    <RotateTransform Angle="-45" />
-                                    <TranslateTransform />
-                                </TransformGroup>
-                            </Rectangle.RenderTransform>
-                        </Rectangle>
-                    </StackPanel>
-                    <StackPanel
-                        Grid.Row="0"
-                        Width="39"
-                        Height="26"
-                        Margin="322,0,39,674">
-                        <Rectangle
-                            Width="14"
-                            Height="2"
-                            Margin="0,12,0,0"
+                            Width="15"
+                            Height="3"
+                            Margin="5, 0"
                             Fill="#dcdcdc"
                             IsHitTestVisible="False"
                             RadiusX="1"
                             RadiusY="1" />
-                    </StackPanel>
-
-                    <Rectangle
-                        Grid.Row="1"
-                        Width="304"
-                        Height="564"
-                        Margin="32,98,64,38"
-                        Fill="#434343"
-                        RadiusX="4"
-                        RadiusY="4" />
-                    <Rectangle
-                        Grid.Row="1"
-                        Width="9"
-                        Height="564"
-                        Margin="352,98,37,38"
-                        Fill="#595959"
-                        RadiusX="2"
-                        RadiusY="2" />
-                    <ScrollViewer
-                        Grid.Row="1"
-                        Margin="32,98,34,38"
-                        Style="{DynamicResource Scroll}">
-                        <Grid Height="5000">
-                            <TextBlock
-                                x:Name="ChangeLog"
-                                Margin="10,10,23,0"
-                                FontFamily="Minecraft"
-                                FontSize="18"
-                                Foreground="#dcdcdc"
-                                Text="Alif-Lam-Ra. Dies ist ein Buch, das Wir zu dir hinabgesandt haben, damit du die Menschen mit der Erlaubnis ihres Herrn aus den Finsternissen hinaus ins Licht bringst, auf den Weg des Allmächtigen und Lobenswürdigen, Aliflamra kitabun anzalnahu ilayka litukhrija annasa mina aththulumati ila annoori biithni rabbihim ila sirati alAAazeezi alhameed (den Weg) Allahs, Dessen ist, was in den Himmeln und was auf der Erde. Und wehe den Ungläubigen vor einer strengen Strafe! Allahi allathee lahu ma fee assamawati wama fee alardi wawaylun lilkafireena min AAathabin shadeed Diejenigen, die das diesseitige Leben mehr lieben als das Jenseits und von Allahs Weg abhalten und danach trachten, ihn krumm zu machen; sie befinden sich in weit(reichend)em Irrtum. Allatheena yastahibboona alhayata addunya AAala alakhirati wayasuddoona AAan sabeeli Allahi wayabghoonaha AAiwajan olaika fee dalalin baAAeed Und Wir haben keinen Gesandten gesandt, außer in der Sprache seines Volkes, damit er ihnen (die Botschaft) klar macht. Allah läßt dann in die Irre gehen, wen Er will, und leitet recht, wen Er will. Und Er ist der Allmächtige und Allweise. Wama arsalna min rasoolin illa bilisani qawmihi liyubayyina lahum fayudillu Allahu man yashao wayahdee man yashao wahuwa alAAazeezu alhakeem Und Wir sandten ja bereits Musa mit Unseren Zeichen: Bringe dein Volk aus den Finsternissen hinaus ins Licht, und erinnere sie an die Tage Allahs. Darin sind wahrlich Zeichen für jeden sehr Standhaften und sehr Dankbaren. Walaqad arsalna moosa biayatina an akhrij qawmaka mina aththulumati ila annoori wathakkirhum biayyami Allahi inna fee thalika laayatin likulli sabbarin shakoor وَمَآ أَرۡسَلۡنَا مِن رَّسُولٍ إِلَّا بِلِسَانِ قَوۡمِهِۦ لِيُبَيِّنَ لَهُمۡۖ فَيُضِلُّ ٱللَّهُ مَن يَشَآءُ وَيَهۡدِي مَن يَشَآءُۚ وَهُوَ ٱلۡعَزِيزُ ٱلۡحَكِي"
-                                TextWrapping="Wrap" />
-
+                        <Grid
+                            Width="25"
+                            Height="25">
+                            <Rectangle
+                                Width="20"
+                                Height="3"
+                                HorizontalAlignment="Center"
+                                VerticalAlignment="Center"
+                                Fill="#dcdcdc"
+                                IsHitTestVisible="False"
+                                RadiusX="1"
+                                RadiusY="1"
+                                RenderTransformOrigin="0.5, 0.5">
+                                <Rectangle.RenderTransform>
+                                    <TransformGroup>
+                                        <RotateTransform Angle="45" />
+                                    </TransformGroup>
+                                </Rectangle.RenderTransform>
+                            </Rectangle>
+                            <Rectangle
+                                Width="20"
+                                Height="3"
+                                HorizontalAlignment="Center"
+                                VerticalAlignment="Center"
+                                Fill="#dcdcdc"
+                                IsHitTestVisible="False"
+                                RadiusX="1"
+                                RadiusY="1"
+                                RenderTransformOrigin="0.5, 0.5">
+                                <Rectangle.RenderTransform>
+                                    <TransformGroup>
+                                        <RotateTransform Angle="-45" />
+                                    </TransformGroup>
+                                </Rectangle.RenderTransform>
+                            </Rectangle>
                         </Grid>
-                    </ScrollViewer>-->
+                    </StackPanel>
                 </Grid>
             </Grid>
             <Border

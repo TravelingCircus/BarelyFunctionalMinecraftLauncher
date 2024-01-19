@@ -29,17 +29,17 @@ internal sealed class VersionConfigurationBlock
         
     public ModPack ModPack { get; set; }
 
-    private readonly ToggleButton _isModdedToggle;
-    private readonly ComboBox _vanillaVersions;
-    private readonly StackPanel _forgeLine;
-    private readonly ComboBox _forgeVersions;
-    private readonly StackPanel _modPackLine;
+    private readonly Grid _forgeLine;
+    private readonly Grid _modPackLine;
     private readonly ComboBox _modPacks;
+    private readonly ComboBox _forgeVersions;
+    private readonly ComboBox _vanillaVersions;
+    private readonly ToggleButton _isModdedToggle;
 
     private readonly Game _game;
     private readonly Repo _repo;
     
-    public VersionConfigurationBlock(ToggleButton isModdedToggle, ComboBox vanillaVersions, ComboBox forgeVersions, ComboBox modPacks, StackPanel forgeLine, StackPanel modPackLine, Game game, Repo repo)
+    public VersionConfigurationBlock(ToggleButton isModdedToggle, ComboBox vanillaVersions, ComboBox forgeVersions, ComboBox modPacks, Grid forgeLine, Grid modPackLine, Game game, Repo repo)
     {
         _isModdedToggle = isModdedToggle;
         _vanillaVersions = vanillaVersions;
