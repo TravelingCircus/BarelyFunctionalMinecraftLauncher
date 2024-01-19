@@ -45,7 +45,7 @@
 
                         <ContentPresenter
                             x:Name="contentPresenter"
-                            Margin="2,6,28,8"
+                            Margin="0"
                             HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
                             VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
                             Focusable="False"

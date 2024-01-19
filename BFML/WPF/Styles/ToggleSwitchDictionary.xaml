@@ -16,9 +16,11 @@
 
             <Ellipse
                 x:Name="FrontOfSwitch"
-                Width="24"
-                Margin="2"
+                Width="20"
+                Height="20"
+                Margin="2.5, 0"
                 HorizontalAlignment="Left"
+                VerticalAlignment="Center"
                 Fill="#ff9a3c" />
         </Border>
         <ControlTemplate.Triggers>
