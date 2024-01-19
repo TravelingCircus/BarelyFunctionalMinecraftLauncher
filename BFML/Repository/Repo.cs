@@ -41,10 +41,10 @@ internal abstract class Repo
             .ToArray();
     }
 
-    internal async Task<bool> ValidateForgeInstalled(Forge forge, FileValidation validationMode)
+    internal async Task<Result<bool>> InstallForge(Forge forge, FileValidation validationMode)
     {
-        bool wasInstalled = await RepoIo.Forge.IsInstalled(forge, validationMode);
-
+        if(await RepoIo.Forge.IsInstalled(forge, validationMode)) return Result<bool>.Ok(true);
+        
         return await RepoIo.Forge.Install(forge);
     }
 
@@ -71,5 +71,10 @@ internal abstract class Repo
         bool success = await RepoIo.Configs.ClearLocalPrefs();
         if(success) LocalPrefs = new LocalPrefs();
         return success;
+    }
+
+    public Task<Result<bool>> InstallModPack(ModPack modPack, FileValidation validationMode)
+    {
+        return Task.FromResult(Result<bool>.Ok(true));
     }
 }

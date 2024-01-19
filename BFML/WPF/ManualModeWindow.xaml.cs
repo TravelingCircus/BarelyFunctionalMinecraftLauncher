@@ -48,13 +48,15 @@ public partial class ManualModeWindow
     private async Task LaunchGame()
     {
         PlayButton.IsEnabled = false;
-        
-        await _game.Launch(
-            _repo.LocalPrefs.Nickname, 
-            _versionBlock.VanillaVersion.Value, 
-            _versionBlock.IsModded, 
-            _versionBlock.Forge.Value, 
+
+        GameConfiguration configuration = new GameConfiguration(
+            _versionBlock.IsModded,
+            _versionBlock.VanillaVersion.Value,
+            _versionBlock.Forge.Value,
             _versionBlock.ModPack);
+        
+        await _game.Launch(_repo.LocalPrefs.Nickname, configuration);
+        
         await Task.Delay(10000);
         Close();
     }
