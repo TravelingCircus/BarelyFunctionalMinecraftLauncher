@@ -54,6 +54,7 @@ public sealed class LocalPrefs : IXmlSerializable
         reader.ReadToFollowing("Nickname");
         Nickname = reader.ReadElementString("Nickname");
         PasswordHash = reader.ReadElementString("PasswordHash");
+        if (string.IsNullOrEmpty(PasswordHash)) PasswordHash = "Steve";
         DedicatedRam = int.Parse(reader.ReadElementString("DedicatedRam"));
         IsFullscreen = bool.Parse(reader.ReadElementString("IsFullscreen"));
         LauncherMode = Enum.Parse<LauncherMode>(reader.ReadElementString("LauncherMode"));

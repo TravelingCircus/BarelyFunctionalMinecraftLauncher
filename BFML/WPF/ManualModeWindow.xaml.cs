@@ -19,6 +19,7 @@ public partial class ManualModeWindow
     private readonly ManualModeRepo _repo;
     private readonly LoadingScreen _loadingScreen;
     private readonly VersionConfigurationBlock _versionBlock;
+    private readonly SettingsTab _settingsTab;
     private readonly Game _game;
     private SkinPreviewRenderer _skinPreviewRenderer;
 
@@ -31,6 +32,7 @@ public partial class ManualModeWindow
         _loadingScreen = new LoadingScreen(Loading, ProgressBar, ProgressText);
         _versionBlock = new VersionConfigurationBlock(IsModded, MinecraftVersion, ForgeVersion, 
             ModPack, ForgeVersionLine, ModPackSelectionLine, _game, _repo);
+        _settingsTab = new SettingsTab(SettingsTab);
         
         //SetUpSkinRenderer();
         Loaded += OnWindowLoaded;
@@ -40,6 +42,7 @@ public partial class ManualModeWindow
     {
         Loaded -= OnWindowLoaded;
         _versionBlock.Start();
+        _settingsTab.Start();
         
         //ApplyLocalPrefs();
         //_skinPreviewRenderer.ChangeSkin(_repo.DefaultSkin);

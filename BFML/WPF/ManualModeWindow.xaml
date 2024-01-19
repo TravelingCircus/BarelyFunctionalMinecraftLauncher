@@ -414,6 +414,7 @@
                         </TabItem>
                         
                         <TabItem
+                            x:Name="SettingsTab"
                             Header="Setting"
                             Template="{DynamicResource CentralTabItem}">
                             <StackPanel>
