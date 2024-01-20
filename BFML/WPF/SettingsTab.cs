@@ -1,9 +1,12 @@
 ﻿using System;
+using System.IO;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
 using BFML.Core;
 using BFML.Repository;
+using Microsoft.WindowsAPICodePack.Dialogs;
 using Utils.Async;
 
 namespace BFML.WPF;
@@ -38,6 +41,7 @@ internal sealed class SettingsTab : IDisposable
         _snapshots.Click += SnapshotsOnClicked;
         _fullscreen.Click += FullscreenOnClicked;
         _filesValidateMode.SelectionChanged += FilesValidateModeOnSelectionChanged;
+        _minecraftPathButton.Click += MinecraftPathButtonOnClick;
     }
 
     internal void Start()
@@ -56,6 +60,7 @@ internal sealed class SettingsTab : IDisposable
         _snapshots.Checked -= SnapshotsOnClicked;
         _fullscreen.Checked -= FullscreenOnClicked;
         _filesValidateMode.SelectionChanged -= FilesValidateModeOnSelectionChanged;
+        _minecraftPathButton.Click -= MinecraftPathButtonOnClick;
     }
 
     private void RamSliderOnValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
@@ -63,7 +68,8 @@ internal sealed class SettingsTab : IDisposable
         LocalPrefs localPrefs = _repo.LocalPrefs;
         Slider slider = (Slider)sender;
         localPrefs.DedicatedRam = (int)e.NewValue;
-        _repo.SaveLocalPrefs(localPrefs).FireAndForget(_ => slider.Value = e.OldValue);
+        SaveLocalPrefs(_repo, localPrefs, () => slider.Value = e.OldValue)
+            .FireAndForget();
     }
 
     private void SnapshotsOnClicked(object sender, RoutedEventArgs e)
@@ -71,7 +77,8 @@ internal sealed class SettingsTab : IDisposable
         LocalPrefs localPrefs = _repo.LocalPrefs;
         ToggleButton toggle = (ToggleButton)sender;
         localPrefs.ShowSnapshots = toggle.IsChecked.Value;
-        _repo.SaveLocalPrefs(localPrefs).FireAndForget(_ => toggle.IsChecked = !toggle.IsChecked);
+        SaveLocalPrefs(_repo, localPrefs, () => toggle.IsChecked = !toggle.IsChecked)
+            .FireAndForget();
     }
 
     private void FullscreenOnClicked(object sender, RoutedEventArgs e)
@@ -80,6 +87,8 @@ internal sealed class SettingsTab : IDisposable
         ToggleButton toggle = (ToggleButton)sender;
         localPrefs.IsFullscreen = toggle.IsChecked.Value;
         _repo.SaveLocalPrefs(localPrefs).FireAndForget(_ => toggle.IsChecked = !toggle.IsChecked);
+        SaveLocalPrefs(_repo, localPrefs, () => toggle.IsChecked = !toggle.IsChecked)
+            .FireAndForget();
     }
 
     private void FilesValidateModeOnSelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -87,6 +96,37 @@ internal sealed class SettingsTab : IDisposable
         LocalPrefs localPrefs = _repo.LocalPrefs;
         ComboBox comboBox = (ComboBox)sender;
         localPrefs.FileValidationMode = (FileValidation)e.AddedItems[0]!;
-        _repo.SaveLocalPrefs(localPrefs).FireAndForget(_ => comboBox.SelectedValue = (FileValidation)e.RemovedItems[0]!);
+        SaveLocalPrefs(_repo, localPrefs, () => comboBox.SelectedValue = (FileValidation)e.RemovedItems[0]!)
+            .FireAndForget();
+    }
+
+    private void MinecraftPathButtonOnClick(object sender, RoutedEventArgs e)
+    {
+        using CommonOpenFileDialog dialog = new CommonOpenFileDialog();
+        dialog.InitialDirectory = _repo.LocalPrefs.GameDirectory.FullName;
+        dialog.IsFolderPicker = true;
+        
+        if (dialog.ShowDialog() != CommonFileDialogResult.Ok) return;
+
+        DirectoryInfo selectedDirectory = new DirectoryInfo(dialog.FileName);
+        if(!selectedDirectory.Exists) return;
+
+        LocalPrefs localPrefs = _repo.LocalPrefs;
+        DirectoryInfo oldDirectory = localPrefs.GameDirectory;
+        
+        localPrefs.GameDirectory = selectedDirectory;
+        _minecraftPathText.Text = selectedDirectory.FullName;
+
+        SaveLocalPrefs(_repo, localPrefs, () => _minecraftPathText.Text = oldDirectory.FullName)
+            .FireAndForget();
+    }
+
+    private static async Task SaveLocalPrefs(Repo repo, LocalPrefs localPrefs, Action onFailure)
+    {
+        bool success = await repo.SaveLocalPrefs(localPrefs);
+        if (success && repo.Validate()) return;
+        
+        onFailure?.Invoke();
+        MessageBox.Show("Can't save local prefs.");
     }
 }
