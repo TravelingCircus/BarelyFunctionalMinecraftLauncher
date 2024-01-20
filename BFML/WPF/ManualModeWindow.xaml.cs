@@ -32,14 +32,19 @@ public sealed partial class ManualModeWindow : IDisposable
         InitializeComponent();
         _loadingScreen = new LoadingScreen(Loading, ProgressBar, ProgressText);
         _versionBlock = new VersionConfigurationBlock(
-            _game, _repo, IsModded, MinecraftVersion,
+            IsModded, MinecraftVersion,
             ForgeVersion, ModPack,
-            ForgeVersionLine, ModPackSelectionLine);
+            ForgeVersionLine, ModPackSelectionLine,
+            ForgeAddButton, ForgeRemoveButton, ModPackAddButton, ModPackRemoveButton,
+            _game, _repo);
         _settingsTab = new SettingsTab(
             _repo, SettingsTab, MinecraftPathButton, MinecraftPathText,
             JavaPathButton, JavaPathText, FilesValidateMode, RamSlider, Fullscreen, Snapshots);
 
         Nickname.Text = _repo.LocalPrefs.Nickname;
+        _versionBlock = new VersionConfigurationBlock(IsModded, MinecraftVersion, ForgeVersion, 
+            ModPack, ForgeVersionLine, ModPackSelectionLine,
+            ForgeAddButton, ForgeRemoveButton, ModPackAddButton, ModPackRemoveButton, _game, _repo);
         
         //SetUpSkinRenderer();
         Loaded += OnWindowLoaded;
@@ -73,13 +78,15 @@ public sealed partial class ManualModeWindow : IDisposable
     private async Task LaunchGame()
     {
         PlayButton.IsEnabled = false;
-        
-        await _game.Launch(
-            _repo.LocalPrefs.Nickname, 
-            _versionBlock.VanillaVersion.Value, 
-            _versionBlock.IsModded, 
-            _versionBlock.Forge.Value, 
+
+        GameConfiguration configuration = new GameConfiguration(
+            _versionBlock.IsModded,
+            _versionBlock.VanillaVersion.Value,
+            _versionBlock.Forge.Value,
             _versionBlock.ModPack);
+        
+        await _game.Launch(_repo.LocalPrefs.Nickname, configuration);
+        
         await Task.Delay(10000);
         Close();
     }

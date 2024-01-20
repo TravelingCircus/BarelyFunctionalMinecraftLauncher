@@ -9,7 +9,8 @@ namespace BFML.Repository;
 
 internal sealed class RepoIO
 {
-    public DirectoryInfo Root => _repoInfo; 
+    public DirectoryInfo Root => _repoInfo;
+    public DirectoryInfo Temp => new DirectoryInfo(_repoInfo.FullName + "\\Temp");
     private DirectoryInfo ForgeDirectory => new DirectoryInfo(_repoInfo.FullName + "\\Forge");
     private DirectoryInfo ConfigsDirectory => new DirectoryInfo(_repoInfo.FullName + "\\Configs");
     private DirectoryInfo ModPacksDirectory => new DirectoryInfo(_repoInfo.FullName + "\\ModPacks");

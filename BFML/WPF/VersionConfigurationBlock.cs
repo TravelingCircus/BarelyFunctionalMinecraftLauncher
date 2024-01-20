@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
@@ -7,6 +8,7 @@ using BFML.Core;
 using BFML.Repository;
 using CmlLib.Core.Version;
 using CmlLib.Core.VersionLoader;
+using CmlLib.Core.VersionMetadata;
 using Utils;
 using Utils.Async;
 using Version = Utils.Version;
@@ -31,18 +33,29 @@ internal sealed class VersionConfigurationBlock : IDisposable
     
     private readonly Game _game;
     private readonly Repo _repo;
-    
     private readonly Grid _forgeLine;
     private readonly Grid _modPackLine;
+    private readonly Button _forgeAddButton;
+    private readonly Button _forgeRemoveButton;
+    private readonly Button _modPackAddButton;
+    private readonly Button _modPackRemoveButton;
     private readonly ComboBox _modPacks;
     private readonly ComboBox _forgeVersions;
     private readonly ComboBox _vanillaVersions;
     private readonly ToggleButton _isModdedToggle;
     
-    public VersionConfigurationBlock(
-        Game game, Repo repo, ToggleButton isModdedToggle,
-        ComboBox vanillaVersions, ComboBox forgeVersions, ComboBox modPacks,
-        Grid forgeLine, Grid modPackLine)
+    public VersionConfigurationBlock(ToggleButton isModdedToggle, 
+        ComboBox vanillaVersions, 
+        ComboBox forgeVersions, 
+        ComboBox modPacks, 
+        Grid forgeLine, 
+        Grid modPackLine,
+        Button forgeAddButton,
+        Button forgeRemoveButton,
+        Button modPackAddButton,
+        Button modPackRemoveButton,
+        Game game, 
+        Repo repo)
     {
         _game = game;
         _repo = repo;
@@ -52,13 +65,16 @@ internal sealed class VersionConfigurationBlock : IDisposable
         _forgeVersions = forgeVersions;
         _isModdedToggle = isModdedToggle;
         _vanillaVersions = vanillaVersions;
+        _forgeAddButton = forgeAddButton;
+        _forgeRemoveButton = forgeRemoveButton;
+        _modPackAddButton = modPackAddButton;
+        _modPackRemoveButton = modPackRemoveButton;
     }
 
     public void Start()
     {
-        Changed += UpdateForgeItems;
         _isModdedToggle.Click += OnModdedToggleClicked;
-        _vanillaVersions.SelectionChanged += OnVanillaChanged;
+        Changed += UpdateForgeItems;
 
         MojangVersionLoader remoteVersionLoader = new MojangVersionLoader();
         MVersionCollection remoteVersions = remoteVersionLoader.GetVersionMetadatas();
@@ -69,6 +85,9 @@ internal sealed class VersionConfigurationBlock : IDisposable
         _vanillaVersions.SelectedItem = _repo.LocalPrefs.LastVanillaVersion;
         _isModdedToggle.IsChecked = _repo.LocalPrefs.IsModded;
 
+        _forgeAddButton.Click += OnForgeAddClicked;
+        _forgeRemoveButton.Click += OnForgeRemoveClicked;
+        
         UpdateModdedSectionVisibility();
         Changed?.Invoke();
     }
@@ -78,13 +97,14 @@ internal sealed class VersionConfigurationBlock : IDisposable
         Changed -= UpdateForgeItems;
         _isModdedToggle.Click -= OnModdedToggleClicked;  
         _vanillaVersions.SelectionChanged -= OnVanillaChanged;
+        _forgeAddButton.Click -= OnForgeAddClicked;
+        _forgeRemoveButton.Click -= OnForgeRemoveClicked;
     }
 
     private void OnModdedToggleClicked(object sender, RoutedEventArgs e)
     {
         LocalPrefs localPrefs = _repo.LocalPrefs;
-        ToggleButton toggle = (ToggleButton)sender;
-        localPrefs.IsModded = toggle.IsChecked.Value;
+        localPrefs.IsModded = _isModdedToggle.IsChecked!.Value;
         _repo.SaveLocalPrefs(localPrefs).FireAndForget();
 
         UpdateModdedSectionVisibility();
@@ -132,5 +152,40 @@ internal sealed class VersionConfigurationBlock : IDisposable
         bool isModded = _isModdedToggle.IsChecked!.Value;
         _forgeLine.Visibility = isModded ? Visibility.Visible : Visibility.Collapsed;
         _modPackLine.Visibility = isModded ? Visibility.Visible : Visibility.Collapsed;
+    }
+
+    private async void OnForgeAddClicked(object sender, RoutedEventArgs args)
+    {
+        try
+        {
+            Result<Forge> loadResult = await _repo.AddForgeWithDialogue();
+            if (loadResult is { IsOk: false, Error: IOException ioError }) MessageBox.Show(ioError.Message);
+        }
+        catch (Exception e)
+        {
+            MessageBox.Show(e.Message);
+        }
+        finally
+        {
+            Changed?.Invoke();
+        }
+    }
+
+    private async void OnForgeRemoveClicked(object sender, RoutedEventArgs args)
+    {
+        if (!Forge.IsSome) return;
+        
+        try
+        {
+            await _repo.RemoveForge(Forge.Value);
+        }
+        catch (Exception e)
+        {
+            MessageBox.Show(e.Message);
+        }
+        finally
+        {
+            Changed?.Invoke();
+        }
     }
 }
