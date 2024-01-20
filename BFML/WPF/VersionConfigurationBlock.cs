@@ -27,7 +27,7 @@ internal sealed class VersionConfigurationBlock : IDisposable
     public Option<Forge> Forge => !IsModded || string.IsNullOrEmpty((string)_forgeVersions.SelectedItem)
         ? Option<Forge>.None
         : Option<Forge>.Some(_repo.LoadForgeVersions(VanillaVersion.Value).Result
-            .First(forge => forge.SubVersion == new Version((string)_vanillaVersions.SelectedItem)));
+            .First(forge => forge.SubVersion == new Version((string)_forgeVersions.SelectedItem)));
         
     public ModPack ModPack { get; set; }
     
@@ -75,6 +75,7 @@ internal sealed class VersionConfigurationBlock : IDisposable
     {
         _isModdedToggle.Click += OnModdedToggleClicked;
         Changed += UpdateForgeItems;
+        _vanillaVersions.SelectionChanged += OnVanillaChanged;
 
         MojangVersionLoader remoteVersionLoader = new MojangVersionLoader();
         MVersionCollection remoteVersions = remoteVersionLoader.GetVersionMetadatas();

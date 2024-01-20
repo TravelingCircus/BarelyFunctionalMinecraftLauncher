@@ -10,17 +10,19 @@ internal readonly struct LaunchConfiguration
     internal readonly int DedicatedRam;
     internal readonly bool FullScreen;
     internal readonly string Nickname;
+    internal readonly FileInfo JVMLocation;
 
     public LaunchConfiguration(
         string nickname, 
         MVersion version, 
         int dedicatedRam, 
-        bool fullScreen) : this()
+        bool fullScreen, FileInfo jvmLocation) : this()
     {
         Nickname = nickname;
         Version = version;
         DedicatedRam = dedicatedRam;
         FullScreen = fullScreen;
+        JVMLocation = jvmLocation;
     }
 
     public Result<bool> IsValid()
