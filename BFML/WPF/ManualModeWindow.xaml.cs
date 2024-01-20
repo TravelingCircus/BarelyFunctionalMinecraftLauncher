@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Controls;
 using BFML._3D;
 using OpenTK.Wpf;
 using System.Windows.Input;
@@ -14,13 +15,14 @@ using Utils.Async;
 
 namespace BFML.WPF;
 
-public partial class ManualModeWindow
+public sealed partial class ManualModeWindow : IDisposable
 {
+    private SkinPreviewRenderer _skinPreviewRenderer;
+    private readonly Game _game;
     private readonly ManualModeRepo _repo;
+    private readonly SettingsTab _settingsTab;
     private readonly LoadingScreen _loadingScreen;
     private readonly VersionConfigurationBlock _versionBlock;
-    private readonly Game _game;
-    private SkinPreviewRenderer _skinPreviewRenderer;
 
     internal ManualModeWindow(ManualModeRepo repo)
     {
@@ -29,21 +31,48 @@ public partial class ManualModeWindow
         
         InitializeComponent();
         _loadingScreen = new LoadingScreen(Loading, ProgressBar, ProgressText);
+        _versionBlock = new VersionConfigurationBlock(
+            IsModded, MinecraftVersion,
+            ForgeVersion, ModPack,
+            ForgeVersionLine, ModPackSelectionLine,
+            ForgeAddButton, ForgeRemoveButton, ModPackAddButton, ModPackRemoveButton,
+            _game, _repo);
+        _settingsTab = new SettingsTab(
+            _repo, SettingsTab, MinecraftPathButton, MinecraftPathText,
+            JavaPathButton, JavaPathText, FilesValidateMode, RamSlider, Fullscreen, Snapshots);
+
+        Nickname.Text = _repo.LocalPrefs.Nickname;
         _versionBlock = new VersionConfigurationBlock(IsModded, MinecraftVersion, ForgeVersion, 
             ModPack, ForgeVersionLine, ModPackSelectionLine,
             ForgeAddButton, ForgeRemoveButton, ModPackAddButton, ModPackRemoveButton, _game, _repo);
         
         //SetUpSkinRenderer();
         Loaded += OnWindowLoaded;
+        Nickname.TextChanged += NicknameOnTextChanged;
+    }
+
+    private void NicknameOnTextChanged(object sender, TextChangedEventArgs e)
+    {
+        LocalPrefs localPrefs = _repo.LocalPrefs;
+        localPrefs.Nickname = Nickname.Text;
+        _repo.SaveLocalPrefs(localPrefs).FireAndForget();
     }
 
     private void OnWindowLoaded(object sender, RoutedEventArgs args)
     {
         Loaded -= OnWindowLoaded;
         _versionBlock.Start();
+        _settingsTab.Start();
         
         //ApplyLocalPrefs();
         //_skinPreviewRenderer.ChangeSkin(_repo.DefaultSkin);
+    }
+    
+    public void Dispose()
+    {
+        Nickname.TextChanged -= NicknameOnTextChanged;
+        _settingsTab?.Dispose();
+        _versionBlock?.Dispose();
     }
 
     private async Task LaunchGame()
@@ -77,7 +106,7 @@ public partial class ManualModeWindow
             _repo.DefaultSkin.SkinBytes.ToArray());
     }
     
-    private async void OnSkinFileDrop(object sender, DragEventArgs e)
+    private void OnSkinFileDrop(object sender, DragEventArgs e)
     {
         if (!e.Data.GetDataPresent(DataFormats.FileDrop)) return;
  
@@ -101,21 +130,21 @@ public partial class ManualModeWindow
 
     private void MoveWindow(object sender, MouseEventArgs e)
     {
-        if (e.LeftButton == MouseButtonState.Pressed)
+        if (e.LeftButton != MouseButtonState.Pressed) return;
+        
+        if (WindowState == WindowState.Maximized) 
         {
-            if (WindowState == WindowState.Maximized) 
-            {
-                WindowState = WindowState.Normal;
-                Application.Current.MainWindow!.Top = 3;
-            }
-            DragMove();
+            WindowState = WindowState.Normal;
+            Application.Current.MainWindow!.Top = 3;
         }
+        DragMove();
     }
 
     private void ShutDown(object sender, RoutedEventArgs e)
     {
         try
         {
+            Dispose();
             Application.Current.Shutdown();
         }
         catch (Exception ex)

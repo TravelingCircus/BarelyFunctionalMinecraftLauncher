@@ -28,6 +28,8 @@ internal abstract class Repo
         return loadResult.IsOk;
     }
 
+    public bool Validate() => RepoIo.ValidateRepository();
+
     protected abstract bool ForgeFilter(Forge forge);
 
     internal async Task<Forge[]> LoadForgeVersions(Version vanillaVersion)

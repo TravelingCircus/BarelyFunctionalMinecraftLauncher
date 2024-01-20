@@ -15,22 +15,24 @@ using Version = Utils.Version;
 
 namespace BFML.WPF;
 
-internal sealed class VersionConfigurationBlock
+internal sealed class VersionConfigurationBlock : IDisposable
 {
     public event Action Changed;
     public bool IsModded => _isModdedToggle.IsChecked!.Value;
 
-    public Option<Version> VanillaVersion => string.IsNullOrEmpty(_vanillaVersions.Text)
+    public Option<Version> VanillaVersion => string.IsNullOrEmpty((string)_vanillaVersions.SelectedItem)
         ? Option<Version>.None
-        : Option<Version>.Some(new Version(_vanillaVersions.Text));
+        : Option<Version>.Some(new Version((string)_vanillaVersions.SelectedItem));
 
-    public Option<Forge> Forge => !IsModded || string.IsNullOrEmpty(_forgeVersions.Text)
+    public Option<Forge> Forge => !IsModded || string.IsNullOrEmpty((string)_forgeVersions.SelectedItem)
         ? Option<Forge>.None
         : Option<Forge>.Some(_repo.LoadForgeVersions(VanillaVersion.Value).Result
-            .First(forge => forge.SubVersion == new Version(_forgeVersions.Text)));
+            .First(forge => forge.SubVersion == new Version((string)_forgeVersions.SelectedItem)));
         
     public ModPack ModPack { get; set; }
-
+    
+    private readonly Game _game;
+    private readonly Repo _repo;
     private readonly Grid _forgeLine;
     private readonly Grid _modPackLine;
     private readonly Button _forgeAddButton;
@@ -41,9 +43,6 @@ internal sealed class VersionConfigurationBlock
     private readonly ComboBox _forgeVersions;
     private readonly ComboBox _vanillaVersions;
     private readonly ToggleButton _isModdedToggle;
-
-    private readonly Game _game;
-    private readonly Repo _repo;
     
     public VersionConfigurationBlock(ToggleButton isModdedToggle, 
         ComboBox vanillaVersions, 
@@ -58,49 +57,72 @@ internal sealed class VersionConfigurationBlock
         Game game, 
         Repo repo)
     {
-        _isModdedToggle = isModdedToggle;
-        _vanillaVersions = vanillaVersions;
-        _forgeVersions = forgeVersions;
+        _game = game;
+        _repo = repo;
         _modPacks = modPacks;
         _forgeLine = forgeLine;
         _modPackLine = modPackLine;
+        _forgeVersions = forgeVersions;
+        _isModdedToggle = isModdedToggle;
+        _vanillaVersions = vanillaVersions;
         _forgeAddButton = forgeAddButton;
         _forgeRemoveButton = forgeRemoveButton;
         _modPackAddButton = modPackAddButton;
         _modPackRemoveButton = modPackRemoveButton;
-        _game = game;
-        _repo = repo;
     }
 
     public void Start()
     {
-        _isModdedToggle.Click += OnModdedToggleToggle;
-        _vanillaVersions.DropDownClosed += OnVanillaChanged;
+        _isModdedToggle.Click += OnModdedToggleClicked;
         Changed += UpdateForgeItems;
-        OnModdedToggleToggle(null, null);
+        _vanillaVersions.SelectionChanged += OnVanillaChanged;
 
         MojangVersionLoader remoteVersionLoader = new MojangVersionLoader();
         MVersionCollection remoteVersions = remoteVersionLoader.GetVersionMetadatas();
-        foreach (MVersionMetadata version in remoteVersions.Where(version => version.MType == MVersionType.Release))
-        {
-            _vanillaVersions.Items.Add(version.Name);
-        }
+        _vanillaVersions.ItemsSource = remoteVersions
+            .Where(version => version.MType == MVersionType.Release)
+            .Select(version => version.Name);
+
+        _vanillaVersions.SelectedItem = _repo.LocalPrefs.LastVanillaVersion;
+        _isModdedToggle.IsChecked = _repo.LocalPrefs.IsModded;
 
         _forgeAddButton.Click += OnForgeAddClicked;
         _forgeRemoveButton.Click += OnForgeRemoveClicked;
         
+        UpdateModdedSectionVisibility();
+        Changed?.Invoke();
+    }
+    
+    public void Dispose()
+    {
+        Changed -= UpdateForgeItems;
+        _isModdedToggle.Click -= OnModdedToggleClicked;  
+        _vanillaVersions.SelectionChanged -= OnVanillaChanged;
+        _forgeAddButton.Click -= OnForgeAddClicked;
+        _forgeRemoveButton.Click -= OnForgeRemoveClicked;
+    }
+
+    private void OnModdedToggleClicked(object sender, RoutedEventArgs e)
+    {
+        LocalPrefs localPrefs = _repo.LocalPrefs;
+        localPrefs.IsModded = _isModdedToggle.IsChecked!.Value;
+        _repo.SaveLocalPrefs(localPrefs).FireAndForget();
+
+        UpdateModdedSectionVisibility();
         Changed?.Invoke();
     }
 
-    private void OnVanillaChanged(object sender, EventArgs e) => Changed?.Invoke();
-
-    private void OnModdedToggleToggle(object sender, RoutedEventArgs e)
+    private async void OnVanillaChanged(object sender, SelectionChangedEventArgs e)
     {
-        bool isModdedNext = _isModdedToggle.IsChecked!.Value;
-
-        _forgeLine.Visibility = isModdedNext ? Visibility.Visible : Visibility.Collapsed;
-        _modPackLine.Visibility = isModdedNext ? Visibility.Visible : Visibility.Collapsed;
-        
+        LocalPrefs localPrefs = _repo.LocalPrefs;
+        ComboBox comboBox = (ComboBox)sender;
+        localPrefs.LastVanillaVersion = (string)e.AddedItems[0]!;
+        bool success = await _repo.SaveLocalPrefs(localPrefs);
+        if (!success || !_repo.Validate())
+        {
+            comboBox.SelectedValue = (FileValidation)e.RemovedItems[0]!;
+            return;
+        }
         Changed?.Invoke();
     }
 
@@ -124,6 +146,13 @@ internal sealed class VersionConfigurationBlock
             _forgeVersions.Items.Add(version.SubVersion.ToString());
         }
         _forgeVersions.Text = versions[0].SubVersion.ToString();
+    }
+
+    private void UpdateModdedSectionVisibility()
+    {
+        bool isModded = _isModdedToggle.IsChecked!.Value;
+        _forgeLine.Visibility = isModded ? Visibility.Visible : Visibility.Collapsed;
+        _modPackLine.Visibility = isModded ? Visibility.Visible : Visibility.Collapsed;
     }
 
     private async void OnForgeAddClicked(object sender, RoutedEventArgs args)

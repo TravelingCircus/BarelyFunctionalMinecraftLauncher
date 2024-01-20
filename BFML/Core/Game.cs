@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using BFML.Repository;
 using CmlLib.Core;
 using CmlLib.Core.Auth;
+using CmlLib.Core.Java;
 using CmlLib.Core.Version;
 using CmlLib.Core.VersionLoader;
 using Utils;
@@ -32,7 +33,8 @@ internal sealed class Game
             nickname, 
             preparationResult.Value,
             _repo.LocalPrefs.DedicatedRam, 
-            _repo.LocalPrefs.IsFullscreen);
+            _repo.LocalPrefs.IsFullscreen,
+            _repo.LocalPrefs.JVMLocation);
         
         await StartGameProcess(launchConfig);
     }
@@ -100,7 +102,8 @@ internal sealed class Game
         {
             MaximumRamMb = launchConfig.DedicatedRam,
             Session = MSession.CreateOfflineSession(launchConfig.Nickname),
-            FullScreen = launchConfig.FullScreen
+            FullScreen = launchConfig.FullScreen,
+            JavaPath = launchConfig.JVMLocation.FullName
         }, false);
         process.Start();
     }

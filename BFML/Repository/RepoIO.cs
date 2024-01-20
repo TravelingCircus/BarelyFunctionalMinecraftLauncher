@@ -44,9 +44,7 @@ internal sealed class RepoIO
     { 
         XmlDocument structure = ReadRepoStructure();
         
-        if (!ValidateRepositoryRecursive(structure.FirstChild, String.Empty)) return false;
-
-        return true;
+        return ValidateRepositoryRecursive(structure.FirstChild, string.Empty);
     }
 
     private bool ValidateRepositoryRecursive(XmlNode node, string parentPath)
