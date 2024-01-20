@@ -27,12 +27,7 @@ public sealed class LocalPrefs : IXmlSerializable
     internal FileInfo JVMLocation { get; set; }
     internal FileValidation FileValidationMode { get; set; }
 
-    internal LocalPrefs() : this(
-        string.Empty, string.Empty,
-        2048, false, false, 
-        string.Empty, string.Empty, string.Empty, 
-        LauncherMode.Manual, new DirectoryInfo(MinecraftPath.WindowsDefaultPath), 
-        new FileInfo(new MinecraftJavaPathResolver(MinecraftPath.WindowsDefaultPath).GetDefaultJavaBinaryPath()!)) { } //TODO Java
+    internal LocalPrefs() { }
 
     internal LocalPrefs(
         string nickname, string passwordHash, int dedicatedRam, bool isFullscreen, bool showSnapshots, 

@@ -18,6 +18,7 @@ internal struct LaunchConfiguration
     internal bool FullScreen = false;
     internal string Nickname = "ABOBA";
     internal FileValidation Validation = FileValidation.Full;
+    //TODO Add JVMPath
 
     public LaunchConfiguration() { }
 

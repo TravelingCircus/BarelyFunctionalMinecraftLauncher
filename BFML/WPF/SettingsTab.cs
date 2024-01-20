@@ -58,6 +58,7 @@ internal sealed class SettingsTab : IDisposable
         _fullscreen.IsChecked = localPrefs.IsFullscreen;
         _filesValidateMode.SelectedValue = localPrefs.FileValidationMode;
         _minecraftPathText.Text = localPrefs.GameDirectory.FullName;
+        _javaPathText.Text = localPrefs.JVMLocation.FullName;
     }
 
     public void Dispose()
@@ -137,13 +138,13 @@ internal sealed class SettingsTab : IDisposable
         if (dialog.ShowDialog() != CommonFileDialogResult.Ok) return;
 
         FileInfo selectedFile = new FileInfo(dialog.FileName);
-        if(selectedFile.Extension != "exe" && selectedFile.Name != "java") return;
+        if(selectedFile.Extension != ".exe" && selectedFile.Name != "javaw.exe") return;
         if(!selectedFile.Exists) return;
 
         LocalPrefs localPrefs = _repo.LocalPrefs;
         FileInfo oldFile = localPrefs.JVMLocation;
         
-        localPrefs.JVMLocation = oldFile;
+        localPrefs.JVMLocation = selectedFile;
         _javaPathText.Text = selectedFile.FullName;
 
         SaveLocalPrefs(_repo, localPrefs, () => _javaPathText.Text = oldFile.FullName)
