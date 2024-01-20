@@ -87,6 +87,7 @@
                     <Slider 
                         Grid.Row="2" 
                         x:Name="SkinSlider"
+                        Maximum="360"
                         Width="350"
                         Height="25"
                         HorizontalAlignment="Center"

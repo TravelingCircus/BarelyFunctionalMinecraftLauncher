@@ -3,6 +3,7 @@ using System.IO;
 using System.IO.Compression;
 using System.Linq;
 using System.Threading.Tasks;
+using BFML._3D;
 using BFML.Core;
 using Common;
 using Microsoft.Win32;
@@ -64,6 +65,11 @@ internal abstract class Repo
     }
 
     internal Task<Skin> LoadDefaultSkin() => RepoIo.Resources.LoadDefaultSkin();
+    
+    public Task<Texture> LoadShadowTexture()
+    {
+        return RepoIo.Resources.LoadShadowImage();
+    }
 
     internal async Task<bool> SaveLocalPrefs(LocalPrefs localPrefs)
     {
