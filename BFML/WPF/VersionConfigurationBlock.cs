@@ -8,6 +8,7 @@ using BFML.Repository;
 using CmlLib.Core.Version;
 using CmlLib.Core.VersionLoader;
 using Utils;
+using Utils.Async;
 using Version = Utils.Version;
 
 namespace BFML.WPF;
@@ -58,7 +59,6 @@ internal sealed class VersionConfigurationBlock : IDisposable
         Changed += UpdateForgeItems;
         _isModdedToggle.Click += OnModdedToggleClicked;
         _vanillaVersions.SelectionChanged += OnVanillaChanged;
-        OnModdedToggleClicked(null, null);
 
         MojangVersionLoader remoteVersionLoader = new MojangVersionLoader();
         MVersionCollection remoteVersions = remoteVersionLoader.GetVersionMetadatas();
@@ -67,7 +67,9 @@ internal sealed class VersionConfigurationBlock : IDisposable
             .Select(version => version.Name);
 
         _vanillaVersions.SelectedItem = _repo.LocalPrefs.LastVanillaVersion;
-        
+        _isModdedToggle.IsChecked = _repo.LocalPrefs.IsModded;
+
+        UpdateModdedSectionVisibility();
         Changed?.Invoke();
     }
     
@@ -76,6 +78,17 @@ internal sealed class VersionConfigurationBlock : IDisposable
         Changed -= UpdateForgeItems;
         _isModdedToggle.Click -= OnModdedToggleClicked;  
         _vanillaVersions.SelectionChanged -= OnVanillaChanged;
+    }
+
+    private void OnModdedToggleClicked(object sender, RoutedEventArgs e)
+    {
+        LocalPrefs localPrefs = _repo.LocalPrefs;
+        ToggleButton toggle = (ToggleButton)sender;
+        localPrefs.IsModded = toggle.IsChecked.Value;
+        _repo.SaveLocalPrefs(localPrefs).FireAndForget();
+
+        UpdateModdedSectionVisibility();
+        Changed?.Invoke();
     }
 
     private async void OnVanillaChanged(object sender, SelectionChangedEventArgs e)
@@ -89,16 +102,6 @@ internal sealed class VersionConfigurationBlock : IDisposable
             comboBox.SelectedValue = (FileValidation)e.RemovedItems[0]!;
             return;
         }
-        Changed?.Invoke();
-    }
-
-    private void OnModdedToggleClicked(object sender, RoutedEventArgs e)
-    {
-        bool isModdedNext = _isModdedToggle.IsChecked!.Value;
-
-        _forgeLine.Visibility = isModdedNext ? Visibility.Visible : Visibility.Collapsed;
-        _modPackLine.Visibility = isModdedNext ? Visibility.Visible : Visibility.Collapsed;
-        
         Changed?.Invoke();
     }
 
@@ -122,5 +125,12 @@ internal sealed class VersionConfigurationBlock : IDisposable
             _forgeVersions.Items.Add(version.SubVersion.ToString());
         }
         _forgeVersions.Text = versions[0].SubVersion.ToString();
+    }
+
+    private void UpdateModdedSectionVisibility()
+    {
+        bool isModded = _isModdedToggle.IsChecked!.Value;
+        _forgeLine.Visibility = isModded ? Visibility.Visible : Visibility.Collapsed;
+        _modPackLine.Visibility = isModded ? Visibility.Visible : Visibility.Collapsed;
     }
 }
