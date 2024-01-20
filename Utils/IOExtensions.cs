@@ -2,11 +2,13 @@
 
 public static class IOExtensions
 {
-    public static bool CopyTo(this DirectoryInfo source, DirectoryInfo target, bool recursive)
+    public static bool CopyTo(this DirectoryInfo source, DirectoryInfo target, bool recursive, bool clearTarget = false)
     {
         if (!source.Exists) return false;
+        if (source == target) throw new InvalidOperationException("Can't copy to source directory.");
         
         DirectoryInfo[] dirs = source.GetDirectories();
+        if (target.Exists && clearTarget) Directory.Delete(target.FullName, true);
         target.Create();
         
         foreach (FileInfo file in source.GetFiles())

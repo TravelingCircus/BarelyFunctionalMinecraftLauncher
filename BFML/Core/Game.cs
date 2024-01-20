@@ -13,7 +13,6 @@ namespace BFML.Core;
 
 internal sealed class Game
 {
-    internal IVersionLoader Versions => _launcher.VersionLoader;
     private readonly Repo _repo;
     private readonly CMLauncher _launcher;
 

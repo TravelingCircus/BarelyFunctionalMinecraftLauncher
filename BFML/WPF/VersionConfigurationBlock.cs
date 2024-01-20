@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
@@ -86,6 +87,7 @@ internal sealed class VersionConfigurationBlock
         }
 
         _forgeAddButton.Click += OnForgeAddClicked;
+        _forgeRemoveButton.Click += OnForgeRemoveClicked;
         
         Changed?.Invoke();
     }
@@ -124,8 +126,38 @@ internal sealed class VersionConfigurationBlock
         _forgeVersions.Text = versions[0].SubVersion.ToString();
     }
 
-    private void OnForgeAddClicked(object sender, RoutedEventArgs e)
+    private async void OnForgeAddClicked(object sender, RoutedEventArgs args)
     {
-        _repo.AddForgeWithDialogue().FireAndForget(e=>MessageBox.Show(e.Message));
+        try
+        {
+            Result<Forge> loadResult = await _repo.AddForgeWithDialogue();
+            if (loadResult is { IsOk: false, Error: IOException ioError }) MessageBox.Show(ioError.Message);
+        }
+        catch (Exception e)
+        {
+            MessageBox.Show(e.Message);
+        }
+        finally
+        {
+            Changed?.Invoke();
+        }
+    }
+
+    private async void OnForgeRemoveClicked(object sender, RoutedEventArgs args)
+    {
+        if (!Forge.IsSome) return;
+        
+        try
+        {
+            await _repo.RemoveForge(Forge.Value);
+        }
+        catch (Exception e)
+        {
+            MessageBox.Show(e.Message);
+        }
+        finally
+        {
+            Changed?.Invoke();
+        }
     }
 }

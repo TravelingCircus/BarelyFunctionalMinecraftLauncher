@@ -82,17 +82,22 @@ internal abstract class Repo
         return Task.FromResult(Result<bool>.Ok(true));
     }
 
-    public Task<Result<bool>> AddForgeWithDialogue()
+    public Task<Result<Forge>> AddForgeWithDialogue()
     {
         Result<FileInfo> fileSelection = PlayFileSelectionDialogue("Forge Package Zip|*.zip");
-        if (!fileSelection.IsOk) return Task.FromResult(Result<bool>.Err(fileSelection.Error));
+        if (!fileSelection.IsOk) return Task.FromResult(Result<Forge>.Err(fileSelection.Error));
         
         FileInfo archiveFile = fileSelection.Value;
-        if (archiveFile.Extension != ".zip") return Task.FromResult(Result<bool>.Err(new FileFormatException("Expected forge version archive.")));
+        if (archiveFile.Extension != ".zip") return Task.FromResult(Result<Forge>.Err(new IOException("Expected forge version archive.")));
 
         return RepoIo.Forge.AddVersion(archiveFile);
     }
-    
+
+    public Task<Result<bool>> RemoveForge(Forge forgeToRemove)
+    {
+        return RepoIo.Forge.DeleteVersion(forgeToRemove);
+    }
+
     /// <param name="pattern">example: "Forge Package Zip|*.zip"</param>
     private Result<FileInfo> PlayFileSelectionDialogue(string pattern)
     {
@@ -113,6 +118,6 @@ internal abstract class Repo
             return Result<FileInfo>.Err(e);
         }
 
-        return Result<FileInfo>.Err(new IOException("File selection dialogue was cancelled."));
+        return Result<FileInfo>.Err(new Exception("File selection dialogue was cancelled."));
     }
 }
