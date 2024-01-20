@@ -16,7 +16,7 @@ internal sealed class ConfigAdapter : RepoAdapter
         FileInfo prefsFile = LocalPrefsFile;
         if (!prefsFile.Exists)
         {
-            LocalPrefs localPrefs = new LocalPrefs();
+            LocalPrefs localPrefs = LocalPrefs.Default();
             SaveLocalPrefs(localPrefs);
             return Task.FromResult(localPrefs);
         }

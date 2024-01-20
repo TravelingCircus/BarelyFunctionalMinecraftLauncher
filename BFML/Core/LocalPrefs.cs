@@ -5,7 +5,6 @@ using System.Xml.Schema;
 using System.Xml.Serialization;
 using BFML.Repository;
 using CmlLib.Core;
-using CmlLib.Core.Java;
 
 namespace BFML.Core;
 
@@ -45,6 +44,15 @@ public sealed class LocalPrefs : IXmlSerializable
         LauncherMode = launcherMode;
         GameDirectory = gameDirectory;
         JVMLocation = jvmLocation;
+    }
+
+    internal static LocalPrefs Default()
+    {
+        return new LocalPrefs(
+            string.Empty, string.Empty,
+            2048, false, false,
+            string.Empty, string.Empty, string.Empty,
+            LauncherMode.Manual, new DirectoryInfo(MinecraftPath.WindowsDefaultPath), null); //Provide default jvm path
     }
 
     public XmlSchema GetSchema() => null;
