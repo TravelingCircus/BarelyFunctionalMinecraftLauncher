@@ -12,6 +12,7 @@ namespace BFML.Repository.RepoIOAdapters;
 internal sealed class ResourceAdapter : RepoAdapter
 {
     private FileInfo DefaultSkinFile => new FileInfo(AdapterDirectory + "\\DefaultSkin.png");
+    private FileInfo ShadowImage => new FileInfo(AdapterDirectory + "\\Shadow.png");
     
     internal ResourceAdapter(DirectoryInfo directory, RepoIO repoIo) : base(directory, repoIo) { }
     
@@ -22,11 +23,20 @@ internal sealed class ResourceAdapter : RepoAdapter
     
     internal async Task<Skin> LoadDefaultSkin()
     {
-        Image<Rgba32> image = await Image.LoadAsync<Rgba32>(DefaultSkinFile.FullName);
+        return new Skin(await LoadTexture(DefaultSkinFile));
+    }
+    
+    internal Task<Texture> LoadShadowImage()
+    {
+        return LoadTexture(ShadowImage);
+    }
+
+    private async Task<Texture> LoadTexture(FileInfo file)
+    {
+        Image<Rgba32> image = await Image.LoadAsync<Rgba32>(file.FullName);
         image.Mutate(x => x.Flip(FlipMode.Vertical));
         byte[] pixels = new byte[4 * image.Width * image.Height];
         image.CopyPixelDataTo(pixels);
-        Texture texture = new Texture(pixels, image.Width, image.Height);
-        return new Skin(texture);
+        return new Texture(pixels, image.Width, image.Height);
     }
 }

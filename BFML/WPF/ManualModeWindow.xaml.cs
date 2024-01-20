@@ -64,9 +64,14 @@ public sealed partial class ManualModeWindow : IDisposable
         Loaded -= OnWindowLoaded;
         _versionBlock.Start();
         _settingsTab.Start();
-        
-        Skin skin = await _repo.LoadDefaultSkin();
-        _skinPreviewRenderer.SetUp(skin.Texture, skin.Texture);
+
+        try
+        {
+            _skinPreviewRenderer.SetUp(
+                (await _repo.LoadDefaultSkin()).Texture, 
+                await _repo.LoadShadowTexture());
+        }
+        catch { }
     }
     
     public void Dispose()
@@ -96,13 +101,20 @@ public sealed partial class ManualModeWindow : IDisposable
 
     private SkinPreviewRenderer SetUpSkinRenderer()
     {
-        GLWpfControlSettings settings = new GLWpfControlSettings
+        try
         {
-            MajorVersion = 4,
-            MinorVersion = 0
-        };
-        OpenTkControl.Start(settings);
-        return new SkinPreviewRenderer();
+            GLWpfControlSettings settings = new GLWpfControlSettings
+            {
+                MajorVersion = 4,
+                MinorVersion = 0
+            };
+            OpenTkControl.Start(settings);
+            return new SkinPreviewRenderer();
+        }
+        catch (Exception e)
+        {
+            return null;
+        }
     }
     
     private void OnSkinFileDrop(object sender, DragEventArgs e)
