@@ -36,7 +36,7 @@ public sealed partial class ManualModeWindow : IDisposable
             ForgeVersionLine, ModPackSelectionLine);
         _settingsTab = new SettingsTab(
             _repo, SettingsTab, MinecraftPathButton, MinecraftPathText,
-            FilesValidateMode, RamSlider, Fullscreen, Snapshots);
+            JavaPathButton, JavaPathText, FilesValidateMode, RamSlider, Fullscreen, Snapshots);
         
         //SetUpSkinRenderer();
         Loaded += OnWindowLoaded;

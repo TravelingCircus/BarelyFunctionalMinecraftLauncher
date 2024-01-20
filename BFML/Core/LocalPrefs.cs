@@ -5,6 +5,7 @@ using System.Xml.Schema;
 using System.Xml.Serialization;
 using BFML.Repository;
 using CmlLib.Core;
+using CmlLib.Core.Java;
 
 namespace BFML.Core;
 
@@ -23,18 +24,20 @@ public sealed class LocalPrefs : IXmlSerializable
     
     internal LauncherMode LauncherMode { get; set; }
     internal DirectoryInfo GameDirectory { get; set; }
+    internal FileInfo JVMLocation { get; set; }
     internal FileValidation FileValidationMode { get; set; }
 
     internal LocalPrefs() : this(
         string.Empty, string.Empty,
         2048, false, false, 
         string.Empty, string.Empty, string.Empty, 
-        LauncherMode.Manual, new DirectoryInfo(MinecraftPath.WindowsDefaultPath)) { }
+        LauncherMode.Manual, new DirectoryInfo(MinecraftPath.WindowsDefaultPath), 
+        new FileInfo(new MinecraftJavaPathResolver(MinecraftPath.WindowsDefaultPath).GetDefaultJavaBinaryPath()!)) { } //TODO Java
 
     internal LocalPrefs(
         string nickname, string passwordHash, int dedicatedRam, bool isFullscreen, bool showSnapshots, 
         string lastVanillaVersion, string lastForgeVersion, string lastModPackGuid,
-        LauncherMode launcherMode, DirectoryInfo gameDirectory)
+        LauncherMode launcherMode, DirectoryInfo gameDirectory, FileInfo jvmLocation)
     {
         Nickname = nickname;
         PasswordHash = passwordHash;
@@ -46,6 +49,7 @@ public sealed class LocalPrefs : IXmlSerializable
         LastVanillaVersion = lastVanillaVersion;
         LauncherMode = launcherMode;
         GameDirectory = gameDirectory;
+        JVMLocation = jvmLocation;
     }
 
     public XmlSchema GetSchema() => null;
@@ -64,6 +68,7 @@ public sealed class LocalPrefs : IXmlSerializable
         LastForgeVersion = reader.ReadElementString("LastForgeVersion");
         LastModPackGuid = reader.ReadElementString("LastModPackGuid");
         GameDirectory = new DirectoryInfo(reader.ReadElementString("GameDirectory"));
+        JVMLocation = new FileInfo(reader.ReadElementString("JVMLocation"));
         FileValidationMode = Enum.Parse<FileValidation>(reader.ReadElementString("FileValidationMode"));
     }
 
@@ -79,6 +84,7 @@ public sealed class LocalPrefs : IXmlSerializable
         writer.WriteElementString("LastForgeVersion", LastForgeVersion);
         writer.WriteElementString("LastModPackGuid", LastModPackGuid);
         writer.WriteElementString("GameDirectory", GameDirectory.FullName);
+        writer.WriteElementString("JVMLocation", JVMLocation.FullName);
         writer.WriteElementString("FileValidationMode", FileValidationMode.ToString());
     }
 }

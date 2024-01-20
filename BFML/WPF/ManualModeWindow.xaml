@@ -765,6 +765,86 @@
                                 </Border>
                                 
                                 <Border
+                                    Height="75"
+                                    Margin="0, 5"
+                                    Background="#434343"
+                                    CornerRadius="5">
+                                    
+                                    <Grid>
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="37.5"/>
+                                            <RowDefinition Height="37.5"/>
+                                        </Grid.RowDefinitions>
+                                        <Grid
+                                            Grid.Row="0"
+                                            HorizontalAlignment="Center">
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="200" />
+                                                <ColumnDefinition Width="150" />
+                                            </Grid.ColumnDefinitions>
+                                            <TextBlock
+                                                Grid.Column="0"
+                                                Width="200"
+                                                HorizontalAlignment="Left"
+                                                VerticalAlignment="Center"
+                                                FontSize="20"
+                                                FontFamily="Minecraft"
+                                                Foreground="#dcdcdc"
+                                                Text="Java path"
+                                                TextAlignment="Left" />
+                                            
+                                            <Button
+                                                Grid.Column="1"
+                                                x:Name="JavaPathButton"
+                                                Height="30"
+                                                Width="150"
+                                                HorizontalAlignment="Center"
+                                                VerticalAlignment="Center"
+                                                Background="#383838"
+                                                Cursor="Hand"
+                                                Style="{DynamicResource DefaultButton}">
+                                                <TextBlock
+                                                    Width="150"
+                                                    VerticalAlignment="Center"
+                                                    FontSize="18"
+                                                    FontFamily="Minecraft"
+                                                    Foreground="#dcdcdc"
+                                                    Text="Change"
+                                                    TextAlignment="Center" />
+                                            </Button>
+                                        </Grid>
+                                        
+                                        <Grid
+                                            Grid.Row="1">
+                                            <TextBlock
+                                                Grid.Column="0"
+                                                x:Name="JavaPathText"
+                                                Width="350"
+                                                HorizontalAlignment="Left"
+                                                VerticalAlignment="Center"
+                                                Margin="12.5, 0"
+                                                FontSize="16"
+                                                FontFamily="Minecraft"
+                                                Foreground="#ff9a3c"
+                                                Text="C://ProgramFiles//Java//java.exe"
+                                                TextTrimming="CharacterEllipsis"
+                                                TextAlignment="Left" />
+                                            <Rectangle
+                                                Grid.Column="0"
+                                                Width="350"
+                                                Height="3"
+                                                Margin="7.5,0,7.5,3"
+                                                HorizontalAlignment="Center"
+                                                VerticalAlignment="Bottom"
+                                                Fill="#ff9a3c"
+                                                RadiusX="1"
+                                                RadiusY="1"
+                                                Style="{DynamicResource GlowingRectangle}" />
+                                        </Grid>
+                                    </Grid>
+                                </Border>
+                                
+                                <Border
                                     Height="125"
                                     Margin="0, 5"
                                     Background="#434343"

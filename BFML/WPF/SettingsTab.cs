@@ -16,6 +16,8 @@ internal sealed class SettingsTab : IDisposable
     private readonly Repo _repo;
     private readonly TabItem _tab;
     private readonly Slider _ramSlider;
+    private readonly Button _javaPathButton;
+    private readonly TextBlock _javaPathText;
     private readonly ToggleButton _snapshots;
     private readonly ToggleButton _fullscreen;
     private readonly ComboBox _filesValidateMode;
@@ -23,14 +25,17 @@ internal sealed class SettingsTab : IDisposable
     private readonly TextBlock _minecraftPathText;
 
     internal SettingsTab(
-        Repo repo, TabItem tab, Button minecraftPathButton, TextBlock minecraftPathText, 
-        ComboBox filesValidateMode, Slider ramSlider, ToggleButton fullscreen, ToggleButton snapshots)
+        Repo repo, TabItem tab, Button minecraftPathButton, TextBlock minecraftPathText,
+        Button javaPathButton, TextBlock javaPathText, ComboBox filesValidateMode,
+        Slider ramSlider, ToggleButton fullscreen, ToggleButton snapshots)
     {
         _repo = repo;
         _tab = tab;
         _ramSlider = ramSlider;
         _snapshots = snapshots;
         _fullscreen = fullscreen;
+        _javaPathText = javaPathText;
+        _javaPathButton = javaPathButton;
         _filesValidateMode = filesValidateMode;
         _minecraftPathText = minecraftPathText;
         _minecraftPathButton = minecraftPathButton;
@@ -42,6 +47,7 @@ internal sealed class SettingsTab : IDisposable
         _fullscreen.Click += FullscreenOnClicked;
         _filesValidateMode.SelectionChanged += FilesValidateModeOnSelectionChanged;
         _minecraftPathButton.Click += MinecraftPathButtonOnClick;
+        _javaPathButton.Click += JavaPathButtonOnClick;
     }
 
     internal void Start()
@@ -61,6 +67,7 @@ internal sealed class SettingsTab : IDisposable
         _fullscreen.Checked -= FullscreenOnClicked;
         _filesValidateMode.SelectionChanged -= FilesValidateModeOnSelectionChanged;
         _minecraftPathButton.Click -= MinecraftPathButtonOnClick;
+        _javaPathButton.Click -= JavaPathButtonOnClick;
     }
 
     private void RamSliderOnValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
@@ -118,6 +125,28 @@ internal sealed class SettingsTab : IDisposable
         _minecraftPathText.Text = selectedDirectory.FullName;
 
         SaveLocalPrefs(_repo, localPrefs, () => _minecraftPathText.Text = oldDirectory.FullName)
+            .FireAndForget();
+    }
+
+    private void JavaPathButtonOnClick(object sender, RoutedEventArgs e)
+    {
+        using CommonOpenFileDialog dialog = new CommonOpenFileDialog();
+        dialog.InitialDirectory = _repo.LocalPrefs.JVMLocation.DirectoryName;
+        dialog.IsFolderPicker = false;
+        
+        if (dialog.ShowDialog() != CommonFileDialogResult.Ok) return;
+
+        FileInfo selectedFile = new FileInfo(dialog.FileName);
+        if(selectedFile.Extension != "exe" && selectedFile.Name != "java") return;
+        if(!selectedFile.Exists) return;
+
+        LocalPrefs localPrefs = _repo.LocalPrefs;
+        FileInfo oldFile = localPrefs.JVMLocation;
+        
+        localPrefs.JVMLocation = oldFile;
+        _javaPathText.Text = selectedFile.FullName;
+
+        SaveLocalPrefs(_repo, localPrefs, () => _javaPathText.Text = oldFile.FullName)
             .FireAndForget();
     }
 
