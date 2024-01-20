@@ -1,10 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.IO.Compression;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Xml.Serialization;
 using BFML.Core;
+using ICSharpCode.SharpZipLib.Core;
 using Utils;
 
 namespace BFML.Repository.RepoIOAdapters;
@@ -109,6 +112,77 @@ internal sealed class ForgeAdapter : RepoAdapter
         {
             Result<Forge> result = LoadForgeDescription(forgeDirectory);
             if (result.IsOk) yield return (result.Value, new DirectoryInfo(forgeDirectory+"\\ForgeFiles"));
+        }
+    }
+
+    public async Task<Result<Forge>> AddVersion(FileInfo archiveFile)
+    {
+        if (!archiveFile.Exists || archiveFile.Extension != ".zip")
+        {
+            return Result<Forge>.Err(new IOException("Expected forge version archive."));
+        }
+        
+        using ZipArchive zipArchive = new ZipArchive(archiveFile.OpenRead());
+        DirectoryInfo temp = new DirectoryInfo(RepoIo.Temp + "\\Forge");
+
+        try
+        {
+            zipArchive.ExtractToDirectory(temp.FullName, true);
+
+            Result<Forge> sourceFileValidation = ValidateForgeDirectory(temp);
+            if (!sourceFileValidation.IsOk) throw sourceFileValidation.Error;
+
+            DirectoryInfo target = new DirectoryInfo(AdapterDirectory + $"\\{sourceFileValidation.Value.Name}");
+            temp.CopyTo(target, true, true);
+
+            return ValidateForgeDirectory(target);
+        }
+        catch (Exception e)
+        {
+            return Result<Forge>.Err(e);
+        }
+        finally
+        {
+            Directory.Delete(temp.FullName, true);
+        }
+    }
+
+    private Result<Forge> ValidateForgeDirectory(DirectoryInfo forgeDirectory)
+    {
+        Result<Forge> manifestLoading = LoadForgeDescription(forgeDirectory);
+        if (!manifestLoading.IsOk) return manifestLoading;
+
+        Forge manifest = manifestLoading.Value;
+
+        DirectoryInfo librariesDirectory = new DirectoryInfo(forgeDirectory + "\\ForgeFiles\\libraries");
+        DirectoryInfo versionDirectory = new DirectoryInfo(forgeDirectory + "\\ForgeFiles\\" + $"{manifest.Name}");
+
+        if (!versionDirectory.Exists)
+        {
+            return Result<Forge>.Err(new IOException($"Forge version {manifest.Name} does not have a version directory."));
+        }
+        
+        if (!librariesDirectory.Exists)
+        {
+            return Result<Forge>.Err(new IOException($"Forge version {manifest.Name} does not have a `libraries` directory."));
+        }
+        
+        return Result<Forge>.Ok(manifest);
+    }
+
+    public Task<Result<bool>> DeleteVersion(Forge forgeToRemove)
+    {
+        Result<(DirectoryInfo Version, DirectoryInfo Libs)> filesSearch = FindForgeFiles(forgeToRemove);
+        if (!filesSearch.IsOk) return Task.FromResult(Result<bool>.Err(filesSearch.Error));
+
+        try
+        {
+            Directory.Delete(filesSearch.Value.Version.Parent!.Parent!.FullName, true);
+            return Task.FromResult(Result<bool>.Ok(true));
+        }
+        catch (Exception e)
+        {
+            return Task.FromResult(Result<bool>.Err(e));
         }
     }
 }

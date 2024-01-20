@@ -30,7 +30,8 @@ public partial class ManualModeWindow
         InitializeComponent();
         _loadingScreen = new LoadingScreen(Loading, ProgressBar, ProgressText);
         _versionBlock = new VersionConfigurationBlock(IsModded, MinecraftVersion, ForgeVersion, 
-            ModPack, ForgeVersionLine, ModPackSelectionLine, _game, _repo);
+            ModPack, ForgeVersionLine, ModPackSelectionLine,
+            ForgeAddButton, ForgeRemoveButton, ModPackAddButton, ModPackRemoveButton, _game, _repo);
         
         //SetUpSkinRenderer();
         Loaded += OnWindowLoaded;
@@ -48,13 +49,15 @@ public partial class ManualModeWindow
     private async Task LaunchGame()
     {
         PlayButton.IsEnabled = false;
-        
-        await _game.Launch(
-            _repo.LocalPrefs.Nickname, 
-            _versionBlock.VanillaVersion.Value, 
-            _versionBlock.IsModded, 
-            _versionBlock.Forge.Value, 
+
+        GameConfiguration configuration = new GameConfiguration(
+            _versionBlock.IsModded,
+            _versionBlock.VanillaVersion.Value,
+            _versionBlock.Forge.Value,
             _versionBlock.ModPack);
+        
+        await _game.Launch(_repo.LocalPrefs.Nickname, configuration);
+        
         await Task.Delay(10000);
         Close();
     }
