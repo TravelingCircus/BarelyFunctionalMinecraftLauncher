@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Controls;
 using BFML._3D;
 using OpenTK.Wpf;
 using System.Windows.Input;
@@ -37,9 +38,19 @@ public sealed partial class ManualModeWindow : IDisposable
         _settingsTab = new SettingsTab(
             _repo, SettingsTab, MinecraftPathButton, MinecraftPathText,
             JavaPathButton, JavaPathText, FilesValidateMode, RamSlider, Fullscreen, Snapshots);
+
+        Nickname.Text = _repo.LocalPrefs.Nickname;
         
         //SetUpSkinRenderer();
         Loaded += OnWindowLoaded;
+        Nickname.TextChanged += NicknameOnTextChanged;
+    }
+
+    private void NicknameOnTextChanged(object sender, TextChangedEventArgs e)
+    {
+        LocalPrefs localPrefs = _repo.LocalPrefs;
+        localPrefs.Nickname = Nickname.Text;
+        _repo.SaveLocalPrefs(localPrefs).FireAndForget();
     }
 
     private void OnWindowLoaded(object sender, RoutedEventArgs args)
@@ -54,6 +65,7 @@ public sealed partial class ManualModeWindow : IDisposable
     
     public void Dispose()
     {
+        Nickname.TextChanged -= NicknameOnTextChanged;
         _settingsTab?.Dispose();
         _versionBlock?.Dispose();
     }
