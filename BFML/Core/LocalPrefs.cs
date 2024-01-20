@@ -16,7 +16,8 @@ public sealed class LocalPrefs : IXmlSerializable
     internal int DedicatedRam { get; set; }
     internal bool IsFullscreen { get; set; }
     internal bool ShowSnapshots { get; set; }
-    
+
+    internal bool IsModded { get; set; }
     internal string LastModPackGuid { get; set; }
     internal string LastForgeVersion { get; set; }
     internal string LastVanillaVersion { get; set; }
@@ -30,7 +31,7 @@ public sealed class LocalPrefs : IXmlSerializable
 
     internal LocalPrefs(
         string nickname, string passwordHash, int dedicatedRam, bool isFullscreen, bool showSnapshots, 
-        string lastVanillaVersion, string lastForgeVersion, string lastModPackGuid,
+        bool isModded, string lastVanillaVersion, string lastForgeVersion, string lastModPackGuid,
         LauncherMode launcherMode, DirectoryInfo gameDirectory, FileInfo jvmLocation)
     {
         Nickname = nickname;
@@ -38,6 +39,7 @@ public sealed class LocalPrefs : IXmlSerializable
         DedicatedRam = dedicatedRam;
         IsFullscreen = isFullscreen;
         ShowSnapshots = showSnapshots;
+        IsModded = isModded;
         LastModPackGuid = lastModPackGuid;
         LastForgeVersion = lastForgeVersion;
         LastVanillaVersion = lastVanillaVersion;
@@ -51,7 +53,7 @@ public sealed class LocalPrefs : IXmlSerializable
         return new LocalPrefs(
             string.Empty, string.Empty,
             2048, false, false,
-            string.Empty, string.Empty, string.Empty,
+            false, string.Empty, string.Empty, string.Empty,
             LauncherMode.Manual, new DirectoryInfo(MinecraftPath.WindowsDefaultPath), null); //Provide default jvm path
     }
 
@@ -67,6 +69,7 @@ public sealed class LocalPrefs : IXmlSerializable
         IsFullscreen = bool.Parse(reader.ReadElementString("IsFullscreen"));
         ShowSnapshots = bool.Parse(reader.ReadElementString("ShowSnapshots"));
         LauncherMode = Enum.Parse<LauncherMode>(reader.ReadElementString("LauncherMode"));
+        IsModded = bool.Parse(reader.ReadElementString("IsModded"));
         LastVanillaVersion = reader.ReadElementString("LastVanillaVersion");
         LastForgeVersion = reader.ReadElementString("LastForgeVersion");
         LastModPackGuid = reader.ReadElementString("LastModPackGuid");
@@ -83,6 +86,7 @@ public sealed class LocalPrefs : IXmlSerializable
         writer.WriteElementString("IsFullscreen", IsFullscreen.ToString());
         writer.WriteElementString("ShowSnapshots", ShowSnapshots.ToString());
         writer.WriteElementString("LauncherMode", LauncherMode.ToString());
+        writer.WriteElementString("IsModded", IsModded.ToString());
         writer.WriteElementString("LastVanillaVersion", LastVanillaVersion);
         writer.WriteElementString("LastForgeVersion", LastForgeVersion);
         writer.WriteElementString("LastModPackGuid", LastModPackGuid);

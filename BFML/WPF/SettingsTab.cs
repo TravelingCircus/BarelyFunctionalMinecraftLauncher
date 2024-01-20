@@ -94,7 +94,6 @@ internal sealed class SettingsTab : IDisposable
         LocalPrefs localPrefs = _repo.LocalPrefs;
         ToggleButton toggle = (ToggleButton)sender;
         localPrefs.IsFullscreen = toggle.IsChecked.Value;
-        _repo.SaveLocalPrefs(localPrefs).FireAndForget(_ => toggle.IsChecked = !toggle.IsChecked);
         SaveLocalPrefs(_repo, localPrefs, () => toggle.IsChecked = !toggle.IsChecked)
             .FireAndForget();
     }
