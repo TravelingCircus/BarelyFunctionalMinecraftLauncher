@@ -2,6 +2,7 @@
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -10,6 +11,7 @@ using OpenTK.Wpf;
 using System.Windows.Input;
 using BFML.Core;
 using BFML.Repository;
+using CmlLib.Utils;
 using Common;
 using Utils.Async;
 
@@ -50,6 +52,22 @@ public sealed partial class ManualModeWindow : IDisposable
         _skinPreviewRenderer = SetUpSkinRenderer();
         Loaded += OnWindowLoaded;
         Nickname.TextChanged += NicknameOnTextChanged;
+        _versionBlock.Changed += OnVersionChanged;
+    }
+
+    private async void OnVersionChanged()
+    {
+        try
+        {
+            Changelogs changelogs = await Changelogs.GetChangelogs();
+            string changelogHtml = await changelogs.GetChangelogHtml(_versionBlock.VanillaVersion.Value.ToString());
+            Changelog.Text = Regex.Replace(changelogHtml, "<.*?>", String.Empty);
+        }
+        catch (Exception e)
+        {
+            MessageBox.Show(e.Message);
+            throw;
+        }
     }
 
     private void NicknameOnTextChanged(object sender, TextChangedEventArgs e)
@@ -77,6 +95,7 @@ public sealed partial class ManualModeWindow : IDisposable
     public void Dispose()
     {
         Nickname.TextChanged -= NicknameOnTextChanged;
+        _versionBlock.Changed -= OnVersionChanged;
         _settingsTab?.Dispose();
         _versionBlock?.Dispose();
     }
