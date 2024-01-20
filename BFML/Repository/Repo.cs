@@ -1,7 +1,11 @@
-﻿using System.Linq;
+﻿using System;
+using System.IO;
+using System.IO.Compression;
+using System.Linq;
 using System.Threading.Tasks;
 using BFML.Core;
 using Common;
+using Microsoft.Win32;
 using Utils;
 using Version = Utils.Version;
 
@@ -76,5 +80,39 @@ internal abstract class Repo
     public Task<Result<bool>> InstallModPack(ModPack modPack, FileValidation validationMode)
     {
         return Task.FromResult(Result<bool>.Ok(true));
+    }
+
+    public Task<Result<bool>> AddForgeWithDialogue()
+    {
+        Result<FileInfo> fileSelection = PlayFileSelectionDialogue("Forge Package Zip|*.zip");
+        if (!fileSelection.IsOk) return Task.FromResult(Result<bool>.Err(fileSelection.Error));
+        
+        FileInfo archiveFile = fileSelection.Value;
+        if (archiveFile.Extension != ".zip") return Task.FromResult(Result<bool>.Err(new FileFormatException("Expected forge version archive.")));
+
+        return RepoIo.Forge.AddVersion(archiveFile);
+    }
+    
+    /// <param name="pattern">example: "Forge Package Zip|*.zip"</param>
+    private Result<FileInfo> PlayFileSelectionDialogue(string pattern)
+    {
+        OpenFileDialog openFileDialog = new OpenFileDialog();
+        openFileDialog.InitialDirectory = "c:\\";
+        openFileDialog.Filter = pattern;
+
+        try
+        {
+            if (openFileDialog.ShowDialog().GetValueOrDefault())
+            {
+                FileInfo file = new FileInfo(openFileDialog.FileName);
+                return file.Exists ? Result<FileInfo>.Ok(file) : Result<FileInfo>.Err(new IOException("Selected file doesn't exist."));
+            }
+        }
+        catch (Exception e)
+        {
+            return Result<FileInfo>.Err(e);
+        }
+
+        return Result<FileInfo>.Err(new IOException("File selection dialogue was cancelled."));
     }
 }

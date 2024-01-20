@@ -9,6 +9,7 @@ using CmlLib.Core.Version;
 using CmlLib.Core.VersionLoader;
 using CmlLib.Core.VersionMetadata;
 using Utils;
+using Utils.Async;
 using Version = Utils.Version;
 
 namespace BFML.WPF;
@@ -31,6 +32,10 @@ internal sealed class VersionConfigurationBlock
 
     private readonly Grid _forgeLine;
     private readonly Grid _modPackLine;
+    private readonly Button _forgeAddButton;
+    private readonly Button _forgeRemoveButton;
+    private readonly Button _modPackAddButton;
+    private readonly Button _modPackRemoveButton;
     private readonly ComboBox _modPacks;
     private readonly ComboBox _forgeVersions;
     private readonly ComboBox _vanillaVersions;
@@ -39,7 +44,18 @@ internal sealed class VersionConfigurationBlock
     private readonly Game _game;
     private readonly Repo _repo;
     
-    public VersionConfigurationBlock(ToggleButton isModdedToggle, ComboBox vanillaVersions, ComboBox forgeVersions, ComboBox modPacks, Grid forgeLine, Grid modPackLine, Game game, Repo repo)
+    public VersionConfigurationBlock(ToggleButton isModdedToggle, 
+        ComboBox vanillaVersions, 
+        ComboBox forgeVersions, 
+        ComboBox modPacks, 
+        Grid forgeLine, 
+        Grid modPackLine,
+        Button forgeAddButton,
+        Button forgeRemoveButton,
+        Button modPackAddButton,
+        Button modPackRemoveButton,
+        Game game, 
+        Repo repo)
     {
         _isModdedToggle = isModdedToggle;
         _vanillaVersions = vanillaVersions;
@@ -47,6 +63,10 @@ internal sealed class VersionConfigurationBlock
         _modPacks = modPacks;
         _forgeLine = forgeLine;
         _modPackLine = modPackLine;
+        _forgeAddButton = forgeAddButton;
+        _forgeRemoveButton = forgeRemoveButton;
+        _modPackAddButton = modPackAddButton;
+        _modPackRemoveButton = modPackRemoveButton;
         _game = game;
         _repo = repo;
     }
@@ -64,6 +84,8 @@ internal sealed class VersionConfigurationBlock
         {
             _vanillaVersions.Items.Add(version.Name);
         }
+
+        _forgeAddButton.Click += OnForgeAddClicked;
         
         Changed?.Invoke();
     }
@@ -100,5 +122,10 @@ internal sealed class VersionConfigurationBlock
             _forgeVersions.Items.Add(version.SubVersion.ToString());
         }
         _forgeVersions.Text = versions[0].SubVersion.ToString();
+    }
+
+    private void OnForgeAddClicked(object sender, RoutedEventArgs e)
+    {
+        _repo.AddForgeWithDialogue().FireAndForget(e=>MessageBox.Show(e.Message));
     }
 }

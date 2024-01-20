@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Xml.Serialization;
 using BFML.Core;
 using Utils;
@@ -110,5 +111,11 @@ internal sealed class ForgeAdapter : RepoAdapter
             Result<Forge> result = LoadForgeDescription(forgeDirectory);
             if (result.IsOk) yield return (result.Value, new DirectoryInfo(forgeDirectory+"\\ForgeFiles"));
         }
+    }
+
+    public Task<Result<bool>> AddVersion(FileInfo archiveFile)
+    {
+        MessageBox.Show(archiveFile.FullName);
+        return Task.FromResult(Result<bool>.Ok(true));
     }
 }

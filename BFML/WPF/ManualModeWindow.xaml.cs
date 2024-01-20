@@ -30,7 +30,8 @@ public partial class ManualModeWindow
         InitializeComponent();
         _loadingScreen = new LoadingScreen(Loading, ProgressBar, ProgressText);
         _versionBlock = new VersionConfigurationBlock(IsModded, MinecraftVersion, ForgeVersion, 
-            ModPack, ForgeVersionLine, ModPackSelectionLine, _game, _repo);
+            ModPack, ForgeVersionLine, ModPackSelectionLine,
+            ForgeAddButton, ForgeRemoveButton, ModPackAddButton, ModPackRemoveButton, _game, _repo);
         
         //SetUpSkinRenderer();
         Loaded += OnWindowLoaded;
