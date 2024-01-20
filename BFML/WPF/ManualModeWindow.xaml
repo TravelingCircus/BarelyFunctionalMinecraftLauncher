@@ -564,8 +564,7 @@
                                                 VerticalAlignment="Center"
                                                 Background="#383838"
                                                 Cursor="Hand"
-                                                Style="{DynamicResource DefaultButton}"
-                                                Click="OnOpenFolderButton">
+                                                Style="{DynamicResource DefaultButton}">
                                                 <TextBlock
                                                     Width="150"
                                                     VerticalAlignment="Center"

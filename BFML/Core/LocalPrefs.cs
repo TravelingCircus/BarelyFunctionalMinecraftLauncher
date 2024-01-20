@@ -5,7 +5,6 @@ using System.Xml.Schema;
 using System.Xml.Serialization;
 using BFML.Repository;
 using CmlLib.Core;
-using CmlLib.Core.Version;
 
 namespace BFML.Core;
 
@@ -16,6 +15,7 @@ public sealed class LocalPrefs : IXmlSerializable
     
     internal int DedicatedRam { get; set; }
     internal bool IsFullscreen { get; set; }
+    internal bool ShowSnapshots { get; set; }
     
     internal string LastModPackGuid { get; set; }
     internal string LastForgeVersion { get; set; }
@@ -27,19 +27,20 @@ public sealed class LocalPrefs : IXmlSerializable
 
     internal LocalPrefs() : this(
         string.Empty, string.Empty,
-        2048, false, string.Empty, 
-        string.Empty, string.Empty, 
+        2048, false, false, 
+        string.Empty, string.Empty, string.Empty, 
         LauncherMode.Manual, new DirectoryInfo(MinecraftPath.WindowsDefaultPath)) { }
 
     internal LocalPrefs(
-        string nickname, string passwordHash, int dedicatedRam, 
-        bool isFullscreen, string lastModPackGuid, string lastForgeVersion, 
-        string lastVanillaVersion, LauncherMode launcherMode, DirectoryInfo gameDirectory)
+        string nickname, string passwordHash, int dedicatedRam, bool isFullscreen, bool showSnapshots, 
+        string lastVanillaVersion, string lastForgeVersion, string lastModPackGuid,
+        LauncherMode launcherMode, DirectoryInfo gameDirectory)
     {
         Nickname = nickname;
         PasswordHash = passwordHash;
         DedicatedRam = dedicatedRam;
         IsFullscreen = isFullscreen;
+        ShowSnapshots = showSnapshots;
         LastModPackGuid = lastModPackGuid;
         LastForgeVersion = lastForgeVersion;
         LastVanillaVersion = lastVanillaVersion;
@@ -53,10 +54,11 @@ public sealed class LocalPrefs : IXmlSerializable
     {
         reader.ReadToFollowing("Nickname");
         Nickname = reader.ReadElementString("Nickname");
+        if (string.IsNullOrEmpty(Nickname)) Nickname = "Steve";
         PasswordHash = reader.ReadElementString("PasswordHash");
-        if (string.IsNullOrEmpty(PasswordHash)) PasswordHash = "Steve";
         DedicatedRam = int.Parse(reader.ReadElementString("DedicatedRam"));
         IsFullscreen = bool.Parse(reader.ReadElementString("IsFullscreen"));
+        ShowSnapshots = bool.Parse(reader.ReadElementString("ShowSnapshots"));
         LauncherMode = Enum.Parse<LauncherMode>(reader.ReadElementString("LauncherMode"));
         LastVanillaVersion = reader.ReadElementString("LastVanillaVersion");
         LastForgeVersion = reader.ReadElementString("LastForgeVersion");
@@ -71,6 +73,7 @@ public sealed class LocalPrefs : IXmlSerializable
         writer.WriteElementString("PasswordHash", PasswordHash);
         writer.WriteElementString("DedicatedRam", DedicatedRam.ToString());
         writer.WriteElementString("IsFullscreen", IsFullscreen.ToString());
+        writer.WriteElementString("ShowSnapshots", ShowSnapshots.ToString());
         writer.WriteElementString("LauncherMode", LauncherMode.ToString());
         writer.WriteElementString("LastVanillaVersion", LastVanillaVersion);
         writer.WriteElementString("LastForgeVersion", LastForgeVersion);

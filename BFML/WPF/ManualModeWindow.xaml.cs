@@ -14,14 +14,14 @@ using Utils.Async;
 
 namespace BFML.WPF;
 
-public partial class ManualModeWindow
+public partial class ManualModeWindow : IDisposable
 {
+    private SkinPreviewRenderer _skinPreviewRenderer;
+    private readonly Game _game;
     private readonly ManualModeRepo _repo;
+    private readonly SettingsTab _settingsTab;
     private readonly LoadingScreen _loadingScreen;
     private readonly VersionConfigurationBlock _versionBlock;
-    private readonly SettingsTab _settingsTab;
-    private readonly Game _game;
-    private SkinPreviewRenderer _skinPreviewRenderer;
 
     internal ManualModeWindow(ManualModeRepo repo)
     {
@@ -32,7 +32,7 @@ public partial class ManualModeWindow
         _loadingScreen = new LoadingScreen(Loading, ProgressBar, ProgressText);
         _versionBlock = new VersionConfigurationBlock(IsModded, MinecraftVersion, ForgeVersion, 
             ModPack, ForgeVersionLine, ModPackSelectionLine, _game, _repo);
-        _settingsTab = new SettingsTab(SettingsTab);
+        _settingsTab = new SettingsTab(_repo, SettingsTab, MinecraftPathButton, MinecraftPathText, FilesValidateMode, RamSlider, Fullscreen, Snapshots);
         
         //SetUpSkinRenderer();
         Loaded += OnWindowLoaded;
@@ -46,6 +46,11 @@ public partial class ManualModeWindow
         
         //ApplyLocalPrefs();
         //_skinPreviewRenderer.ChangeSkin(_repo.DefaultSkin);
+    }
+    
+    public void Dispose()
+    {
+        _settingsTab?.Dispose();
     }
 
     private async Task LaunchGame()
@@ -77,7 +82,7 @@ public partial class ManualModeWindow
             _repo.DefaultSkin.SkinBytes.ToArray());
     }
     
-    private async void OnSkinFileDrop(object sender, DragEventArgs e)
+    private void OnSkinFileDrop(object sender, DragEventArgs e)
     {
         if (!e.Data.GetDataPresent(DataFormats.FileDrop)) return;
  
@@ -116,6 +121,7 @@ public partial class ManualModeWindow
     {
         try
         {
+            Dispose();
             Application.Current.Shutdown();
         }
         catch (Exception ex)
