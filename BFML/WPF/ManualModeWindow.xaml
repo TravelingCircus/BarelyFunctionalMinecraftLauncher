@@ -469,12 +469,12 @@
                                     VerticalAlignment="Center"
                                     Background="#383838"
                                     Cursor="Hand"
-                                    Style="{DynamicResource DefaultButton}"
-                                    Click="OnReloadFiles" />
+                                    Style="{DynamicResource DefaultButton}"/>
                                 <Image
                                     Grid.Row="1"
                                     Height="35"
                                     Width="35"
+                                    IsEnabled="False"
                                     HorizontalAlignment="Center"
                                     VerticalAlignment="Center"
                                     IsHitTestVisible="False"
@@ -881,6 +881,7 @@
                                                 Text="IPv4:"
                                                 TextAlignment="Left" />
                                             <TextBox
+                                                IsEnabled="False"
                                                 x:Name="ServerIp"
                                                 Width="200"
                                                 FontSize="20"
@@ -906,6 +907,7 @@
                                                 Text="Port:"
                                                 TextAlignment="Left" />
                                             <TextBox
+                                                IsEnabled="False"
                                                 x:Name="ServerPort"
                                                 Width="200"
                                                 FontSize="20"
