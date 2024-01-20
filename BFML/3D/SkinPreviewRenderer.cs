@@ -10,8 +10,9 @@ public class SkinPreviewRenderer
     private Camera _camera;
     private RenderObject _skinPreviewRenderObject;
     private RenderObject _dustRenderObject;
+    private bool _isInitialized;
     
-    public void SetUp(byte[] skinPng, byte[] shadowPng)
+    public void SetUp(Texture skinTexture, Texture shadowTexture)
     {
         _camera = new Camera(
             new Vector3(0f, -1.1f, -5f), 
@@ -29,17 +30,21 @@ public class SkinPreviewRenderer
         ObjModelLoader skinModelLoader = new ObjModelLoader("SkinPreview.obj");
         Model skinModel =  skinModelLoader.Load();
         Shader shader = new Shader("shader.vert", "shader.frag");
-        Material skinMaterial = new Material(shader, skinPng);
+        Material skinMaterial = new Material(shader, skinTexture);
         _skinPreviewRenderObject = RenderObject.Instantiate(skinModel, skinMaterial);
 
         ObjModelLoader dustModelLoader = new ObjModelLoader("plane.obj");
         Model dustModel =  dustModelLoader.Load();
-        Material dustMaterial = new Material(shader, shadowPng);
+        Material dustMaterial = new Material(shader, shadowTexture);
         _dustRenderObject = RenderObject.Instantiate(dustModel, dustMaterial);
+
+        _isInitialized = true;
     }
 
     public void Render(float angle)
     {
+        if (!_isInitialized) return;
+        
         GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
 
         angle += 155f;
@@ -53,6 +58,6 @@ public class SkinPreviewRenderer
 
     public void ChangeSkin(Skin skin)
     {
-        _skinPreviewRenderObject.Material.ChangeTexture(skin.SkinBytes.ToArray());
+        _skinPreviewRenderObject.Material.Texture = skin.Texture;
     }
 }

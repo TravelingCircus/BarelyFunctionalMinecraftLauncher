@@ -111,7 +111,7 @@ public sealed class ServerConnection : IDisposable
         return true;
     }
 
-    public async Task<bool> TryChangeSkin(User user, Skin skin)
+    /*public async Task<bool> TryChangeSkin(User user, Skin skin)
     {
         byte[] skinData = skin.SkinBytes.ToArray();
         SkinChangeRequest request = new SkinChangeRequest(user.Nickname, skinData, skin.SkinBytes.Count);
@@ -124,7 +124,7 @@ public sealed class ServerConnection : IDisposable
         GetSkinRequest request = new GetSkinRequest(user.Nickname);
         GetSkinResponse response = (GetSkinResponse)await GetResponseFor(request);
         return Skin.FromBytes(response.SkinData);
-    }
+    }*/
 
     #endregion
 
