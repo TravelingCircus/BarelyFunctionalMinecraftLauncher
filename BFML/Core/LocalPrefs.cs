@@ -5,6 +5,7 @@ using System.Xml.Schema;
 using System.Xml.Serialization;
 using BFML.Repository;
 using CmlLib.Core;
+using CmlLib.Core.Java;
 
 namespace BFML.Core;
 
@@ -62,6 +63,7 @@ public sealed class LocalPrefs : IXmlSerializable
         reader.ReadToFollowing("Nickname");
         Nickname = reader.ReadElementString("Nickname");
         if (string.IsNullOrEmpty(Nickname)) Nickname = "Steve";
+        
         PasswordHash = reader.ReadElementString("PasswordHash");
         DedicatedRam = int.Parse(reader.ReadElementString("DedicatedRam"));
         IsFullscreen = bool.Parse(reader.ReadElementString("IsFullscreen"));
@@ -71,7 +73,14 @@ public sealed class LocalPrefs : IXmlSerializable
         LastForgeVersion = reader.ReadElementString("LastForgeVersion");
         LastModPackGuid = reader.ReadElementString("LastModPackGuid");
         GameDirectory = new DirectoryInfo(reader.ReadElementString("GameDirectory"));
-        JVMLocation = new FileInfo(reader.ReadElementString("JVMLocation"));
+        
+        string jvmPath = reader.ReadElementString("JVMLocation");
+        
+        jvmPath = String.IsNullOrWhiteSpace(jvmPath) 
+            ? new CMLauncher(GameDirectory.FullName).GetDefaultJavaPath()! 
+            : jvmPath;
+        JVMLocation = new FileInfo(jvmPath);
+        
         FileValidationMode = Enum.Parse<FileValidation>(reader.ReadElementString("FileValidationMode"));
     }
 
