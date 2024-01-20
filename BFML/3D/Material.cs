@@ -4,23 +4,18 @@ namespace BFML._3D;
 
 public sealed class Material
 {
+    public Texture Texture;
     public readonly Shader Shader;
-    private Texture _texture;
 
-    public Material(Shader shader, byte[] png)
+    public Material(Shader shader, Texture texture)
     {
         Shader = shader;
-        ChangeTexture(png);
-    }
-
-    public void ChangeTexture(byte[] png)
-    {
-        _texture = new Texture(png);
+        Texture = texture;
     }
 
     public void Use()
     {
         Shader.Use();
-        _texture.Use(TextureUnit.Texture0);
+        Texture.Use(TextureUnit.Texture0);
     }
 }

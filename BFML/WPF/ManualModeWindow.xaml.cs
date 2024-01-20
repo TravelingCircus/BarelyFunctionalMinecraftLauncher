@@ -2,6 +2,7 @@
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -10,6 +11,7 @@ using OpenTK.Wpf;
 using System.Windows.Input;
 using BFML.Core;
 using BFML.Repository;
+using CmlLib.Utils;
 using Common;
 using Utils.Async;
 
@@ -30,6 +32,7 @@ public sealed partial class ManualModeWindow : IDisposable
         _game = new Game(_repo);
         
         InitializeComponent();
+        
         _loadingScreen = new LoadingScreen(Loading, ProgressBar, ProgressText);
         _versionBlock = new VersionConfigurationBlock(
             IsModded, MinecraftVersion,
@@ -43,9 +46,25 @@ public sealed partial class ManualModeWindow : IDisposable
 
         Nickname.Text = _repo.LocalPrefs.Nickname;
         
-        //SetUpSkinRenderer();
+        _skinPreviewRenderer = SetUpSkinRenderer();
         Loaded += OnWindowLoaded;
         Nickname.TextChanged += NicknameOnTextChanged;
+        _versionBlock.Changed += OnVersionChanged;
+    }
+
+    private async void OnVersionChanged()
+    {
+        try
+        {
+            Changelogs changelogs = await Changelogs.GetChangelogs();
+            string changelogHtml = await changelogs.GetChangelogHtml(_versionBlock.VanillaVersion.Value.ToString());
+            Changelog.Text = Regex.Replace(changelogHtml, "<.*?>", String.Empty);
+        }
+        catch (Exception e)
+        {
+            MessageBox.Show(e.Message);
+            throw;
+        }
     }
 
     private void NicknameOnTextChanged(object sender, TextChangedEventArgs e)
@@ -55,19 +74,25 @@ public sealed partial class ManualModeWindow : IDisposable
         _repo.SaveLocalPrefs(localPrefs).FireAndForget();
     }
 
-    private void OnWindowLoaded(object sender, RoutedEventArgs args)
+    private async void OnWindowLoaded(object sender, RoutedEventArgs args)
     {
         Loaded -= OnWindowLoaded;
         _versionBlock.Start();
         _settingsTab.Start();
-        
-        //ApplyLocalPrefs();
-        //_skinPreviewRenderer.ChangeSkin(_repo.DefaultSkin);
+
+        try
+        {
+            _skinPreviewRenderer.SetUp(
+                (await _repo.LoadDefaultSkin()).Texture, 
+                await _repo.LoadShadowTexture());
+        }
+        catch { }
     }
     
     public void Dispose()
     {
         Nickname.TextChanged -= NicknameOnTextChanged;
+        _versionBlock.Changed -= OnVersionChanged;
         _settingsTab?.Dispose();
         _versionBlock?.Dispose();
     }
@@ -90,30 +115,37 @@ public sealed partial class ManualModeWindow : IDisposable
 
     #region PlayerModelRendering
 
-    private void SetUpSkinRenderer()
+    private SkinPreviewRenderer SetUpSkinRenderer()
     {
-        GLWpfControlSettings settings = new GLWpfControlSettings
+        try
         {
-            MajorVersion = 4,
-            MinorVersion = 0
-        };
-        OpenTkControl.Start(settings);
-        _skinPreviewRenderer = new SkinPreviewRenderer();
-        _skinPreviewRenderer.SetUp(_repo.DefaultSkin.SkinBytes.ToArray(), 
-            _repo.DefaultSkin.SkinBytes.ToArray());
+            GLWpfControlSettings settings = new GLWpfControlSettings
+            {
+                MajorVersion = 4,
+                MinorVersion = 0
+            };
+            OpenTkControl.Start(settings);
+            return new SkinPreviewRenderer();
+        }
+        catch (Exception e)
+        {
+            return null;
+        }
     }
     
     private void OnSkinFileDrop(object sender, DragEventArgs e)
     {
-        if (!e.Data.GetDataPresent(DataFormats.FileDrop)) return;
- 
+        throw new NotImplementedException();
+
+        /*if (!e.Data.GetDataPresent(DataFormats.FileDrop)) return;
+
         string[] files = (string[])e.Data.GetData(DataFormats.FileDrop)!;
         if (files.Length != 1 || !files[0].EndsWith(".png")) return;
 
         FileInfo fileInfo = new FileInfo(files[0]);
         Skin skin = Skin.FromFile(fileInfo);
         //TODO rewrite saved skin
-        _skinPreviewRenderer.ChangeSkin(skin);
+        _skinPreviewRenderer.ChangeSkin(skin);*/
     }
     
     private void SkinPreviewOnRender(TimeSpan obj)
