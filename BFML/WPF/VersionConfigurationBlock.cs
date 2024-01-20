@@ -7,70 +7,92 @@ using BFML.Core;
 using BFML.Repository;
 using CmlLib.Core.Version;
 using CmlLib.Core.VersionLoader;
-using CmlLib.Core.VersionMetadata;
 using Utils;
 using Version = Utils.Version;
 
 namespace BFML.WPF;
 
-internal sealed class VersionConfigurationBlock
+internal sealed class VersionConfigurationBlock : IDisposable
 {
     public event Action Changed;
     public bool IsModded => _isModdedToggle.IsChecked!.Value;
 
-    public Option<Version> VanillaVersion => string.IsNullOrEmpty(_vanillaVersions.Text)
+    public Option<Version> VanillaVersion => string.IsNullOrEmpty((string)_vanillaVersions.SelectedItem)
         ? Option<Version>.None
-        : Option<Version>.Some(new Version(_vanillaVersions.Text));
+        : Option<Version>.Some(new Version((string)_vanillaVersions.SelectedItem));
 
-    public Option<Forge> Forge => !IsModded || string.IsNullOrEmpty(_forgeVersions.Text)
+    public Option<Forge> Forge => !IsModded || string.IsNullOrEmpty((string)_forgeVersions.SelectedItem)
         ? Option<Forge>.None
         : Option<Forge>.Some(_repo.LoadForgeVersions(VanillaVersion.Value).Result
-            .First(forge => forge.SubVersion == new Version(_forgeVersions.Text)));
+            .First(forge => forge.SubVersion == new Version((string)_vanillaVersions.SelectedItem)));
         
     public ModPack ModPack { get; set; }
-
+    
+    private readonly Game _game;
+    private readonly Repo _repo;
+    
     private readonly Grid _forgeLine;
     private readonly Grid _modPackLine;
     private readonly ComboBox _modPacks;
     private readonly ComboBox _forgeVersions;
     private readonly ComboBox _vanillaVersions;
     private readonly ToggleButton _isModdedToggle;
-
-    private readonly Game _game;
-    private readonly Repo _repo;
     
-    public VersionConfigurationBlock(ToggleButton isModdedToggle, ComboBox vanillaVersions, ComboBox forgeVersions, ComboBox modPacks, Grid forgeLine, Grid modPackLine, Game game, Repo repo)
+    public VersionConfigurationBlock(
+        Game game, Repo repo, ToggleButton isModdedToggle,
+        ComboBox vanillaVersions, ComboBox forgeVersions, ComboBox modPacks,
+        Grid forgeLine, Grid modPackLine)
     {
-        _isModdedToggle = isModdedToggle;
-        _vanillaVersions = vanillaVersions;
-        _forgeVersions = forgeVersions;
+        _game = game;
+        _repo = repo;
         _modPacks = modPacks;
         _forgeLine = forgeLine;
         _modPackLine = modPackLine;
-        _game = game;
-        _repo = repo;
+        _forgeVersions = forgeVersions;
+        _isModdedToggle = isModdedToggle;
+        _vanillaVersions = vanillaVersions;
     }
 
     public void Start()
     {
-        _isModdedToggle.Click += OnModdedToggleToggle;
-        _vanillaVersions.DropDownClosed += OnVanillaChanged;
         Changed += UpdateForgeItems;
-        OnModdedToggleToggle(null, null);
+        _isModdedToggle.Click += OnModdedToggleClicked;
+        _vanillaVersions.SelectionChanged += OnVanillaChanged;
+        OnModdedToggleClicked(null, null);
 
         MojangVersionLoader remoteVersionLoader = new MojangVersionLoader();
         MVersionCollection remoteVersions = remoteVersionLoader.GetVersionMetadatas();
-        foreach (MVersionMetadata version in remoteVersions.Where(version => version.MType == MVersionType.Release))
-        {
-            _vanillaVersions.Items.Add(version.Name);
-        }
+        _vanillaVersions.ItemsSource = remoteVersions
+            .Where(version => version.MType == MVersionType.Release)
+            .Select(version => version.Name);
+
+        _vanillaVersions.SelectedItem = _repo.LocalPrefs.LastVanillaVersion;
         
         Changed?.Invoke();
     }
+    
+    public void Dispose()
+    {
+        Changed -= UpdateForgeItems;
+        _isModdedToggle.Click -= OnModdedToggleClicked;  
+        _vanillaVersions.SelectionChanged -= OnVanillaChanged;
+    }
 
-    private void OnVanillaChanged(object sender, EventArgs e) => Changed?.Invoke();
+    private async void OnVanillaChanged(object sender, SelectionChangedEventArgs e)
+    {
+        LocalPrefs localPrefs = _repo.LocalPrefs;
+        ComboBox comboBox = (ComboBox)sender;
+        localPrefs.LastVanillaVersion = (string)e.AddedItems[0]!;
+        bool success = await _repo.SaveLocalPrefs(localPrefs);
+        if (!success || !_repo.Validate())
+        {
+            comboBox.SelectedValue = (FileValidation)e.RemovedItems[0]!;
+            return;
+        }
+        Changed?.Invoke();
+    }
 
-    private void OnModdedToggleToggle(object sender, RoutedEventArgs e)
+    private void OnModdedToggleClicked(object sender, RoutedEventArgs e)
     {
         bool isModdedNext = _isModdedToggle.IsChecked!.Value;
 

@@ -14,7 +14,7 @@ using Utils.Async;
 
 namespace BFML.WPF;
 
-public partial class ManualModeWindow : IDisposable
+public sealed partial class ManualModeWindow : IDisposable
 {
     private SkinPreviewRenderer _skinPreviewRenderer;
     private readonly Game _game;
@@ -30,9 +30,13 @@ public partial class ManualModeWindow : IDisposable
         
         InitializeComponent();
         _loadingScreen = new LoadingScreen(Loading, ProgressBar, ProgressText);
-        _versionBlock = new VersionConfigurationBlock(IsModded, MinecraftVersion, ForgeVersion, 
-            ModPack, ForgeVersionLine, ModPackSelectionLine, _game, _repo);
-        _settingsTab = new SettingsTab(_repo, SettingsTab, MinecraftPathButton, MinecraftPathText, FilesValidateMode, RamSlider, Fullscreen, Snapshots);
+        _versionBlock = new VersionConfigurationBlock(
+            _game, _repo, IsModded, MinecraftVersion,
+            ForgeVersion, ModPack,
+            ForgeVersionLine, ModPackSelectionLine);
+        _settingsTab = new SettingsTab(
+            _repo, SettingsTab, MinecraftPathButton, MinecraftPathText,
+            FilesValidateMode, RamSlider, Fullscreen, Snapshots);
         
         //SetUpSkinRenderer();
         Loaded += OnWindowLoaded;
@@ -51,6 +55,7 @@ public partial class ManualModeWindow : IDisposable
     public void Dispose()
     {
         _settingsTab?.Dispose();
+        _versionBlock?.Dispose();
     }
 
     private async Task LaunchGame()
@@ -106,15 +111,14 @@ public partial class ManualModeWindow : IDisposable
 
     private void MoveWindow(object sender, MouseEventArgs e)
     {
-        if (e.LeftButton == MouseButtonState.Pressed)
+        if (e.LeftButton != MouseButtonState.Pressed) return;
+        
+        if (WindowState == WindowState.Maximized) 
         {
-            if (WindowState == WindowState.Maximized) 
-            {
-                WindowState = WindowState.Normal;
-                Application.Current.MainWindow!.Top = 3;
-            }
-            DragMove();
+            WindowState = WindowState.Normal;
+            Application.Current.MainWindow!.Top = 3;
         }
+        DragMove();
     }
 
     private void ShutDown(object sender, RoutedEventArgs e)
