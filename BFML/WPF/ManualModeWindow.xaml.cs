@@ -45,9 +45,6 @@ public sealed partial class ManualModeWindow : IDisposable
             JavaPathButton, JavaPathText, FilesValidateMode, RamSlider, Fullscreen, Snapshots);
 
         Nickname.Text = _repo.LocalPrefs.Nickname;
-        _versionBlock = new VersionConfigurationBlock(IsModded, MinecraftVersion, ForgeVersion, 
-            ModPack, ForgeVersionLine, ModPackSelectionLine,
-            ForgeAddButton, ForgeRemoveButton, ModPackAddButton, ModPackRemoveButton, _game, _repo);
         
         _skinPreviewRenderer = SetUpSkinRenderer();
         Loaded += OnWindowLoaded;
@@ -108,7 +105,7 @@ public sealed partial class ManualModeWindow : IDisposable
             _versionBlock.IsModded,
             _versionBlock.VanillaVersion.Value,
             _versionBlock.Forge.Value,
-            _versionBlock.ModPack);
+            _versionBlock.ModPack.Value);
         
         await _game.Launch(_repo.LocalPrefs.Nickname, configuration);
         

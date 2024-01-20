@@ -31,6 +31,7 @@ internal abstract class Repo
 
     public bool Validate() => RepoIo.ValidateRepository();
 
+#region Forge
     protected abstract bool ForgeFilter(Forge forge);
 
     internal async Task<Forge[]> LoadForgeVersions(Version vanillaVersion)
@@ -41,7 +42,7 @@ internal abstract class Repo
             .ToArray();
     }
 
-    internal async Task<Forge[]> LoadAllForgeVersions()
+    internal async Task<Forge[]> LoadForgeVersions()
     {
         return (await RepoIo.Forge.LoadAllVersions())
             .Where(ForgeFilter)
@@ -50,19 +51,74 @@ internal abstract class Repo
 
     internal async Task<Result<bool>> InstallForge(Forge forge, FileValidation validationMode)
     {
-        if(await RepoIo.Forge.IsInstalled(forge, validationMode)) return Result<bool>.Ok(true);
+        return await RepoIo.Forge.IsInstalled(forge, validationMode) switch
+        {
+            true => Result<bool>.Ok(true),
+            false => await RepoIo.Forge.Install(forge)
+        };
+    }
+    
+    internal Task<Result<Forge>> AddForgeWithDialogue()
+    {
+        Result<FileInfo> fileSelection = PlayFileSelectionDialogue("Forge Package Zip|*.zip");
+        if (!fileSelection.IsOk) return Task.FromResult(Result<Forge>.Err(fileSelection.Error));
         
-        return await RepoIo.Forge.Install(forge);
+        FileInfo archiveFile = fileSelection.Value;
+        return archiveFile.Extension == ".zip" 
+            ? RepoIo.Forge.AddVersion(archiveFile) 
+            : Task.FromResult(Result<Forge>.Err(new IOException("Expected forge version archive.")));
     }
 
+    internal Task<Result<bool>> RemoveForge(Forge forgeToRemove) 
+    {
+        return RepoIo.Forge.DeleteVersion(forgeToRemove);
+    }
+#endregion
+
+#region ModPacks
     protected abstract bool ModPackFilter(ModPack modPack);
 
-    internal async Task<ModPack[]> LoadModPackList()
+    internal async Task<ModPack[]> LoadModPacks(Forge forge)
+        {
+            return (await RepoIo.ModPacks.LoadModPackList())
+                .Where(ModPackFilter)
+                .Where(modPack => modPack.VanillaVersion == forge.TargetVanillaVersion
+                                  && modPack.ForgeVersion == forge.SubVersion)
+                .ToArray();
+        }
+
+    internal async Task<ModPack[]> LoadModPacks()
     {
         return (await RepoIo.ModPacks.LoadModPackList())
             .Where(ModPackFilter)
             .ToArray();
     }
+    
+    internal async Task<Result<bool>> InstallModPack(ModPack modPack, FileValidation validationMode) 
+    {
+        return await RepoIo.ModPacks.IsInstalled(modPack, validationMode) switch
+        {
+            true => Result<bool>.Ok(true),
+            false => await RepoIo.ModPacks.Install(modPack)
+        };
+    }
+    
+    internal Task<Result<ModPack>> AddModPackWithDialogue() 
+    {
+        Result<FileInfo> fileSelection = PlayFileSelectionDialogue("ModPack Package Zip|*.zip");
+        if (!fileSelection.IsOk) return Task.FromResult(Result<ModPack>.Err(fileSelection.Error));
+        
+        FileInfo archiveFile = fileSelection.Value;
+        return archiveFile.Extension == ".zip" 
+            ? RepoIo.ModPacks.AddVersion(archiveFile) 
+            : Task.FromResult(Result<ModPack>.Err(new IOException("Expected mod pack version archive.")));
+    }
+    
+    internal Task<Result<bool>> RemoveModPack(ModPack modPack)
+    {
+        return RepoIo.ModPacks.DeleteVersion(modPack);
+    }
+#endregion
 
     internal Task<Skin> LoadDefaultSkin() => RepoIo.Resources.LoadDefaultSkin();
     
@@ -85,33 +141,14 @@ internal abstract class Repo
         return success;
     }
 
-    public Task<Result<bool>> InstallModPack(ModPack modPack, FileValidation validationMode)
-    {
-        return Task.FromResult(Result<bool>.Ok(true));
-    }
-
-    public Task<Result<Forge>> AddForgeWithDialogue()
-    {
-        Result<FileInfo> fileSelection = PlayFileSelectionDialogue("Forge Package Zip|*.zip");
-        if (!fileSelection.IsOk) return Task.FromResult(Result<Forge>.Err(fileSelection.Error));
-        
-        FileInfo archiveFile = fileSelection.Value;
-        if (archiveFile.Extension != ".zip") return Task.FromResult(Result<Forge>.Err(new IOException("Expected forge version archive.")));
-
-        return RepoIo.Forge.AddVersion(archiveFile);
-    }
-
-    public Task<Result<bool>> RemoveForge(Forge forgeToRemove)
-    {
-        return RepoIo.Forge.DeleteVersion(forgeToRemove);
-    }
-
     /// <param name="pattern">example: "Forge Package Zip|*.zip"</param>
-    private Result<FileInfo> PlayFileSelectionDialogue(string pattern)
+    private static Result<FileInfo> PlayFileSelectionDialogue(string pattern)
     {
-        OpenFileDialog openFileDialog = new OpenFileDialog();
-        openFileDialog.InitialDirectory = "c:\\";
-        openFileDialog.Filter = pattern;
+        OpenFileDialog openFileDialog = new OpenFileDialog
+        {
+            InitialDirectory = "c:\\",
+            Filter = pattern
+        };
 
         try
         {
