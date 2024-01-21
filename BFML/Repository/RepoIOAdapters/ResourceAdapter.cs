@@ -7,6 +7,7 @@ using Common;
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.PixelFormats;
 using SixLabors.ImageSharp.Processing;
+using Utils;
 
 namespace BFML.Repository.RepoIOAdapters;
 
@@ -21,11 +22,6 @@ internal sealed class ResourceAdapter : RepoAdapter
     
     internal ResourceAdapter(DirectoryInfo directory, RepoIO repoIo) : base(directory, repoIo) { }
     
-    internal Task<FileInfo> LoadFont()
-    {
-        throw new NotImplementedException();
-    }
-    
     internal async Task<Skin> LoadDefaultSkin()
     {
         return new Skin(await LoadTexture(DefaultSkinFile));
@@ -36,32 +32,48 @@ internal sealed class ResourceAdapter : RepoAdapter
         return LoadTexture(ShadowImageFile);
     }
 
-    internal Task<Shader> LoadShader()
+    internal Task<Result<Shader>> LoadShader()
     {
         try
         {
-            string vertexShaderSource;
-            string fragmentShaderSource;
-            
-            using (StreamReader reader = new StreamReader(VertexShaderFile.FullName, Encoding.UTF8))
-            {
-                vertexShaderSource = reader.ReadToEnd();
-            }
+            using StreamReader vertexReader = new StreamReader(VertexShaderFile.FullName, Encoding.UTF8);
+            string vertexSource = vertexReader.ReadToEnd();
 
-            using (StreamReader reader = new StreamReader(FragmentShaderFile.FullName, Encoding.UTF8))
-            {
-                fragmentShaderSource = reader.ReadToEnd();
-            }
-            
-            return Task.FromResult<Shader>(new Shader(vertexShaderSource, fragmentShaderSource));
+            using StreamReader fragmentReader = new StreamReader(FragmentShaderFile.FullName, Encoding.UTF8);
+            string fragmentSource = fragmentReader.ReadToEnd();
+
+            return Task.FromResult(Result<Shader>.Ok(new Shader(vertexSource, fragmentSource)));
         }
         catch (Exception e)
         {
-            Console.WriteLine(e);
-            throw;
+            return Task.FromResult(Result<Shader>.Err(e));
         }
     }
 
+    internal Task<Result<Model>> LoadPlayerModel()
+    {
+        return LoadObjModel(PlayerModelFile);
+    }
+    
+    internal Task<Result<Model>> LoadPlaneModel()
+    {
+        return LoadObjModel(PlaneModelFile);
+    }
+
+    private Task<Result<Model>> LoadObjModel(FileInfo objFile)
+    {
+        try
+        {
+            ObjModelLoader skinModelLoader = new ObjModelLoader(objFile.FullName);
+            Model model = skinModelLoader.Load();
+            return Task.FromResult(Result<Model>.Ok(model));
+        }
+        catch (Exception e)
+        {
+            return Task.FromResult(Result<Model>.Err(e));
+        }
+    }
+    
     private async Task<Texture> LoadTexture(FileInfo file)
     {
         Image<Rgba32> image = await Image.LoadAsync<Rgba32>(file.FullName);

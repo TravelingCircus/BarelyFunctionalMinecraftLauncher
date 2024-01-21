@@ -165,4 +165,19 @@ internal abstract class Repo
 
         return Result<FileInfo>.Err(new Exception("File selection dialogue was cancelled."));
     }
+
+    public Task<Result<Shader>> LoadDefaultShader()
+    {
+        return RepoIo.Resources.LoadShader();
+    }
+
+    public Task<Result<Model>> LoadPlayerModel()
+    {
+        return RepoIo.Resources.LoadPlayerModel();
+    }
+    
+    public Task<Result<Model>> LoadPlaneModel()
+    {
+        return RepoIo.Resources.LoadPlaneModel();
+    }
 }
