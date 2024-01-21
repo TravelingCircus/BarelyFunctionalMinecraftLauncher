@@ -20,7 +20,7 @@ public sealed partial class ManualModeWindow : IDisposable
     private readonly Game _game;
     private readonly ManualModeRepo _repo;
     private readonly SettingsTab _settingsTab;
-    private readonly LoadingScreen _loadingScreen;
+    private readonly Loading.LoadingScreen _loadingScreen;
     private readonly VersionConfigurationBlock _versionBlock;
 
     internal ManualModeWindow(ManualModeRepo repo)
@@ -30,7 +30,7 @@ public sealed partial class ManualModeWindow : IDisposable
         
         InitializeComponent();
         
-        _loadingScreen = new LoadingScreen(Loading, ProgressBar, ProgressText);
+        _loadingScreen = new Loading.LoadingScreen(Loading, ProgressBar, ProgressText);
         _versionBlock = new VersionConfigurationBlock(
             IsModded, MinecraftVersion,
             ForgeVersion, ModPack,

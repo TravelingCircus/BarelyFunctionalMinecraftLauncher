@@ -1,6 +1,9 @@
-﻿namespace Common.Misc;
+﻿using System;
+using System.Collections.Generic;
 
-public class CompositeProgress
+namespace BFML.WPF.Loading;
+
+public class CompositeProgressTracker
 {
     public event Action<float> Changed; 
     public float Covered
@@ -19,7 +22,8 @@ public class CompositeProgress
         private set => _current = Math.Clamp(value, 0f, 1f);
     }
     private float _current;
-    private List<(ProgressTracker tracker, float share) > _trackers = new();
+    private readonly List<(ProgressTracker tracker, float share) > _trackers = 
+        new List<(ProgressTracker tracker, float share)>();
 
     public ProgressTracker AddTracker(float shareOfComposite)
     {

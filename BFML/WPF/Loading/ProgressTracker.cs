@@ -1,4 +1,6 @@
-﻿namespace Common.Misc;
+﻿using System;
+
+namespace BFML.WPF.Loading;
 
 public class ProgressTracker : IProgress<float>
 {
