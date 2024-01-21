@@ -9,6 +9,7 @@ using OpenTK.Wpf;
 using System.Windows.Input;
 using BFML.Core;
 using BFML.Repository;
+using BFML.WPF.Loading;
 using CmlLib.Utils;
 using Utils.Async;
 
@@ -194,6 +195,26 @@ public sealed partial class ManualModeWindow : IDisposable
     
     private void OnReloadFiles(object sender, RoutedEventArgs e)
     {
+        ProgressTracker[] trackers = {
+            new ProgressTracker("Downloading Minecraft", 750, MeasurementUnits.MBs),
+            new ProgressTracker("Installing Miners", 17, MeasurementUnits.Mods),
+            new ProgressTracker("Removing win32", 9321, MeasurementUnits.Files),
+            new ProgressTracker("Formatting C:\\", 1048576, MeasurementUnits.MBs),
+            new ProgressTracker("Osymeninnya", 69, MeasurementUnits.Units),
+        };
+        
+        _loadingScreen.Show(trackers);
+        Task.Run(async () =>
+        {
+            foreach (ProgressTracker tracker in trackers)
+            {
+                for (int i = 0; i < 100; i++)
+                {
+                    await Task.Delay(100);
+                    tracker.Add(tracker.MaxValue / 100f);
+                }
+            }
+        });
         MessageBox.Show(new NotImplementedException().Message, "Not quite there yet");
     }
 

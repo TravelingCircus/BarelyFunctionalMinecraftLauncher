@@ -4,4 +4,6 @@ public enum MeasurementUnits
 {
     Units,
     MBs,
+    Files,
+    Mods
 }
