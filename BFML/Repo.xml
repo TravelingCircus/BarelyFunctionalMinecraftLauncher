@@ -4,6 +4,10 @@
         <Png>Perfection</Png>
         <Png>Shadow</Png>
         <Ttf>MinecraftFont</Ttf>
+        <Obj>Plane</Obj>
+        <Obj>SkinPreview</Obj>
+        <Frag>Shader</Frag>
+        <Vert>Shader</Vert>
     </Resources>
     <Configs>
         <Xml>LocalPrefs</Xml>

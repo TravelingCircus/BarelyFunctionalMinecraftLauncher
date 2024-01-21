@@ -31,6 +31,11 @@ internal sealed class ResourceAdapter : RepoAdapter
         return LoadTexture(ShadowImage);
     }
 
+    internal Task<Shader> LoadShader()
+    {
+        throw new NotImplementedException();
+    }
+
     private async Task<Texture> LoadTexture(FileInfo file)
     {
         Image<Rgba32> image = await Image.LoadAsync<Rgba32>(file.FullName);
