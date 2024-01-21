@@ -48,10 +48,11 @@ internal sealed class Game
         
         Result<MVersion> forgePreparation = await PrepareForge(gameConfiguration.Forge, validationMode);
         if (!forgePreparation.IsOk) return Result<MVersion>.Err(forgePreparation.Error);
+
+        if (gameConfiguration.ModPack == null) return Result<MVersion>.Ok(forgePreparation.Value);
         
         return (await PrepareMods(gameConfiguration.ModPack, validationMode))
-            .Match(ok => Result<MVersion>.Ok(forgePreparation.Value), 
-                err => Result<MVersion>.Err(err));
+            .Match(ok => Result<MVersion>.Ok(forgePreparation.Value), Result<MVersion>.Err);
     }
 
     private async Task<Result<MVersion>> PrepareVanilla(string versionName)
