@@ -2,24 +2,28 @@
 
 namespace BFML.WPF.Loading;
 
-public class ProgressTracker : IProgress<float>
+public class ProgressTracker
 {
     public event Action Changed;
-    public float Current
-    {
-        get => _current;
-        private set => _current = Math.Clamp(value, 0f, 1f);
-    }
-    private float _current;
+    public float Current { get; private set; }
+    public TrackerState State { get; private set; }
+    private MeasurementUnits _units;
+    private float _maxValue;
 
-    public void Report(float value)
+    public ProgressTracker(float maxValue, MeasurementUnits units)
     {
-        Current = value;
-        Changed?.Invoke();
+        _maxValue = maxValue;
+        _units = units;
     }
 
     public void Add(float step)
     {
-        Report(Current + step);
+        Set(Current + step);
+    }
+
+    public void Set(float value)
+    {
+        Current = value;
+        Changed?.Invoke();
     }
 }
