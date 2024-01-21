@@ -5,7 +5,6 @@ using System.Threading.Tasks;
 using BFML.Repository;
 using CmlLib.Core;
 using CmlLib.Core.Auth;
-using CmlLib.Core.Java;
 using CmlLib.Core.Version;
 using CmlLib.Core.VersionLoader;
 using Utils;
@@ -15,18 +14,18 @@ namespace BFML.Core;
 internal sealed class Game
 {
     private readonly Repo _repo;
-    private readonly CMLauncher _launcher;
 
     internal Game(Repo repo)
     {
         _repo = repo;
-        MinecraftPath minecraftPath = new MinecraftPath(_repo.LocalPrefs.GameDirectory.FullName);
-        _launcher = new CMLauncher(minecraftPath);
     }
 
     public async Task Launch(string nickname, GameConfiguration gameConfiguration)
     {
-        Result<MVersion> preparationResult = await PrepareConfiguration(gameConfiguration, _repo.LocalPrefs.FileValidationMode);
+        MinecraftPath minecraftPath = new MinecraftPath(_repo.LocalPrefs.GameDirectory.FullName);
+        CMLauncher launcher = new CMLauncher(minecraftPath);
+        
+        Result<MVersion> preparationResult = await PrepareConfiguration(launcher, gameConfiguration, _repo.LocalPrefs.FileValidationMode);
         if (!preparationResult.IsOk) throw preparationResult.Error; 
         
         LaunchConfiguration launchConfig = new LaunchConfiguration(
@@ -36,17 +35,17 @@ internal sealed class Game
             _repo.LocalPrefs.IsFullscreen,
             _repo.LocalPrefs.JVMLocation);
         
-        await StartGameProcess(launchConfig);
+        await StartGameProcess(launcher, launchConfig);
     }
 
-    private async Task<Result<MVersion>> PrepareConfiguration(GameConfiguration gameConfiguration, FileValidation validationMode)
+    private async Task<Result<MVersion>> PrepareConfiguration(CMLauncher launcher, GameConfiguration gameConfiguration, FileValidation validationMode)
     {
-        Result<MVersion> vanillaPreparation = await PrepareVanilla(gameConfiguration.Vanilla.ToString());
+        Result<MVersion> vanillaPreparation = await PrepareVanilla(launcher, gameConfiguration.Vanilla.ToString());
         if (!vanillaPreparation.IsOk) return Result<MVersion>.Err(vanillaPreparation.Error);
 
         if (!gameConfiguration.IsModded) return Result<MVersion>.Ok(vanillaPreparation.Value);
         
-        Result<MVersion> forgePreparation = await PrepareForge(gameConfiguration.Forge, validationMode);
+        Result<MVersion> forgePreparation = await PrepareForge(launcher, gameConfiguration.Forge, validationMode);
         if (!forgePreparation.IsOk) return Result<MVersion>.Err(forgePreparation.Error);
 
         if (gameConfiguration.ModPack == null) return Result<MVersion>.Ok(forgePreparation.Value);
@@ -55,7 +54,7 @@ internal sealed class Game
             .Match(ok => Result<MVersion>.Ok(forgePreparation.Value), Result<MVersion>.Err);
     }
 
-    private async Task<Result<MVersion>> PrepareVanilla(string versionName)
+    private static async Task<Result<MVersion>> PrepareVanilla(CMLauncher launcher, string versionName)
     {
         if (string.IsNullOrWhiteSpace(versionName))
         {
@@ -64,8 +63,8 @@ internal sealed class Game
 
         try
         {
-            MVersion vanilla = await _launcher.GetVersionAsync(versionName);
-            await _launcher.CheckAndDownloadAsync(vanilla); // TODO track progress and time out
+            MVersion vanilla = await launcher.GetVersionAsync(versionName);
+            await launcher.CheckAndDownloadAsync(vanilla); // TODO track progress and time out
             return vanilla;
         }
         catch (Exception e)
@@ -74,14 +73,14 @@ internal sealed class Game
         }
     }
 
-    private async Task<Result<MVersion>> PrepareForge(Forge forge, FileValidation validationMode)
+    private async Task<Result<MVersion>> PrepareForge(CMLauncher launcher, Forge forge, FileValidation validationMode)
     {
         Result<bool> installation = await _repo.InstallForge(forge, validationMode);
         if (!installation.IsOk) return Result<MVersion>.Err(installation.Error);
 
         try
         {
-            MVersionCollection localVersions = await new LocalVersionLoader(_launcher.MinecraftPath).GetVersionMetadatasAsync();
+            MVersionCollection localVersions = await new LocalVersionLoader(launcher.MinecraftPath).GetVersionMetadatasAsync();
             MVersion forgeVersion = await localVersions.GetVersionAsync(forge.Name);
             return Result<MVersion>.Ok(forgeVersion);
         }
@@ -96,10 +95,10 @@ internal sealed class Game
         return _repo.InstallModPack(modPack, validationMode);
     }
     
-    private async Task StartGameProcess(LaunchConfiguration launchConfig)
+    private static async Task StartGameProcess(CMLauncher launcher, LaunchConfiguration launchConfig)
     {
         System.Net.ServicePointManager.DefaultConnectionLimit = 256;
-        Process process = await _launcher.CreateProcessAsync(launchConfig.Version, new MLaunchOption
+        Process process = await launcher.CreateProcessAsync(launchConfig.Version, new MLaunchOption
         {
             MaximumRamMb = launchConfig.DedicatedRam,
             Session = MSession.CreateOfflineSession(launchConfig.Nickname),

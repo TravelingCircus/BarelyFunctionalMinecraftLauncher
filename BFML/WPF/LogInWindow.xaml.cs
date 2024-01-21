@@ -62,13 +62,15 @@ public partial class LogInWindow
 
     private async void RegisterButtonOnClick(object sender, RoutedEventArgs e)
     {
+        throw new NotImplementedException();
+        
         string nickname = InputNickname.Text;
         string password = InputPassword.Text;
         ValidateString(nickname);
         ValidateString(password);
 
         User newUser = new User(nickname, password);
-        Result<User> registrationResult = await _repo.CreateRecord(newUser);
+        /*Result<User> registrationResult = await _repo.CreateRecord(newUser);
         if (!registrationResult.IsOk)
         {
             //TODO Display that user exists
@@ -76,7 +78,7 @@ public partial class LogInWindow
         }
 
         User registeredUser = registrationResult.Value;
-        TryLogIn(registeredUser).FireAndForget();
+        TryLogIn(registeredUser).FireAndForget();*/
     }
 
     private void LogInButtonOnClick(object sender, RoutedEventArgs e)
@@ -92,7 +94,9 @@ public partial class LogInWindow
 
     private async Task TryLogIn(User user)
     {
-        Result<User> loginResult = await _repo.Authenticate(user);
+        throw new NotImplementedException();
+
+        /*Result<User> loginResult = await _repo.Authenticate(user);
         if (!loginResult.IsOk)
         {
             //TODO Display that user doesn't exists
@@ -106,7 +110,7 @@ public partial class LogInWindow
         await _repo.SaveLocalPrefs(localPrefs);
         //MainWindow mainWindow = new MainWindow(_repo, loginResult.Value); //TODO CentrilizedModeWindow
         //mainWindow.Show();
-        Close();
+        Close();*/
     }
 
     private void TextNicknameMouseDown(object sender, MouseButtonEventArgs e)
