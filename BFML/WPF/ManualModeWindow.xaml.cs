@@ -62,8 +62,7 @@ public sealed partial class ManualModeWindow : IDisposable
         }
         catch (Exception e)
         {
-            MessageBox.Show(e.Message);
-            throw;
+            Changelog.Text = String.Empty;
         }
     }
 
