@@ -24,6 +24,12 @@ public readonly struct Result<T>
     public static implicit operator Result<T>(Exception e) => new Result<T>(default(T), e, false);
 
     public TR Match<TR>(Func<T, TR> success, Func<Exception, TR> failure) => _success ? success(Value) : failure(Error);
+
+    public T Unwrap()
+    {
+        if (IsOk) return Value;
+        throw Error;
+    }
 }
 
 public readonly struct Result<T, TE> 
