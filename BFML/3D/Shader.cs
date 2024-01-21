@@ -10,21 +10,8 @@ public sealed class Shader : IDisposable
 {
     private readonly int _handle;
 
-    public Shader(string vertexPath, string fragmentPath)
+    public Shader(string vertexShaderSource, string fragmentShaderSource)
     {
-        string vertexShaderSource;
-        string fragmentShaderSource;
-
-        using (StreamReader reader = new StreamReader(vertexPath, Encoding.UTF8))
-        {
-            vertexShaderSource = reader.ReadToEnd();
-        }
-
-        using (StreamReader reader = new StreamReader(fragmentPath, Encoding.UTF8))
-        {
-            fragmentShaderSource = reader.ReadToEnd();
-        }
-
         int vertexShader = GL.CreateShader(ShaderType.VertexShader);
         GL.ShaderSource(vertexShader, vertexShaderSource);
 

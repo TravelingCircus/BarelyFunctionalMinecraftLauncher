@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Diagnostics;
-using System.IO;
-using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows;
@@ -12,7 +10,6 @@ using System.Windows.Input;
 using BFML.Core;
 using BFML.Repository;
 using CmlLib.Utils;
-using Common;
 using Utils.Async;
 
 namespace BFML.WPF;
@@ -62,8 +59,7 @@ public sealed partial class ManualModeWindow : IDisposable
         }
         catch (Exception e)
         {
-            MessageBox.Show(e.Message);
-            throw;
+            Changelog.Text = String.Empty;
         }
     }
 

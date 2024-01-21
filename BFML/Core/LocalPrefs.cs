@@ -52,10 +52,11 @@ public sealed class LocalPrefs : IXmlSerializable
     internal static LocalPrefs Default()
     {
         return new LocalPrefs(
-            string.Empty, string.Empty,
+            "Steve", string.Empty,
             2048, false, false,
             false, string.Empty, string.Empty, string.Empty,
-            LauncherMode.Manual, new DirectoryInfo(MinecraftPath.WindowsDefaultPath), null); //Provide default jvm path
+            LauncherMode.Manual, new DirectoryInfo(MinecraftPath.WindowsDefaultPath), 
+            new FileInfo(MinecraftPath.WindowsDefaultPath+"\\runtime\\java-runtime-gamma\\bin\\javaw.exe"));
     }
 
     public XmlSchema GetSchema() => null;

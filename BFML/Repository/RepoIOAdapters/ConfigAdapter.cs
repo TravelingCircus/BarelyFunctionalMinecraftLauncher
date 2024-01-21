@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using System.Threading.Tasks;
 using System.Xml.Serialization;
 using BFML.Core;
@@ -13,19 +14,24 @@ internal sealed class ConfigAdapter : RepoAdapter
 
     internal Task<LocalPrefs> LoadLocalPrefs()
     {
-        FileInfo prefsFile = LocalPrefsFile;
-        if (!prefsFile.Exists)
+        try
         {
-            LocalPrefs localPrefs = LocalPrefs.Default();
-            SaveLocalPrefs(localPrefs);
-            return Task.FromResult(localPrefs);
+            return Task.FromResult(DeserializePrefsFile());
         }
-        
-        using FileStream fileStream = prefsFile.OpenRead();
+        catch (Exception e)
+        {
+            ClearLocalPrefs();
+        }
 
-        XmlSerializer serializer = new XmlSerializer(typeof(LocalPrefs));
-        LocalPrefs loadedPrefs = serializer.Deserialize(fileStream) as LocalPrefs;
-        return Task.FromResult(loadedPrefs);
+        return Task.FromResult(DeserializePrefsFile());
+
+        LocalPrefs DeserializePrefsFile()
+        {
+            FileInfo prefsFile = LocalPrefsFile;
+            using FileStream fileStream = prefsFile.OpenRead();
+            XmlSerializer serializer = new XmlSerializer(typeof(LocalPrefs));
+            return serializer.Deserialize(fileStream) as LocalPrefs;
+        }
     }
 
     internal Task<bool> SaveLocalPrefs(LocalPrefs prefs)
@@ -44,6 +50,6 @@ internal sealed class ConfigAdapter : RepoAdapter
     {
         FileInfo prefsFile = LocalPrefsFile;
         if (prefsFile.Exists) prefsFile.Delete();
-        return SaveLocalPrefs(new LocalPrefs());
+        return SaveLocalPrefs(LocalPrefs.Default());
     }
 }
