@@ -4,7 +4,8 @@ namespace BFML.WPF.Loading;
 
 public class ProgressTracker
 {
-    public event Action Changed;
+    public event Action<float> Changed;
+    public string FormattedLabel { get; }
     public float Current { get; private set; }
     public TrackerState State { get; private set; }
     public string Label { get; private set; }
@@ -17,6 +18,7 @@ public class ProgressTracker
         MaxValue = maxValue;
         Units = units;
         State = TrackerState.Inactive;
+        FormattedLabel = $"• {Label}";
     }
 
     public void Add(float step)
@@ -33,6 +35,6 @@ public class ProgressTracker
         Current = value;
         Current = Math.Clamp(Current, 0, MaxValue);
         
-        Changed?.Invoke();
+        Changed?.Invoke(Current / MaxValue);
     }
 }

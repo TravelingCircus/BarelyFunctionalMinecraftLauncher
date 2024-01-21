@@ -6,16 +6,22 @@ namespace BFML.WPF.Loading;
 
 internal sealed class LoadingScreen
 {
-    private readonly Border _loading;
-    private readonly RadialProgressBar _progressBar;
-    private readonly TextBlock _progressText;
     private ProgressTracker[] _trackers;
+    private readonly Border _loading;
+    private readonly TextBlock _progressText;
+    private readonly RadialProgressBar _progressBar;
+    private readonly ItemsControl _progressTrackersList;
+    private readonly TextBlock _progressTrackerProgressText;
 
-    public LoadingScreen(Border loading, RadialProgressBar progressBar, TextBlock progressText)
+    public LoadingScreen(
+        Border loading, RadialProgressBar progressBar, TextBlock progressText, 
+        TextBlock progressTrackerProgressText, ItemsControl progressTrackerList)
     {
         _loading = loading;
         _progressBar = progressBar;
         _progressText = progressText;
+        _progressTrackersList = progressTrackerList;
+        _progressTrackerProgressText = progressTrackerProgressText;
     }
 
     public void Show(ProgressTracker[] trackers)
@@ -24,6 +30,11 @@ internal sealed class LoadingScreen
         _progressBar.Value = 0f;
         _progressText.Text = "0";
         _trackers = trackers;
+        _progressTrackersList.ItemsSource = trackers;
+        foreach (ProgressTracker tracker in trackers)
+        {
+            tracker.Changed += OnProgressTrackerChange;
+        }
     }
 
     public void Hide()

@@ -21,7 +21,7 @@ public sealed partial class ManualModeWindow : IDisposable
     private readonly Game _game;
     private readonly ManualModeRepo _repo;
     private readonly SettingsTab _settingsTab;
-    private readonly Loading.LoadingScreen _loadingScreen;
+    private readonly LoadingScreen _loadingScreen;
     private readonly VersionConfigurationBlock _versionBlock;
 
     internal ManualModeWindow(ManualModeRepo repo)
@@ -31,7 +31,7 @@ public sealed partial class ManualModeWindow : IDisposable
         
         InitializeComponent();
         
-        _loadingScreen = new Loading.LoadingScreen(Loading, ProgressBar, ProgressText);
+        _loadingScreen = new LoadingScreen(Loading, ProgressBar, ProgressText, ProgressTrackerProgressText, ProgressTrackerList);
         _versionBlock = new VersionConfigurationBlock(
             IsModded, MinecraftVersion,
             ForgeVersion, ModPack,
@@ -215,7 +215,6 @@ public sealed partial class ManualModeWindow : IDisposable
                 }
             }
         });
-        MessageBox.Show(new NotImplementedException().Message, "Not quite there yet");
     }
 
     private void ExitAccount(object sender, RoutedEventArgs e)

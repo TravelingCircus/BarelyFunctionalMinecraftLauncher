@@ -471,7 +471,8 @@
                                     VerticalAlignment="Center"
                                     Background="#383838"
                                     Cursor="Hand"
-                                    Style="{DynamicResource DefaultButton}"/>
+                                    Style="{DynamicResource DefaultButton}"
+                                    Click="OnReloadFiles" />
                                 <Image
                                     Grid.Row="1"
                                     Height="35"
@@ -1057,31 +1058,62 @@
             <Border
                 Background="#383838" 
                 CornerRadius="8" 
-                Visibility="Collapsed"
+                Visibility="Visible"
                 x:Name="Loading">
                 
                 <Grid
                     Width="400"
-                    Height="400"
-                    Margin="0,0,0,0"
+                    Height="700"
                     HorizontalAlignment="Center"
                     VerticalAlignment="Center">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="100"/>
+                        <RowDefinition Height="300"/>
+                        <RowDefinition Height="300"/>
+                    </Grid.RowDefinitions>
+
+                    <TextBlock
+                        Grid.Row="0"
+                        Width="350"
+                        Height="25"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Top"
+                        Margin="0, 20"
+                        FontFamily="Minecraft"
+                        FontSize="20"
+                        Foreground="#dcdcdc"
+                        Text="I'm just barely functional"
+                        TextAlignment="Center" />
+
+                    <TextBlock
+                        Grid.Row="0"
+                        Width="350"
+                        Height="25"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Bottom"
+                        Margin="0, 20"
+                        FontFamily="Minecraft"
+                        FontSize="20"
+                        Foreground="#dcdcdc"
+                        Text="Please be patient"
+                        TextWrapping="Wrap"
+                        TextAlignment="Center" />
 
                     <Ellipse
-                        Width="210"
-                        Height="210"
-                        Margin="6,0,0,50"
+                        Grid.Row="1"
+                        Width="257.5"
+                        Height="257.5"
                         HorizontalAlignment="Center"
                         VerticalAlignment="Center"
                         Stroke="#505050"
                         StrokeThickness="10" />
 
                     <xrpb:RadialProgressBar
+                        Grid.Row="1"
                         x:Name="ProgressBar"
                         Value="69"
-                        Width="228"
-                        Height="228"
-                        Margin="6,0,0,50"
+                        Width="275"
+                        Height="275"
                         Foreground="#ff9a3c"
                         ArcWidth="18">
                         <xrpb:RadialProgressBar.Effect>
@@ -1095,14 +1127,15 @@
                     </xrpb:RadialProgressBar>
 
                     <TextBlock
+                        Grid.Row="1"
                         x:Name="ProgressText"
-                        Width="76"
-                        Height="70"
-                        Margin="6,0,0,85"
+                        Width="175"
+                        Height="100"
                         HorizontalAlignment="Center"
-                        VerticalAlignment="Center"
+                        VerticalAlignment="Top"
+                        Margin="0, 80, 0, 0"
                         FontFamily="Minecraft"
-                        FontSize="50"
+                        FontSize="75"
                         Foreground="#ff9a3c"
                         Text="69"
                         TextAlignment="Center">
@@ -1118,38 +1151,40 @@
                     </TextBlock>
 
                     <TextBlock
-                        Width="210"
-                        Height="26"
-                        Margin="0,25,0,0"
+                        Grid.Row="1"
+                        x:Name="ProgressTrackerProgressText"
+                        Width="125"
+                        Height="50"
                         HorizontalAlignment="Center"
+                        VerticalAlignment="Bottom"
+                        Margin="0, 0, 0, 60"
                         FontFamily="Minecraft"
                         FontSize="18"
                         Foreground="#dcdcdc"
-                        Text="LOADING"
-                        TextAlignment="Center" />
-
-                    <TextBlock
-                        Width="200"
-                        Height="26"
-                        Margin="0,280,0 ,0"
-                        HorizontalAlignment="Center"
-                        FontFamily="Minecraft"
-                        FontSize="16"
-                        Foreground="#dcdcdc"
-                        Text="Please be patient"
+                        Text="1 / 17"
                         TextWrapping="Wrap"
                         TextAlignment="Center" />
-
-                    <TextBlock
+                    
+                    <ItemsControl
+                        Grid.Row="2"
+                        x:Name="ProgressTrackerList"
                         Width="400"
-                        Height="26"
-                        Margin="0,330,0 ,0"
+                        Height="250"
                         HorizontalAlignment="Center"
-                        FontFamily="Minecraft"
-                        FontSize="16"
-                        Foreground="#dcdcdc"
-                        Text="I'm just barely functional"
-                        TextAlignment="Center" />
+                        VerticalAlignment="Center"
+                        HorizontalContentAlignment="Center"
+                        VerticalContentAlignment="Top">
+                        
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <TextBlock 
+                                    Width="375"
+                                    Height="30"
+                                    FontSize="20"
+                                    Style="{DynamicResource ProgressTrackerItemStyle}" />
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
                 </Grid>
             </Border>
         </Grid>
