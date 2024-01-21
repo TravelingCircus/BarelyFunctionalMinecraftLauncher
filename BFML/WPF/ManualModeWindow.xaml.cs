@@ -76,13 +76,7 @@ public sealed partial class ManualModeWindow : IDisposable
         _versionBlock.Start();
         _settingsTab.Start();
 
-        try
-        {
-            _skinPreviewRenderer.SetUp(
-                (await _repo.LoadDefaultSkin()).Texture, 
-                await _repo.LoadShadowTexture());
-        }
-        catch { }
+        _skinPreviewRenderer.SetUp().FireAndForget();
     }
     
     public void Dispose()
@@ -121,7 +115,7 @@ public sealed partial class ManualModeWindow : IDisposable
                 MinorVersion = 0
             };
             OpenTkControl.Start(settings);
-            return new SkinPreviewRenderer();
+            return new SkinPreviewRenderer(_repo);
         }
         catch (Exception e)
         {
